@@ -10,8 +10,8 @@
 <!-- component_nav -->
 <nav>
     <a href={ROUTES.home.path}><House /></a>
-    <a href={ROUTES.profile.path}><Search /></a>
-    <a href={ROUTES.profile.path}><Bell /></a>
+    <a href={ROUTES.search.path}><Search /></a>
+    <a href={ROUTES.notifications.path}><Bell /></a>
     <a href={ROUTES.profile.path}><User /></a>
 </nav>
 
