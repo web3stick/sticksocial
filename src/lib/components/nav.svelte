@@ -51,13 +51,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    
+
       width: 48px;
       height: 48px;
-    
+
       border-radius: 14px;
-      color: white;
-    
+      color: var(--text-color, currentColor);
+
       transition: all 0.25s ease;
     }
     
