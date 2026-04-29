@@ -1,0 +1,27 @@
+/*==================================*/
+/*alingment*/
+body {
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  text-align: center;
+}
+/*==================================*/
+/*font*/
+body {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+/*==================================*/
+/*color*/
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+}
+/*==================================*/

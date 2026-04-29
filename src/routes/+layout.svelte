@@ -1,6 +1,7 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
 	let { children } = $props();
+	import COMPONENT_NAV from '$lib/components/nav.svelte'
 </script>
 
 <!-- ============================================ -->
@@ -13,3 +14,4 @@
 <!-- ============================================ -->
 <!-- ============================================ -->
 {@render children()}
+<COMPONENT_NAV/>
