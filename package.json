@@ -27,6 +27,6 @@
 	},
 	"dependencies": {
 		"lucide-svelte": "^1.0.1",
-		"near-social-js": "github:NEARBuilders/near-social-js#695c899db4eb581d763ba6cd593e07b2fa403970"
+		"near-social-js": "^2.0.4"
 	}
 }

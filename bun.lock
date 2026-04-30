@@ -6,7 +6,7 @@
       "name": "sticksocial",
       "dependencies": {
         "lucide-svelte": "^1.0.1",
-        "near-social-js": "github:NEARBuilders/near-social-js#695c899db4eb581d763ba6cd593e07b2fa403970",
+        "near-social-js": "^2.0.4",
       },
       "devDependencies": {
         "@sveltejs/adapter-auto": "^7.0.1",
@@ -213,7 +213,7 @@
 
     "near-kit": ["near-kit@0.10.0", "", { "dependencies": { "@napi-rs/keyring": "^1.2.0", "@noble/curves": "^2.0.1", "@noble/hashes": "^2.0.1", "@scure/base": "^2.0.0", "@scure/bip32": "^2.0.1", "@scure/bip39": "^2.0.1", "@zorsh/zorsh": "^0.4.0", "tar": "^7.5.6", "zod": "^4.3.6" }, "peerDependencies": { "@hot-labs/near-connect": ">=0.6.0", "@near-wallet-selector/core": ">=8.0.0" }, "optionalPeers": ["@hot-labs/near-connect", "@near-wallet-selector/core"] }, "sha512-P/UEXT8gSbdZgeEFc7lMIOmUvkCwczmypDS5vU/7gUdcFG8S77ZymBzn8dkyxxLeVA2wFkwVpAPmzJEEX9m4ug=="],
 
-    "near-social-js": ["near-social-js@github:NEARBuilders/near-social-js#695c899", { "dependencies": { "bignumber.js": "^9.3.1", "near-kit": "^0.10.0" } }, "NEARBuilders-near-social-js-695c899", "sha512-Gv6e/5MmTdB8AxMCxtCmV1R/hREka5svDdiENZqBxntEHdE6V3mD4X3ohaliD3dBw0U+QrKBSLmUEqm294hMtw=="],
+    "near-social-js": ["near-social-js@2.0.4", "", { "dependencies": { "bignumber.js": "^9.3.1", "near-kit": "^0.10.0" } }, "sha512-CObpWWuE73jd0phsswAI9biA9pt0nYA3CD35EXvD6Y8FhyXlACmb2BQlfL46ZYR+Q9mGTwWJoic//zRvaI5z1A=="],
 
     "obug": ["obug@2.1.1", "", {}, "sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ=="],
 
