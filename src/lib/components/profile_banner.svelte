@@ -1,11 +1,20 @@
 <script lang="ts">
 	import type { Profile } from 'near-social-js';
-	import { resolveImageUrl, resolveLinkUrl } from '$lib/ts/profile_fun';
+	import { resolveImageUrl, resolveLinkUrl, resolveProfileImageUrl } from '$lib/ts/profile_fun';
 	let { profile } = $props<{ profile: Profile | null }>();
 
 	let expanded = $state(false);
 	const MAX_LENGTH = 100;
 	const needsTruncation = $derived((profile?.description?.length ?? 0) > MAX_LENGTH);
+
+	let profileImageUrl = $state('');
+	$effect(() => {
+		if (profile?.image) {
+			resolveProfileImageUrl(profile.image).then((url) => {
+				profileImageUrl = url;
+			});
+		}
+	});
 </script>
 
 <!-- ============================================ -->
@@ -17,7 +26,9 @@
     <!-- =========================== -->
 	<img src={resolveImageUrl(profile?.backgroundImage)} alt="BANNER" class="banner" />
 	{#if profile?.image}
-		<img src={resolveImageUrl(profile.image)} alt="PROFILE_PIC" class="profile-pic" />
+		{#if profileImageUrl}
+			<img src={profileImageUrl} alt="PROFILE_PIC" class="profile-pic" />
+		{/if}
 	{/if}
 	<!-- =========================== -->
 	<h1>{profile?.name}</h1>
