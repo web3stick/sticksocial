@@ -43,7 +43,7 @@
       max-width: 90vw;
       margin: 0 auto;
       position: relative;
-      font-family: 'Ubuntu', sans-serif;
+      text-align: left;
     }
     
     /* Banner */
@@ -69,7 +69,7 @@
     
     /* Name + description container */
     h1, p {
-      margin-left: 20px;
+      /*margin-left: 20px;*/
       margin-top: 50px;
     }
     
@@ -90,29 +90,9 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      padding-left: 20px;
+      /*padding-left: 20px;*/
     }
     
-    .linktree a {
-      padding: 6px 12px;
-      background: rgba(140, 162, 245, 0.15);
-      border: 1px solid rgba(140, 162, 245, 0.4);
-      border-radius: 20px;
-      text-decoration: none;
-      color: #8CA2F5;
-      font-size: 0.85rem;
-      transition: all 0.2s ease;
-    }
-    
-    .linktree a:hover {
-      background: #C9A8F4;
-      color: white;
-      transform: translateY(-2px);
-    }
-    
-    .linktree a:active {
-      background: #95D58D;
-      transform: translateY(0);
-    }
+   
 
 </style>
