@@ -17,7 +17,7 @@
 		}
 		// =================
 		console.log("=================")
-		console.log("=================")
+		console.log("/profile/" + accountId);
 		console.log($state.snapshot(profile));
 		console.log("=================")
 		// =================
