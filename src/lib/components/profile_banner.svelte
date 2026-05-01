@@ -38,23 +38,81 @@
 <!-- ============================================ -->
 
 <style>
-	div {
-		text-align: left;
-		width: 500px;
-		max-width: 90vw;
-	}
-	.banner {
-		width: 500px;
-		max-width: 90vw;
-	}
-	.profile-pic {
-		width: 80px;
-		height: 80px;
-		border-radius: 50%;
-	}
-	.linktree {
-		display: flex;
-		gap: 10px;
-		flex-wrap: wrap;
-	}
+    div {
+      width: 500px;
+      max-width: 90vw;
+      margin: 0 auto;
+      position: relative;
+      font-family: 'Ubuntu', sans-serif;
+    }
+    
+    /* Banner */
+    .banner {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 16px;
+      filter: brightness(0.9);
+    }
+    
+    /* Floating profile picture */
+    .profile-pic {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid white;
+      position: absolute;
+      top: 110px;
+      left: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    
+    /* Name + description container */
+    h1, p {
+      margin-left: 20px;
+      margin-top: 50px;
+    }
+    
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+    
+    p {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      margin-top: 0;
+    }
+    
+    /* Linktree pills */
+    .linktree {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-left: 20px;
+    }
+    
+    .linktree a {
+      padding: 6px 12px;
+      background: rgba(140, 162, 245, 0.15);
+      border: 1px solid rgba(140, 162, 245, 0.4);
+      border-radius: 20px;
+      text-decoration: none;
+      color: #8CA2F5;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    
+    .linktree a:hover {
+      background: #C9A8F4;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .linktree a:active {
+      background: #95D58D;
+      transform: translateY(0);
+    }
+
 </style>
