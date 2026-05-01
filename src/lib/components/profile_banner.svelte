@@ -16,9 +16,9 @@
 	{/if}
 	<h1>{profile?.name}</h1>
 	<p>{profile?.description}</p>
-	{#if profile.linktree}
+	{#if profile?.linktree}
 		<div class="linktree">
-			{#each Object.entries(profile.linktree) as [key, url]}
+			{#each Object.entries(profile?.linktree ?? {}) as [key, url]}
 				<a href={resolveLinkUrl(key, url as string)} target="_blank" rel="noopener noreferrer">{key}</a>
 			{/each}
 		</div>
