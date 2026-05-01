@@ -13,7 +13,6 @@ export function thumb(imageUrl: string, size = 'large'): string {
         : imageUrl;
 }
 // ========================================
-// ========================================
 export function resolveLinkUrl(platform: string, value: string): string {
     if (!value) return '';
     if (value.startsWith('http://') || value.startsWith('https://')) return value;

@@ -5,6 +5,7 @@
 	import type { Profile } from 'near-social-js';
 	// ============================================
 	import PROFILE_BANNER from '$lib/components/profile_banner.svelte';
+	import PROFILE_NAV from '$lib/components/profile_nav.svelte';
 	// ============================================
 	// profile for profile deatils pass to the profile banner componet
 	let profile = $state<Profile | null>(null);
@@ -24,9 +25,10 @@
 <!-- ============================================ -->
 
 <section>
-    {#if page.params.accountId}
-        <PROFILE_BANNER {profile} accountId={page.params.accountId}/>
-    {/if}
+	<PROFILE_NAV />
+	{#if page.params.accountId}
+		<PROFILE_BANNER {profile} accountId={page.params.accountId} />
+	{/if}
 </section>
 
 <!-- ============================================ -->
