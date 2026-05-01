@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import favicon from '$lib/assets/favicon.svg';
 	import { near_connect_client } from '@near-kit-tool-box/web';
+	import ROUTES from '$lib/ts/routes';
 	// ==================================
 	let isSignedIn: boolean = false;
 	let accountId: string | null = null;
@@ -21,6 +23,11 @@
 	// ==================================
 	onMount(async () => {
 		await updateAuthStatus();
+		if (isSignedIn && accountId) {
+			goto(`/profile/${accountId}.near`);
+		} else {
+			goto(ROUTES.profile_auth.path);
+		}
 	});
 </script>
 
@@ -28,7 +35,7 @@
 <!-- ============================================ -->
 
 <section>
-	<img src={favicon}/>
+	<img src={favicon} alt="Loading"/>
 </section>
 
 <!-- ============================================ -->

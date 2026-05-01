@@ -4,8 +4,8 @@
   import { onMount } from "svelte";
   import { near_connect_client } from "@near-kit-tool-box/web";
   // ==================================
-  let isSignedIn: boolean = false;
-  let accountId: string | null = null;
+  let isSignedIn = $state(false);
+  let accountId = $state<string | null>(null);
   // ==================================
   async function updateAuthStatus() {
     const wallet = await near_connect_client().wallet();
@@ -53,11 +53,11 @@
 
 <!-- AUTH_BUTTON -->
 {#if isSignedIn}
-  <button on:click={handleLogout}>
+  <button onclick={handleLogout}>
     LOGOUT {accountId}
   </button>
 {:else}
-  <button on:click={handleLogin}> LOGIN </button>
+  <button onclick={handleLogin}> LOGIN </button>
 {/if}
 
 <!-- =========================================== -->
