@@ -1,0 +1,43 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import favicon from '$lib/assets/favicon.svg';
+	import { near_connect_client } from '@near-kit-tool-box/web';
+	// ==================================
+	let isSignedIn: boolean = false;
+	let accountId: string | null = null;
+	// ==================================
+	async function updateAuthStatus() {
+		const wallet = await near_connect_client().wallet();
+		const accounts = await wallet.getAccounts();
+		if (accounts && accounts.length > 0) {
+			console.log('Connected account:', accounts[0].accountId);
+			accountId = accounts[0].accountId;
+			isSignedIn = true;
+		} else {
+			console.log('Not connected');
+			isSignedIn = false;
+		}
+	}
+	// ==================================
+	onMount(async () => {
+		await updateAuthStatus();
+	});
+</script>
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+<section>
+	<img src={favicon}/>
+</section>
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+<style>
+    img {
+        width: 500px;
+        max-width: 90vw;
+        /*border: 1px solid red;*/
+    }
+</style>

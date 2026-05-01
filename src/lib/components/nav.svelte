@@ -12,7 +12,7 @@
   <a href={ROUTES.home.path} class="active"><House /></a>
   <a href={ROUTES.search.path}><Search /></a>
   <a href={ROUTES.notifications.path}><Bell /></a>
-  <a href={ROUTES.profile.path}><User /></a>
+  <a href={ROUTES.profile_router.path}><User /></a>
 </nav>
 
 
