@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Profile } from 'near-social-js';
-	import { resolveImageUrl } from '$lib/ts/profile_fun';
+	import { resolveImageUrl, resolveLinkUrl } from '$lib/ts/profile_fun';
 	let { profile } = $props<{ profile: Profile | null }>();
 </script>
 
@@ -19,7 +19,7 @@
 	{#if profile.linktree}
 		<div class="linktree">
 			{#each Object.entries(profile.linktree) as [key, url]}
-				<a href={url as string} target="_blank" rel="noopener noreferrer">{key}</a>
+				<a href={resolveLinkUrl(key, url as string)} target="_blank" rel="noopener noreferrer">{key}</a>
 			{/each}
 		</div>
 	{/if}

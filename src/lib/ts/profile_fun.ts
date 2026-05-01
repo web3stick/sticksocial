@@ -7,3 +7,12 @@ export function resolveImageUrl(image: { ipfs_cid?: string; url?: string } | und
     return '';
 }
 // ========================================
+export function resolveLinkUrl(platform: string, value: string): string {
+    if (!value) return '';
+    if (platform === 'twitter') return `https://twitter.com/${value}`;
+    if (platform === 'github') return `https://github.com/${value}`;
+    if (platform === 'telegram') return `https://t.me/${value}`;
+    if (platform === 'website') return value.startsWith('http') ? value : `https://${value}`;
+    return value;
+}
+// ========================================
