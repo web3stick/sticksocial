@@ -4,6 +4,9 @@
 	import { get_profile } from '$lib/near-social-js/fun_get_profile';
 	import type { Profile } from 'near-social-js';
 	// ============================================
+	import PROFILE_BANNER from '$lib/components/profile_banner.svelte';
+	// ============================================
+	// profile for profile deatils pass to the profile banner componet
 	let profile = $state<Profile | null>(null);
 	// ============================================
 	onMount(async () => {
@@ -21,6 +24,7 @@
 <!-- ============================================ -->
 
 <section>
+    <PROFILE_BANNER/>
 </section>
 
 <!-- ============================================ -->
