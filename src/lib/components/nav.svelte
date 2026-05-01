@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { House, User, Search, Bell } from 'lucide-svelte';
 	import ROUTES from '../ts/routes';
+	import { page } from '$app/state';
 </script>
 
 <!-- ============================================ -->
@@ -9,10 +10,10 @@
 <!-- COMPONENT_NAV -->
 <!-- component_nav -->
 <nav>
-  <a href={ROUTES.home.path} class="active"><House /></a>
-  <a href={ROUTES.search.path}><Search /></a>
-  <a href={ROUTES.notifications.path}><Bell /></a>
-  <a href={ROUTES.profile_router.path}><User /></a>
+  <a href={ROUTES.home.path} class:active={page.url.pathname === ROUTES.home.path}><House /></a>
+  <a href={ROUTES.search.path} class:active={page.url.pathname === ROUTES.search.path}><Search /></a>
+  <a href={ROUTES.notifications.path} class:active={page.url.pathname === ROUTES.notifications.path}><Bell /></a>
+  <a href={ROUTES.profile_router.path} class:active={page.url.pathname === ROUTES.profile_router.path}><User /></a>
 </nav>
 
 
@@ -76,8 +77,8 @@
     
     /* Active route highlight */
     nav a.active {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+      background: rgba(255, 248, 163, 0.25);
+      box-shadow: 0 0 10px rgba(255, 248, 163, 0.4);
     }
 
 </style>
