@@ -13,6 +13,7 @@ bun run build
 bun run preview
 bun run check
 bun run format
+bun update --latest
 bun run tsc --noEmit
 
 # netlify
