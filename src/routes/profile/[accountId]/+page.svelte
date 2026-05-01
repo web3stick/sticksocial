@@ -16,7 +16,10 @@
 			profile = await get_profile(accountId);
 		}
 		// =================
+		console.log("=================")
+		console.log("=================")
 		console.log($state.snapshot(profile));
+		console.log("=================")
 		// =================
 	});
 </script>
