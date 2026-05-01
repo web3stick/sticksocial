@@ -2,6 +2,10 @@
 	import type { Profile } from 'near-social-js';
 	import { resolveImageUrl, resolveLinkUrl } from '$lib/ts/profile_fun';
 	let { profile } = $props<{ profile: Profile | null }>();
+
+	let expanded = $state(false);
+	const MAX_LENGTH = 100;
+	const needsTruncation = $derived((profile?.description?.length ?? 0) > MAX_LENGTH);
 </script>
 
 <!-- ============================================ -->
@@ -10,12 +14,21 @@
 <!-- profile_banner -->
 <!-- PROFILE_BANNER -->
 <div>
+    <!-- =========================== -->
 	<img src={resolveImageUrl(profile?.backgroundImage)} alt="BANNER" class="banner" />
 	{#if profile?.image}
 		<img src={resolveImageUrl(profile.image)} alt="PROFILE_PIC" class="profile-pic" />
 	{/if}
+	<!-- =========================== -->
 	<h1>{profile?.name}</h1>
-	<p>{profile?.description}</p>
+	<!-- =========================== -->
+	<p>
+		{expanded || !needsTruncation ? profile?.description : profile?.description?.slice(0, MAX_LENGTH) + '...'}
+		{#if needsTruncation}
+			<button class="show-more" onclick={() => expanded = !expanded}>{expanded ? 'SHOW LESS' : 'SHOW MORE'}</button>
+		{/if}
+	</p>
+	<!-- =========================== -->
 	{#if profile?.linktree}
 		<div class="linktree">
 			{#each Object.entries(profile?.linktree ?? {}) as [key, url]}
@@ -23,7 +36,7 @@
 			{/each}
 		</div>
 	{/if}
-
+	<!-- =========================== -->
 	<!-- we will use tags in future when i add links to them to routes -->
 	<!-- {#if profile?.tags}
 		<div class="tags">
@@ -32,6 +45,7 @@
 			{/each}
 		</div>
 	{/if} -->
+	<!-- =========================== -->
 </div>
 
 <!-- ============================================ -->
@@ -82,6 +96,16 @@
       font-size: 0.95rem;
       opacity: 0.8;
       margin-top: 0;
+    }
+
+    .show-more {
+      background: none;
+      border: none;
+      color: var(--color-blue);
+      cursor: pointer;
+      padding: 0;
+      margin-left: 4px;
+      font-size: 10px;
     }
     
     /* Linktree pills */
