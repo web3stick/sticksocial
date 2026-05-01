@@ -51,7 +51,7 @@
 <!-- =========================================== -->
 <!-- =========================================== -->
 
-<!-- AUTH_BUTTON -->
+<!-- AUTH_BUTTON_LOGIN -->
 {#if isSignedIn}
   <button onclick={handleLogout}>
     LOGOUT {accountId}
