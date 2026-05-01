@@ -7,10 +7,12 @@
 	let profile = $state<Profile | null>(null);
 	// ============================================
 	onMount(async () => {
+		const accountId = page.params.accountId;
+		if (accountId) {
+			profile = await get_profile(accountId);
+		}
 		// =================
-		profile = await get_profile(page.params.accountId);
-		// =================
-		console.log(profile);
+		console.log($state.snapshot(profile));
 		// =================
 	});
 </script>
