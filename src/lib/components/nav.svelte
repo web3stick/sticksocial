@@ -27,6 +27,7 @@
       transform: translateX(-50%);
       width: 500px;
       max-width: 90vw;
+      box-sizing: border-box;
     
       display: flex;
       justify-content: space-between;
