@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Profile } from 'near-social-js';
-	import { resolveImageUrl, resolveLinkUrl, resolveProfileImageUrl } from '$lib/ts/profile_fun';
+	import { resolveImageUrl, resolveLinkUrl, resolveProfileImageUrl, thumb } from '$lib/ts/profile_fun';
 	let { profile } = $props<{ profile: Profile | null }>();
 
 	let expanded = $state(false);
@@ -11,7 +11,7 @@
 	$effect(() => {
 		if (profile?.image) {
 			resolveProfileImageUrl(profile.image).then((url) => {
-				profileImageUrl = url;
+				profileImageUrl = thumb(url, 'small');
 			});
 		}
 	});

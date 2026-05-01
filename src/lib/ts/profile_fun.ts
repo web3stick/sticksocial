@@ -9,6 +9,12 @@ export function resolveImageUrl(image: { ipfs_cid?: string; url?: string } | und
     return '';
 }
 // ========================================
+export function thumb(imageUrl: string, size = 'large'): string {
+    return imageUrl && !imageUrl.startsWith('data:image/')
+        ? `https://i.near.social/${size}/${imageUrl}`
+        : imageUrl;
+}
+// ========================================
 export async function resolveProfileImageUrl(
 	image: { ipfs_cid?: string; url?: string; nft?: { contractId: string; tokenId: string } } | undefined
 ): Promise<string> {
@@ -19,6 +25,7 @@ export async function resolveProfileImageUrl(
     }
     return resolveImageUrl(image);
 }
+// ========================================
 // ========================================
 export function resolveLinkUrl(platform: string, value: string): string {
     if (!value) return '';
