@@ -24,7 +24,9 @@
 <!-- ============================================ -->
 
 <section>
-    <PROFILE_BANNER {profile}/>
+    {#if page.params.accountId}
+        <PROFILE_BANNER {profile} accountId={page.params.accountId}/>
+    {/if}
 </section>
 
 <!-- ============================================ -->

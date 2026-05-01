@@ -1,6 +1,4 @@
 import { near_social_ipfs } from './const.ts'
-import { nft_get_image_url_fun } from './fun_get_nft_image.ts'
-import { near_kit_client } from '@near-kit-tool-box/web'
 // ========================================
 export function resolveImageUrl(image: { ipfs_cid?: string; url?: string } | undefined): string {
     if (!image) return '';
@@ -13,17 +11,6 @@ export function thumb(imageUrl: string, size = 'large'): string {
     return imageUrl && !imageUrl.startsWith('data:image/')
         ? `https://i.near.social/${size}/${imageUrl}`
         : imageUrl;
-}
-// ========================================
-export async function resolveProfileImageUrl(
-	image: { ipfs_cid?: string; url?: string; nft?: { contractId: string; tokenId: string } } | undefined
-): Promise<string> {
-    if (!image) return '';
-    if (image.nft?.contractId && image.nft?.tokenId) {
-        const url = await nft_get_image_url_fun(near_kit_client(), image.nft.contractId, image.nft.tokenId);
-        return url ?? resolveImageUrl(image);
-    }
-    return resolveImageUrl(image);
 }
 // ========================================
 // ========================================
