@@ -35,7 +35,7 @@
 	$effect(() => {
 		if (checked) {
 			if (isSignedIn && accountId) {
-				goto(`/profile/${accountId}.near`);
+				goto(`/profile/${accountId}`);
 			} else {
 				goto(ROUTES.profile_auth.path);
 			}

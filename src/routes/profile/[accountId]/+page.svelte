@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
-
-	let { accountId } = $props();
 </script>
 
 <section>
 	<h1>PROFILE</h1>
-	<p>Account: {accountId}</p>
+	<p>Account: {page.params.accountId}</p>
 </section>
 
 <style>
