@@ -47,16 +47,16 @@
 <!-- ============================================ -->
 
 <section>
-	<img src={favicon} alt="LOADING"/>
+	<!-- <img src={favicon} alt="LOADING"/> -->
 </section>
 
 <!-- ============================================ -->
 <!-- ============================================ -->
 
 <style>
-    img {
+    /*img {
         width: 500px;
         max-width: 90vw;
-        /*border: 1px solid red;*/
-    }
+        border: 1px solid red;
+    }*/
 </style>

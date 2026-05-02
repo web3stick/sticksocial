@@ -6,15 +6,19 @@
 	// ============================================
 	import PROFILE_BANNER from '$lib/components/profile_banner.svelte';
 	import PROFILE_NAV from '$lib/components/profile_nav.svelte';
+	import SKELETON_PROFILE_BANNER from '$lib/components/skeleton_profile_banner.svelte';
 	// ============================================
 	// profile for profile deatils pass to the profile banner componet
 	let profile = $state<Profile | null>(null);
+	let loading = $state(true);
+	let ready = $state(false);
 	// ============================================
 	onMount(async () => {
 		const accountId = page.params.accountId;
 		if (accountId) {
 			profile = await get_profile(accountId);
 		}
+		loading = false;
 		// =================
 		console.log("=================")
 		console.log("/profile/" + accountId);
@@ -22,6 +26,10 @@
 		console.log("=================")
 		// =================
 	});
+
+	function onSkeletonReady() {
+		ready = true;
+	}
 </script>
 
 <!-- ============================================ -->
@@ -30,7 +38,10 @@
 <section>
 	<PROFILE_NAV />
 	{#if page.params.accountId}
-		<PROFILE_BANNER {profile} accountId={page.params.accountId} />
+		<SKELETON_PROFILE_BANNER loading={loading} accountId={page.params.accountId} onReady={onSkeletonReady} />
+		{#if ready}
+			<PROFILE_BANNER {profile} accountId={page.params.accountId} />
+		{/if}
 	{/if}
 </section>
 
