@@ -29,8 +29,8 @@
 <div class="skeleton-container" class:hidden={!showSkeleton}>
 	<div class="banner"></div>
 	<div class="profile-pic"></div>
-	<h1 class="text-block"></h1>
-	<p class="text-block small"></p>
+	<div class="name-block"></div>
+	<div class="desc-block"></div>
 	<div class="linktree">
 		<div class="link-pill"></div>
 		<div class="link-pill"></div>
@@ -63,7 +63,8 @@
 
 	.skeleton-container .banner,
 	.skeleton-container .profile-pic,
-	.skeleton-container .text-block,
+	.skeleton-container .name-block,
+	.skeleton-container .desc-block,
 	.skeleton-container .link-pill {
 		background: var(--color-skeleton, #e0e0e0);
 		animation: shimmer 1.5s ease-in-out infinite;
@@ -87,15 +88,16 @@
 		box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 	}
 
-	.skeleton-container .text-block {
-		width: 100%;
+	.skeleton-container .name-block {
+		width: 30%;
 		height: 20px;
 		margin-top: 50px;
 	}
 
-	.skeleton-container .text-block.small {
-		width: 60%;
+	.skeleton-container .desc-block {
+		width: 100%;
 		height: 14px;
+		margin-top: 0;
 	}
 
 	.skeleton-container .link-pill {
@@ -115,7 +117,8 @@
 	@media (prefers-color-scheme: dark) {
 		.skeleton-container .banner,
 		.skeleton-container .profile-pic,
-		.skeleton-container .text-block,
+		.skeleton-container .name-block,
+		.skeleton-container .desc-block,
 		.skeleton-container .link-pill {
 			background: var(--color-skeleton, #3a3a3a);
 		}
