@@ -46,35 +46,35 @@
 	{/if}
 	<form>
 		<label>
-			Name
+			NAME
 			<input type="text" bind:value={name} />
 		</label>
 		<label>
-			Image URL
+			IMAGE URL
 			<input type="text" bind:value={imageUrl} />
 		</label>
 		<label>
-			Backdrop URL
+			BACKDROP IMAGE URL
 			<input type="text" bind:value={backdropUrl} />
 		</label>
 		<label>
-			Bio
+			BIO
 			<textarea bind:value={bio}></textarea>
 		</label>
 		<label>
-			Twitter
+			TWITTER
 			<input type="text" bind:value={twitter} />
 		</label>
 		<label>
-			GitHub
+			GITHUB
 			<input type="text" bind:value={github} />
 		</label>
 		<label>
-			Telegram
+			TELEGRAM
 			<input type="text" bind:value={telegram} />
 		</label>
 		<label>
-			Website
+			WEBSITE
 			<input type="text" bind:value={website} />
 		</label>
 	</form>
@@ -85,11 +85,7 @@
 
 <style>
 	div {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		padding: 1rem;
-		align-items: center;
+		text-align: left;
 	}
 	.profile-pic {
 		width: 90px;
@@ -97,13 +93,6 @@
 		border-radius: 50%;
 		border: 4px solid white;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-	}
-	form {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		width: 100%;
-		max-width: 400px;
 	}
 	label {
 		display: flex;
@@ -115,6 +104,10 @@
 		padding: 0.5rem;
 		border: 1px solid #ccc;
 		border-radius: 4px;
+		/*width: 100%;*/
+		width: 500px;
+		max-width: 90vw;
+		box-sizing: border-box;
 	}
 	textarea {
 		min-height: 80px;
