@@ -15,7 +15,7 @@
 		const timer = setTimeout(() => {
 			minTimeElapsed = true;
 			checkReady();
-		}, 500);
+		}, 700);
 
 		return () => clearTimeout(timer);
 	});
