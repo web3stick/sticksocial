@@ -1,13 +1,13 @@
 <script lang="ts">
-  import AUTH_BUTTON_LOGIN from "$lib/components/button_auth_login.svelte"
+	import AUTH_BUTTON from '$lib/components/button_auth.svelte';
 </script>
 
 <!-- ============================================ -->
 <!-- ============================================ -->
 
 <section>
-	<h1>LOGIN</h1>
-	<AUTH_BUTTON_LOGIN/>
+	<h1>LOGIN/LOGOUT</h1>
+	<AUTH_BUTTON />
 </section>
 
 <!-- ============================================ -->
