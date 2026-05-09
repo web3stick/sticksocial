@@ -1,6 +1,7 @@
 // ============================================
 const ROUTES = {
 	home: { path: "/", label: "HOME" },
+	feed: { path: "/feed", label: "FEED" },
 	search: { path: "/search", label: "SEARCH" },
 	discover: { path: "/discover", label: "DISCOVER" },
 	settings: { path: "/settings", label: "SETTINGS" },

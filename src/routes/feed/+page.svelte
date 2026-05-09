@@ -1,10 +1,13 @@
-<script lang="ts"></script>
+<script lang="ts">
+  import HOME_NAV from "$lib/components/home_nav.svelte"
+</script>
 
 <!-- ============================================ -->
 <!-- ============================================ -->
 
 <section>
-	<h1>HOME</h1>
+	<h1>FEED</h1>
+	<HOME_NAV/>
 </section>
 
 <!-- ============================================ -->

@@ -10,7 +10,7 @@
 <!-- COMPONENT_NAV -->
 <!-- component_nav -->
 <nav>
-	<a href={ROUTES.home.path} class:active={page.url.pathname === ROUTES.home.path}><House /></a>
+	<a href={ROUTES.feed.path} class:active={page.url.pathname === ROUTES.feed.path}><House /></a>
 	<a href={ROUTES.discover.path} class:active={page.url.pathname === ROUTES.discover.path}
 		><Search /></a
 	>
