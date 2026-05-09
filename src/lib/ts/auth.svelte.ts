@@ -2,7 +2,7 @@ import { near_connect_client } from '@near-kit-tool-box/web';
 // ========================================
 export const auth = $state({
 	isSignedIn: false,
-	accountId: null as string | null,
+	accountId: null as string | null
 });
 // ========================================
 export async function updateAuthStatus() {

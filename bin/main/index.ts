@@ -1,11 +1,11 @@
-import { near_social_js_index_fun } from "../../src/lib/near-social-js/main/fun_index";
+import { near_social_js_index_fun } from '../../src/lib/near-social-js/main/fun_index';
 // ========================================
 // index --action <action> --key <key> [--accountId <accountId>] [--order <asc|desc>] [--limit <number>]
 // ========================================
 const args = process.argv.slice(2);
 const getArg = (flag: string) => {
-  const idx = args.indexOf(flag);
-  return idx >= 0 ? args[idx + 1] : undefined;
+	const idx = args.indexOf(flag);
+	return idx >= 0 ? args[idx + 1] : undefined;
 };
 const action = getArg('--action') || 'post';
 const key = getArg('--key') || 'main';

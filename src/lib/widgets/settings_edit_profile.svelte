@@ -41,7 +41,11 @@
 <div>
 	<h3>EDIT PROFILE</h3>
 	{#if auth.accountId}
-		<img src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${auth.accountId}`} alt="PROFILE_PIC" class="profile-pic" />
+		<img
+			src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${auth.accountId}`}
+			alt="PROFILE_PIC"
+			class="profile-pic"
+		/>
 	{/if}
 	<form>
 		<label>
