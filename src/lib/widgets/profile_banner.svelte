@@ -16,12 +16,6 @@
 		const accountId = page.params.accountId;
 		if (accountId) {
 			profile = await get_profile(accountId);
-			// =================
-			console.log('=================');
-			console.log('/profile/' + accountId);
-			console.log($state.snapshot(profile));
-			console.log('=================');
-			// =================
 		}
 		loading = false;
 	});
