@@ -2,12 +2,8 @@ import { get_notifications } from "../../src/lib/near-social-js/main/fun_get_not
 // ========================================
 // get-notifications <accountId> [--order <asc|desc>] [--limit <number>] [--from <number>]
 // ========================================
-const args = process.argv.slice(2);
-const accountId = args[0];
-if (!accountId) {
-	console.error("Usage: bun run bin/main/get_notifications.ts <accountId> [--order <asc|desc>] [--limit <number>] [--from <number>]");
-	process.exit(1);
-}
+const accountId = process.argv[2] || "sleet.near";
+const args = process.argv.slice(3);
 const getArg = (flag: string) => {
 	const idx = args.indexOf(flag);
 	return idx >= 0 ? args[idx + 1] : undefined;
