@@ -2,6 +2,7 @@
 const ROUTES = {
 	home: { path: '/', label: 'HOME' },
 	search: { path: '/search', label: 'SEARCH' },
+	discover: { path: '/discover', label: 'DISCOVER' },
 	settings: { path: '/settings', label: 'SETTINGS' },
 	notifications: { path: '/notifications', label: 'NOTIFICATIONS' },
 	profile: { path: '/profile', label: 'PROFILE' },
