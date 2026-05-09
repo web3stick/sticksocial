@@ -34,8 +34,8 @@
 {:else}
 	<!-- ============================================ -->
 	<!-- ============================================ -->
-	<!-- profile_banner -->
-	<!-- PROFILE_BANNER -->
+	<!-- widget_profile_banner -->
+	<!-- WIDGET_PROFILE_BANNER -->
 	<div>
 		<!-- =========================== -->
 		<img src={resolveImageUrl(profile?.backgroundImage)} alt="BANNER" class="banner" />

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { auth, updateAuthStatus } from '$lib/ts/auth.svelte';
-	import { get_profile } from '$lib/near-social-js/fun_get_profile';
+	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
 	import { resolveImageUrl } from '$lib/ts/profile_fun';
 	import type { Profile } from 'near-social-js';
 	// ==================================

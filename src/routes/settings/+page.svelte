@@ -1,6 +1,6 @@
 <script lang="ts">
 	import BUTTON_AUTH from '$lib/components/button_auth.svelte';
-	import SETTINGS_EDIT_PROFILE from '$lib/components/settings_edit_profile.svelte'
+	import SETTINGS_EDIT_PROFILE from '$lib/widgets/settings_edit_profile.svelte'
 </script>
 
 <!-- ============================================ -->
