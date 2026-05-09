@@ -8,6 +8,7 @@ export async function get_profile(account_id: string): Promise<Profile | null> {
 	// =================
 	console.log('=================');
 	console.log('/profile/' + account_id);
+	console.log('=================');
 	console.log(profile);
 	console.log('=================');
 	// =================
