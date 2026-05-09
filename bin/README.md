@@ -26,6 +26,11 @@ bun run bin/main/get_profile.ts -- mob.near
 bun run bin/main/get_activity_feed.ts
 bun run bin/main/get_activity_feed.ts -- --limit 10
 bun run bin/main/get_activity_feed.ts -- --order asc --limit 5 --from 0
+
+bun run bin/main/get_notifications.ts
+bun run bin/main/get_notifications.ts -- sleet.near
+bun run bin/main/get_notifications.ts -- mob.near --limit 10
+bun run bin/main/get_notifications.ts -- mob.near --order asc --limit 5 --from 0
 ```
 
 helper bins
