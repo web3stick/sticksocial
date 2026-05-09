@@ -18,6 +18,14 @@ bun run bin/main/index.ts -- --action post --key main --accountId mob.near --lim
 
 bun run bin/main/set.ts
 bun run bin/main/set.ts -- --signerId sleet.near --data '{"sleet.near":{"test":{"key":"value"}}}'
+
+bun run bin/main/get_profile.ts
+bun run bin/main/get_profile.ts -- sleet.near
+bun run bin/main/get_profile.ts -- mob.near
+
+bun run bin/main/get_activity_feed.ts
+bun run bin/main/get_activity_feed.ts -- --limit 10
+bun run bin/main/get_activity_feed.ts -- --order asc --limit 5 --from 0
 ```
 
 helper bins

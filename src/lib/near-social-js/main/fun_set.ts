@@ -13,9 +13,9 @@ export async function near_social_js_set_fun(
 	const result = await near_social_client(near_kit_client).set({ signerId, data, ...options });
 	// =================
 	console.log('=================');
-	console.log("signerId:", signerId);
-	console.log("data:", data);
-	console.log("options:", options);
+	console.log('signerId:', signerId);
+	console.log('data:', data);
+	console.log('options:', options);
 	console.log('=================');
 	console.log(result);
 	console.log('=================');
