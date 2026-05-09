@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import type { Profile } from 'near-social-js';
 	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
@@ -7,13 +6,12 @@
 	// ============================================
 	let profile = $state<Profile | null>(null);
 	let loading = $state(true);
-	let {} = $props<{}>();
+	let { accountId } = $props<{ accountId: string }>();
 	let expanded = $state(false);
 	const MAX_LENGTH = 100;
 	const needsTruncation = $derived((profile?.description?.length ?? 0) > MAX_LENGTH);
 	// ============================================
 	onMount(async () => {
-		const accountId = page.params.accountId;
 		if (accountId) {
 			profile = await get_profile(accountId);
 		}
@@ -33,9 +31,9 @@
 	<div>
 		<!-- =========================== -->
 		<img src={resolveImageUrl(profile?.backgroundImage)} alt="BANNER" class="banner" />
-		{#if page.params.accountId}
+		{#if accountId}
 			<img
-				src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${page.params.accountId}`}
+				src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${accountId}`}
 				alt="PROFILE_PIC"
 				class="profile-pic"
 			/>
