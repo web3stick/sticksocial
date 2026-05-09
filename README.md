@@ -11,6 +11,7 @@ bun i
 bun run dev
 bun run build
 bun run preview
+bun run prepare # ??
 bun run check
 bun run format
 bun update --latest
