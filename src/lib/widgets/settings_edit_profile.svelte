@@ -1,34 +1,34 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { auth, updateAuthStatus } from '$lib/ts/auth.svelte';
-	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
-	import { resolveImageUrl } from '$lib/ts/profile_fun';
-	import type { Profile } from 'near-social-js';
+	import { onMount } from "svelte";
+	import { auth, updateAuthStatus } from "$lib/ts/auth.svelte";
+	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
+	import { resolveImageUrl } from "$lib/ts/profile_fun";
+	import type { Profile } from "near-social-js";
 	// ==================================
 	let profile = $state<Profile | null>(null);
 	// ==================================
-	let name = $state('');
-	let imageUrl = $state('');
-	let backdropUrl = $state('');
-	let bio = $state('');
-	let twitter = $state('');
-	let github = $state('');
-	let telegram = $state('');
-	let website = $state('');
+	let name = $state("");
+	let imageUrl = $state("");
+	let backdropUrl = $state("");
+	let bio = $state("");
+	let twitter = $state("");
+	let github = $state("");
+	let telegram = $state("");
+	let website = $state("");
 	// ==================================
 	onMount(async () => {
 		await updateAuthStatus();
 		if (auth.accountId) {
 			profile = await get_profile(auth.accountId);
 			if (profile) {
-				name = profile.name ?? '';
+				name = profile.name ?? "";
 				imageUrl = resolveImageUrl(profile.image);
 				backdropUrl = resolveImageUrl(profile.backgroundImage);
-				bio = profile.description ?? '';
-				twitter = profile.linktree?.['twitter'] ?? '';
-				github = profile.linktree?.['github'] ?? '';
-				telegram = profile.linktree?.['telegram'] ?? '';
-				website = profile.linktree?.['website'] ?? '';
+				bio = profile.description ?? "";
+				twitter = profile.linktree?.["twitter"] ?? "";
+				github = profile.linktree?.["github"] ?? "";
+				telegram = profile.linktree?.["telegram"] ?? "";
+				website = profile.linktree?.["website"] ?? "";
 			}
 		}
 	});

@@ -1,4 +1,4 @@
-import { Social } from 'near-social-js';
+import { Social } from "near-social-js";
 // import { Near } from "near-kit";
 // leave as any for now cause of  ersion differnt but that should be Near
 // ============================================

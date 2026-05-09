@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { near_social_js_get_fun } from '../main/fun_get';
-import { account_id_profile_schema } from '../../types/account_id_profile';
+import { z } from "zod";
+import { near_social_js_get_fun } from "../main/fun_get";
+import { account_id_profile_schema } from "../../types/account_id_profile";
 // ============================================
 export async function get_account_id_profile(
 	accountId: string

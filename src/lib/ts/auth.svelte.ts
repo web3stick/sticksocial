@@ -1,4 +1,4 @@
-import { near_connect_client } from '@near-kit-tool-box/web';
+import { near_connect_client } from "@near-kit-tool-box/web";
 // ========================================
 export const auth = $state({
 	isSignedIn: false,

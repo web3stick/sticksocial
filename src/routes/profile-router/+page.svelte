@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { auth, updateAuthStatus } from '$lib/ts/auth.svelte';
-	import ROUTES from '$lib/ts/routes';
+	import { onMount } from "svelte";
+	import { goto } from "$app/navigation";
+	import { auth, updateAuthStatus } from "$lib/ts/auth.svelte";
+	import ROUTES from "$lib/ts/routes";
 	// ==================================
 	let checked = $state(false);
 	// ==================================

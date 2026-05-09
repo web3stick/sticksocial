@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { House, User, Search, Bell } from 'lucide-svelte';
-	import ROUTES from '../ts/routes';
-	import { page } from '$app/state';
+	import { House, User, Search, Bell } from "lucide-svelte";
+	import ROUTES from "../ts/routes";
+	import { page } from "$app/state";
 </script>
 
 <!-- ============================================ -->
@@ -20,7 +20,7 @@
 	<a
 		href={ROUTES.profile_router.path}
 		class:active={page.url.pathname === ROUTES.profile_router.path ||
-			(page.url.pathname.startsWith('/profile/') && page.url.pathname !== '/profile-auth')}
+			(page.url.pathname.startsWith("/profile/") && page.url.pathname !== "/profile-auth")}
 		><User /></a
 	>
 </nav>

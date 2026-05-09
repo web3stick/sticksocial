@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import type { Profile } from 'near-social-js';
+import { z } from "zod";
+import type { Profile } from "near-social-js";
 // ============================================
 const account_id_profile_image_schema = z
 	.object({
@@ -7,7 +7,7 @@ const account_id_profile_image_schema = z
 		url: z.string().optional()
 	})
 	.refine((data) => data.ipfs_cid !== undefined || data.url !== undefined, {
-		message: 'Image must have ipfs_cid or url'
+		message: "Image must have ipfs_cid or url"
 	});
 // ============================================
 const account_id_profile_nft_image_schema = z.object({

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import ROUTES from '../ts/routes';
-	import { LogOut, Settings } from 'lucide-svelte';
+	import ROUTES from "../ts/routes";
+	import { LogOut, Settings } from "lucide-svelte";
 </script>
 
 <!-- ============================================ -->

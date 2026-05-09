@@ -1,5 +1,5 @@
-import { near_kit_client } from '@near-kit-tool-box/web';
-import { near_social_client } from '../new';
+import { near_kit_client } from "@near-kit-tool-box/web";
+import { near_social_client } from "../new";
 // ============================================
 export async function near_social_js_keys_fun(keys: string[]): Promise<Record<string, any> | null> {
 	// =================
@@ -8,12 +8,12 @@ export async function near_social_js_keys_fun(keys: string[]): Promise<Record<st
 		any
 	> | null;
 	// =================
-	console.log('=================');
-	console.log('keys()');
-	console.log(keys.join(','));
-	console.log('=================');
+	console.log("=================");
+	console.log("keys()");
+	console.log(keys.join(","));
+	console.log("=================");
 	console.log(result);
-	console.log('=================');
+	console.log("=================");
 	// =================
 	return result;
 }

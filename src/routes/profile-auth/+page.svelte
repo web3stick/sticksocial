@@ -1,6 +1,6 @@
 <script lang="ts">
-	import AUTH_BUTTON from '$lib/components/button_auth.svelte';
-	import ROUTES from '$lib/ts/routes';
+	import AUTH_BUTTON from "$lib/components/button_auth.svelte";
+	import ROUTES from "$lib/ts/routes";
 </script>
 
 <!-- ============================================ -->

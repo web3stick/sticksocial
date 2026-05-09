@@ -1,5 +1,5 @@
-import { near_kit_client } from '@near-kit-tool-box/web';
-import { near_social_client } from '../new';
+import { near_kit_client } from "@near-kit-tool-box/web";
+import { near_social_client } from "../new";
 // ============================================
 export async function near_social_js_set_fun(
 	signerId: string,
@@ -12,13 +12,13 @@ export async function near_social_js_set_fun(
 	// =================
 	const result = await near_social_client(near_kit_client).set({ signerId, data, ...options });
 	// =================
-	console.log('=================');
-	console.log('signerId:', signerId);
-	console.log('data:', data);
-	console.log('options:', options);
-	console.log('=================');
+	console.log("=================");
+	console.log("signerId:", signerId);
+	console.log("data:", data);
+	console.log("options:", options);
+	console.log("=================");
 	console.log(result);
-	console.log('=================');
+	console.log("=================");
 	// =================
 	return result;
 }

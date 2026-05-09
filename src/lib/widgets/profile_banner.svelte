@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type { Profile } from 'near-social-js';
-	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
-	import { resolve_image_url_fun } from '$lib/fun/profile_image';
+	import { onMount } from "svelte";
+	import type { Profile } from "near-social-js";
+	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
+	import { resolve_image_url_fun } from "$lib/fun/profile_image";
 	// ============================================
 	let profile = $state<Profile | null>(null);
 	let loading = $state(true);
@@ -44,10 +44,10 @@
 		<p>
 			{expanded || !needsTruncation
 				? profile?.description
-				: profile?.description?.slice(0, MAX_LENGTH) + '...'}
+				: profile?.description?.slice(0, MAX_LENGTH) + "..."}
 			{#if needsTruncation}
 				<button class="show-more" onclick={() => (expanded = !expanded)}
-					>{expanded ? 'SHOW LESS' : 'SHOW MORE'}</button
+					>{expanded ? "SHOW LESS" : "SHOW MORE"}</button
 				>
 			{/if}
 		</p>

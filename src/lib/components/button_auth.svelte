@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { auth, login, logout, updateAuthStatus } from '$lib/ts/auth.svelte';
+	import { onMount } from "svelte";
+	import { auth, login, logout, updateAuthStatus } from "$lib/ts/auth.svelte";
 	// ==================================
 	onMount(async () => {
 		await updateAuthStatus();
