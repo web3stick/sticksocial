@@ -3,7 +3,6 @@
 	import type { Profile } from 'near-social-js';
 	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
 	import { resolve_image_url_fun } from '$lib/fun/profile_image';
-	import { resolve_linktree_url_fun } from '$lib/fun/profile_linktree';
 	// ============================================
 	let profile = $state<Profile | null>(null);
 	let loading = $state(true);
@@ -52,17 +51,6 @@
 				>
 			{/if}
 		</p>
-		<!-- =========================== -->
-		{#if profile?.linktree}
-			<div class="linktree">
-			<p>linktree</p>
-				{#each Object.entries(profile?.linktree ?? {}) as [key, url]}
-					<a href={resolve_linktree_url_fun(key, url as string)} target="_blank" rel="noopener noreferrer"
-						>{key}</a
-					>
-				{/each}
-			</div>
-		{/if}
 		<!-- =========================== -->
 		<!-- we will use tags in future when i add links to them to routes -->
 		<!-- {#if profile?.tags}
@@ -135,14 +123,5 @@
 		padding: 0;
 		margin-left: 4px;
 		font-size: 10px;
-	}
-
-	/* Linktree pills */
-	.linktree {
-		margin-top: 12px;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		/*padding-left: 20px;*/
 	}
 </style>
