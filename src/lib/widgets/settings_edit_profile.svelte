@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import { auth, updateAuthStatus } from "$lib/ts/auth.svelte";
 	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
-	import { resolveImageUrl } from "$lib/ts/profile_fun";
+	import { resolve_image_url_fun } from "$lib/fun/profile_image";
 	import type { Profile } from "near-social-js";
 	// ==================================
 	let profile = $state<Profile | null>(null);
@@ -22,8 +22,8 @@
 			profile = await get_profile(auth.accountId);
 			if (profile) {
 				name = profile.name ?? "";
-				imageUrl = resolveImageUrl(profile.image);
-				backdropUrl = resolveImageUrl(profile.backgroundImage);
+				imageUrl = resolve_image_url_fun(profile.image);
+				backdropUrl = resolve_image_url_fun(profile.backgroundImage);
 				bio = profile.description ?? "";
 				twitter = profile.linktree?.["twitter"] ?? "";
 				github = profile.linktree?.["github"] ?? "";
