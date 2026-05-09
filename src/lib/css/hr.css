@@ -1,0 +1,10 @@
+/*==================================*/
+hr {
+	border-style: solid;
+	border-width: 1px;
+	width: 500px;
+	max-width: 90vw;
+	box-sizing: border-box;
+	border-color: #95d58d;
+}
+/*==================================*/

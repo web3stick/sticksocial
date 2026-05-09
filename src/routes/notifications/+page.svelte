@@ -16,6 +16,7 @@
 
 <section>
 	<h1>NOTIFICATIONS</h1>
+	<hr />
 	{#if checked && auth.accountId}
 		<WIDGET_NOTIFICATIONS_LIST accountId={auth.accountId} />
 	{:else if !checked}
