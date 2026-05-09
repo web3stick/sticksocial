@@ -1,3 +1,12 @@
+<!--
+todo
+- add some depth and shadow css
+- add a type file to the type folder for the notifications,
+- or use the type Notification form the package
+
+when all done and said this page links to the profiles that did the commenting or following
+and or to the post that was like or commented on.
+-->
 <script lang="ts">
 	import { get_notifications } from "$lib/near-social-js/main/fun_get_notifications";
 	import type { Notification } from "near-social-js";
@@ -16,6 +25,7 @@
 
 <!-- ============================================ -->
 <!-- ============================================ -->
+
 <!-- widget_notifications_list -->
 <!-- WIDGET_NOTIFICATIONS_LIST -->
 <div class="notifications">
@@ -32,10 +42,6 @@
 <!-- ============================================ -->
 
 <style>
-    /*
-    todo
-    - add some depth and shadow
-    */
 	.notifications {
 		width: 500px;
 		max-width: 90vw;
