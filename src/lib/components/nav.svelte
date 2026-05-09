@@ -11,7 +11,8 @@
 <!-- component_nav -->
 <nav>
 	<a href={ROUTES.home.path} class:active={page.url.pathname === ROUTES.home.path}><House /></a>
-	<a href={ROUTES.discover.path} class:active={page.url.pathname === ROUTES.discover.path}><Search /></a
+	<a href={ROUTES.discover.path} class:active={page.url.pathname === ROUTES.discover.path}
+		><Search /></a
 	>
 	<a href={ROUTES.notifications.path} class:active={page.url.pathname === ROUTES.notifications.path}
 		><Bell /></a
