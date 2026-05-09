@@ -6,10 +6,15 @@ export const auth = $state({
 });
 // ========================================
 export async function updateAuthStatus() {
-	const wallet = await near_connect_client().wallet();
-	const accounts = await wallet.getAccounts();
-	auth.isSignedIn = accounts?.length > 0;
-	auth.accountId = accounts?.[0]?.accountId ?? null;
+	try {
+		const wallet = await near_connect_client().wallet();
+		const accounts = await wallet.getAccounts();
+		auth.isSignedIn = accounts?.length > 0;
+		auth.accountId = accounts?.[0]?.accountId ?? null;
+	} catch (e) {
+		auth.isSignedIn = false;
+		auth.accountId = null;
+	}
 }
 // ========================================
 export async function login() {
