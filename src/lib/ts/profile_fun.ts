@@ -1,4 +1,4 @@
-import { near_social_ipfs } from './const.ts'
+import { near_social_ipfs } from './const'
 // ========================================
 export function resolveImageUrl(image: { ipfs_cid?: string; url?: string } | undefined): string {
     if (!image) return '';
