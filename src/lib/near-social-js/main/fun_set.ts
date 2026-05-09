@@ -10,7 +10,7 @@ export async function near_social_js_set_fun(
 	}
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client).set({ signerId, data, ...options });
+	const result = await near_social_client(near_kit_client()).set({ signerId, data, ...options });
 	// =================
 	console.log("=================");
 	console.log("signerId:", signerId);

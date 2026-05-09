@@ -12,7 +12,7 @@ export async function near_social_js_index_fun(
 	}
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client).index({ action, key, ...options });
+	const result = await near_social_client(near_kit_client()).index({ action, key, ...options });
 	// =================
 	console.log("=================");
 	console.log("index()");

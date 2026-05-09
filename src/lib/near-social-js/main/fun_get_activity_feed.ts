@@ -3,7 +3,7 @@ import { near_social_client } from "../new";
 import type { FeedOptions } from "near-social-js";
 // ============================================
 export async function get_activity_feed(options?: FeedOptions) {
-	const result = await near_social_client(near_kit_client).getActivityFeed(options);
+	const result = await near_social_client(near_kit_client()).getActivityFeed(options);
 	console.log("=================");
 	console.log("getActivityFeed()");
 	console.log("=================");
