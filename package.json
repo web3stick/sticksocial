@@ -29,6 +29,7 @@
 	"dependencies": {
 		"@near-kit-tool-box/web": "^0.0.6",
 		"lucide-svelte": "^1.0.1",
-		"near-social-js": "^2.0.4"
+		"near-social-js": "^2.0.4",
+		"zod": "^4.4.3"
 	}
 }
