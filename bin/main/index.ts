@@ -13,9 +13,5 @@ const accountId = getArg('--accountId');
 const order = getArg('--order') as 'asc' | 'desc' | undefined;
 const limit = getArg('--limit') ? parseInt(getArg('--limit')!) : undefined;
 // ========================================
-console.log('=================');
-console.log({ action, key, accountId, order, limit });
-const result = await near_social_js_index_fun(action, key, { accountId, order, limit });
-console.log(result);
-console.log('=================');
+await near_social_js_index_fun(action, key, { accountId, order, limit });
 // ========================================

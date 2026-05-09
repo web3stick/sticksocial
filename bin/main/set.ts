@@ -31,9 +31,6 @@ if (!data) {
 	process.exit(1);
 }
 // ========================================
-console.log('=================');
-console.log({ signerId, data, deposit, refundUnusedDeposit });
-const result = await near_social_js_set_fun(signerId, data, { deposit, refundUnusedDeposit });
-console.log(result);
-console.log('=================');
+// console.log({ signerId, data, deposit, refundUnusedDeposit });
+await near_social_js_set_fun(signerId, data, { deposit, refundUnusedDeposit });
 // ========================================

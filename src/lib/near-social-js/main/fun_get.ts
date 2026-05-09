@@ -9,7 +9,9 @@ export async function near_social_js_get_fun(keys: string[]): Promise<Record<str
 	> | null;
 	// =================
 	console.log('=================');
-	console.log('/get/' + keys.join(','));
+	console.log('get()');
+	console.log(keys.join(','));
+	console.log('=================');
 	console.log(result);
 	console.log('=================');
 	// =================

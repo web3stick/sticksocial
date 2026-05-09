@@ -8,8 +8,10 @@ export async function near_social_js_keys_fun(keys: string[]): Promise<Record<st
 		any
 	> | null;
 	// =================
+  console.log('=================');
+  console.log("keys()")
+	console.log( keys.join(','));
 	console.log('=================');
-	console.log('/keys/' + keys.join(','));
 	console.log(result);
 	console.log('=================');
 	// =================

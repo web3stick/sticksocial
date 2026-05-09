@@ -11,5 +11,5 @@ const order = getArg('--order') as 'asc' | 'desc' | undefined;
 const limit = getArg('--limit') ? parseInt(getArg('--limit')!) : undefined;
 const from = getArg('--from') ? parseInt(getArg('--from')!) : undefined;
 // ========================================
-const result = await get_activity_feed({ order, limit, from });
+await get_activity_feed({ order, limit, from });
 // ========================================

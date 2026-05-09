@@ -14,8 +14,10 @@ export async function near_social_js_index_fun(
 	// =================
 	const result = await near_social_client(near_kit_client).index({ action, key, ...options });
 	// =================
-	console.log('=================');
-	console.log('/index/' + action + '/' + key);
+  console.log('=================');
+  console.log("index()")
+  console.log({ action, key, options });
+  console.log('=================');
 	console.log(result);
 	console.log('=================');
 	// =================
