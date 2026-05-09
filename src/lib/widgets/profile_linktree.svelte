@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { Profile } from 'near-social-js';
 	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
-	import { resolve_linktree_url_fun } from '$lib/fun/profile_linktree';
+	import { resolve_linktree_url_fun, resolve_linktree_icon_fun } from '$lib/fun/profile_linktree';
 	// ============================================
 	let { accountId }: { accountId: string } = $props();
 	let profile = $state<Profile | null>(null);
@@ -13,6 +13,10 @@
 		}
 	});
 </script>
+
+<svelte:head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+</svelte:head>
 
 <!-- ============================================ -->
 <!-- ============================================ -->
@@ -26,7 +30,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<button>{key}</button>
+				<button><i class="bi {resolve_linktree_icon_fun(key)}"></i> {key}</button>
 			</a>
 		{/each}
 	</div>
@@ -49,6 +53,8 @@
 		margin-bottom: 2px;
 		width: 100%;
 		border-radius: 3px;
+		display: flex;
+		justify-content: space-between;
 		/*box-sizing: border-box;*/
 	}
 </style>

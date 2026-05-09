@@ -28,6 +28,7 @@
 	},
 	"dependencies": {
 		"@near-kit-tool-box/web": "^0.0.6",
+		"bootstrap-icons": "^1.13.1",
 		"lucide-svelte": "^1.0.1",
 		"near-social-js": "^2.0.4",
 		"zod": "^4.4.3"

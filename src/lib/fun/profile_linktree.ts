@@ -9,3 +9,13 @@ export function resolve_linktree_url_fun(platform: string, value: string): strin
 	return value;
 }
 // ========================================
+export function resolve_linktree_icon_fun(platform: string): string {
+	const map: Record<string, string> = {
+		twitter: 'bi-twitter',
+		github: 'bi-github',
+		telegram: 'bi-telegram',
+		website: 'bi-globe2'
+	};
+	return map[platform] ?? 'bi-link';
+}
+// ========================================
