@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import type { Profile } from 'near-social-js';
-	import { get_profile } from '$lib/near-social-js/fun_get_profile';
+	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
 	import { resolveImageUrl, resolveLinkUrl } from '$lib/ts/profile_fun';
 
 	let profile = $state<Profile | null>(null);
