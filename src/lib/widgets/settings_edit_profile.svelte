@@ -31,7 +31,6 @@
 				website = profile.linktree?.['website'] ?? '';
 			}
 		}
-		console.log($state.snapshot(profile));
 	});
 </script>
 

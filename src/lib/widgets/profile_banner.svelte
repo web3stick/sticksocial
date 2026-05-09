@@ -56,6 +56,7 @@
 		<!-- =========================== -->
 		{#if profile?.linktree}
 			<div class="linktree">
+			<p>linktree</p>
 				{#each Object.entries(profile?.linktree ?? {}) as [key, url]}
 					<a href={resolveLinkUrl(key, url as string)} target="_blank" rel="noopener noreferrer"
 						>{key}</a
