@@ -4,20 +4,24 @@
 	import type { Profile } from 'near-social-js';
 	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
 	import { resolveImageUrl, resolveLinkUrl } from '$lib/ts/profile_fun';
-
+	// ============================================
 	let profile = $state<Profile | null>(null);
 	let loading = $state(true);
-
-	let {  } = $props<{  }>();
-
+	let {} = $props<{}>();
 	let expanded = $state(false);
 	const MAX_LENGTH = 100;
 	const needsTruncation = $derived((profile?.description?.length ?? 0) > MAX_LENGTH);
-
+	// ============================================
 	onMount(async () => {
 		const accountId = page.params.accountId;
 		if (accountId) {
 			profile = await get_profile(accountId);
+			// =================
+			console.log('=================');
+			console.log('/profile/' + accountId);
+			console.log($state.snapshot(profile));
+			console.log('=================');
+			// =================
 		}
 		loading = false;
 	});
@@ -25,117 +29,126 @@
 
 <!-- ============================================ -->
 <!-- ============================================ -->
-
 {#if loading}
-	<div class="loading">Loading...</div>
+	<!-- <div class="loading">LOADING</div> -->
 {:else}
-<!-- profile_banner -->
-<!-- PROFILE_BANNER -->
-<div>
-    <!-- =========================== -->
-	<img src={resolveImageUrl(profile?.backgroundImage)} alt="BANNER" class="banner" />
-	{#if page.params.accountId}
-		<img src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${page.params.accountId}`} alt="PROFILE_PIC" class="profile-pic" />
-	{/if}
-	<!-- =========================== -->
-	<h1>{profile?.name}</h1>
-	<!-- =========================== -->
-	<p>
-		{expanded || !needsTruncation ? profile?.description : profile?.description?.slice(0, MAX_LENGTH) + '...'}
-		{#if needsTruncation}
-			<button class="show-more" onclick={() => expanded = !expanded}>{expanded ? 'SHOW LESS' : 'SHOW MORE'}</button>
+	<!-- ============================================ -->
+	<!-- ============================================ -->
+	<!-- profile_banner -->
+	<!-- PROFILE_BANNER -->
+	<div>
+		<!-- =========================== -->
+		<img src={resolveImageUrl(profile?.backgroundImage)} alt="BANNER" class="banner" />
+		{#if page.params.accountId}
+			<img
+				src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${page.params.accountId}`}
+				alt="PROFILE_PIC"
+				class="profile-pic"
+			/>
 		{/if}
-	</p>
-	<!-- =========================== -->
-	{#if profile?.linktree}
-		<div class="linktree">
-			{#each Object.entries(profile?.linktree ?? {}) as [key, url]}
-				<a href={resolveLinkUrl(key, url as string)} target="_blank" rel="noopener noreferrer">{key}</a>
-			{/each}
-		</div>
-	{/if}
-	<!-- =========================== -->
-	<!-- we will use tags in future when i add links to them to routes -->
-	<!-- {#if profile?.tags}
+		<!-- =========================== -->
+		<h1>{profile?.name}</h1>
+		<!-- =========================== -->
+		<p>
+			{expanded || !needsTruncation
+				? profile?.description
+				: profile?.description?.slice(0, MAX_LENGTH) + '...'}
+			{#if needsTruncation}
+				<button class="show-more" onclick={() => (expanded = !expanded)}
+					>{expanded ? 'SHOW LESS' : 'SHOW MORE'}</button
+				>
+			{/if}
+		</p>
+		<!-- =========================== -->
+		{#if profile?.linktree}
+			<div class="linktree">
+				{#each Object.entries(profile?.linktree ?? {}) as [key, url]}
+					<a href={resolveLinkUrl(key, url as string)} target="_blank" rel="noopener noreferrer"
+						>{key}</a
+					>
+				{/each}
+			</div>
+		{/if}
+		<!-- =========================== -->
+		<!-- we will use tags in future when i add links to them to routes -->
+		<!-- {#if profile?.tags}
 		<div class="tags">
 			{#each Object.entries(profile.tags) as [tag]}
 				<span>{tag}</span>
 			{/each}
 		</div>
 	{/if} -->
-	<!-- =========================== -->
-</div>
+		<!-- =========================== -->
+	</div>
 {/if}
 
 <!-- ============================================ -->
 <!-- ============================================ -->
 
 <style>
-    div {
-      width: 500px;
-      max-width: 90vw;
-      margin: 0 auto;
-      position: relative;
-      text-align: left;
-    }
-    
-    /* Banner */
-    .banner {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 16px;
-      filter: brightness(0.9);
-    }
-    
-    /* Floating profile picture */
-    .profile-pic {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      border: 4px solid white;
-      position: absolute;
-      top: 110px;
-      left: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    }
-    
-    /* Name + description container */
-    h1, p {
-      /*margin-left: 20px;*/
-      margin-top: 50px;
-    }
-    
-    h1 {
-      font-size: 1.4rem;
-      margin-bottom: 4px;
-    }
-    
-    p {
-      font-size: 0.95rem;
-      opacity: 0.8;
-      margin-top: 0;
-    }
+	div {
+		width: 500px;
+		max-width: 90vw;
+		margin: 0 auto;
+		position: relative;
+		text-align: left;
+	}
 
-    .show-more {
-      background: none;
-      border: none;
-      color: var(--color-blue);
-      cursor: pointer;
-      padding: 0;
-      margin-left: 4px;
-      font-size: 10px;
-    }
-    
-    /* Linktree pills */
-    .linktree {
-      margin-top: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      /*padding-left: 20px;*/
-    }
-    
-   
+	/* Banner */
+	.banner {
+		width: 100%;
+		height: 160px;
+		object-fit: cover;
+		border-radius: 16px;
+		filter: brightness(0.9);
+	}
 
+	/* Floating profile picture */
+	.profile-pic {
+		width: 90px;
+		height: 90px;
+		border-radius: 50%;
+		border: 4px solid white;
+		position: absolute;
+		top: 110px;
+		left: 20px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+	}
+
+	/* Name + description container */
+	h1,
+	p {
+		/*margin-left: 20px;*/
+		margin-top: 50px;
+	}
+
+	h1 {
+		font-size: 1.4rem;
+		margin-bottom: 4px;
+	}
+
+	p {
+		font-size: 0.95rem;
+		opacity: 0.8;
+		margin-top: 0;
+	}
+
+	.show-more {
+		background: none;
+		border: none;
+		color: var(--color-blue);
+		cursor: pointer;
+		padding: 0;
+		margin-left: 4px;
+		font-size: 10px;
+	}
+
+	/* Linktree pills */
+	.linktree {
+		margin-top: 12px;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		/*padding-left: 20px;*/
+	}
 </style>
