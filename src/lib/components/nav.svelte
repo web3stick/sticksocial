@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { House, User, Search, Bell } from "lucide-svelte";
+	import { House, User, Binoculars, Bell } from "lucide-svelte";
 	import ROUTES from "../ts/routes";
 	import { page } from "$app/state";
 </script>
@@ -12,7 +12,7 @@
 <nav>
 	<a href={ROUTES.feed.path} class:active={page.url.pathname === ROUTES.feed.path}><House /></a>
 	<a href={ROUTES.discover.path} class:active={page.url.pathname === ROUTES.discover.path}
-		><Search /></a
+		><Binoculars /></a
 	>
 	<a href={ROUTES.notifications.path} class:active={page.url.pathname === ROUTES.notifications.path}
 		><Bell /></a
