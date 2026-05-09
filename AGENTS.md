@@ -1,18 +1,18 @@
 # AGENTS.md
 
-### Logging
+project architecture
 
-- Use minimal logging to no loging. i like to consol log raw data, so for example when a function like this `get_profile()` resturns something consol log the response, other than conslol loging ner social data respnse there should be no other consol loging.
+- `./src/lib/near-social-js` for rusable near social js functions for intercting with near socail db, 
+- `./bin`, for testing the near socail js functions
+- `./src/lib/widgets` for anythig that interacts with near socail db, profile data, post data, feed, and so on. also components for widgets can go in `./src/lib/widgets/components`
 
-### Component Naming
 
-- Import with UPPER_CASE: `import COMPONENT_BLANK from '...';`
-- Use in template: `<COMPONENT_BLANK />`
+workflow
+- create and work on one thing at a time
+- flow the formate of existing files, small deatils matter
 
-### New Components
 
-Copy `src/lib/components/blank.svelte` as template.
 
-### New Routes
+---
 
-Copy `src/routes/blank/+page.svelte` as template.
+copyright 2026 by sleet.near
