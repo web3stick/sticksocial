@@ -33,8 +33,6 @@ and or to the post that was like or commented on.
 		<div class="notification">
 			<p>{JSON.stringify(notification)}</p>
 		</div>
-	{:else}
-		<p>No notifications</p>
 	{/each}
 </div>
 
