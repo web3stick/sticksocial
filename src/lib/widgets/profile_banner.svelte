@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import type { Profile } from 'near-social-js';
 	import { get_profile } from '$lib/near-social-js/main/fun_get_profile';
-	import { resolveImageUrl, resolveLinkUrl } from '$lib/ts/profile_fun';
+	import { resolve_image_url_fun } from '$lib/fun/profile_image';
+	import { resolve_linktree_url_fun } from '$lib/fun/profile_linktree';
 	// ============================================
 	let profile = $state<Profile | null>(null);
 	let loading = $state(true);
@@ -30,7 +31,7 @@
 	<!-- WIDGET_PROFILE_BANNER -->
 	<div>
 		<!-- =========================== -->
-		<img src={resolveImageUrl(profile?.backgroundImage)} alt="BANNER" class="banner" />
+		<img src={resolve_image_url_fun(profile?.backgroundImage)} alt="BANNER" class="banner" />
 		{#if accountId}
 			<img
 				src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${accountId}`}
@@ -56,7 +57,7 @@
 			<div class="linktree">
 			<p>linktree</p>
 				{#each Object.entries(profile?.linktree ?? {}) as [key, url]}
-					<a href={resolveLinkUrl(key, url as string)} target="_blank" rel="noopener noreferrer"
+					<a href={resolve_linktree_url_fun(key, url as string)} target="_blank" rel="noopener noreferrer"
 						>{key}</a
 					>
 				{/each}
