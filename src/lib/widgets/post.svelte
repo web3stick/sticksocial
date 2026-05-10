@@ -17,6 +17,9 @@
 	});
 </script>
 
+<!-- ============================================ -->
+<!-- ============================================ -->
+
 <div class="post">
 	<p class="meta">{accountId}::{Number(blockHeight)}</p>
 	{#if post}
@@ -29,10 +32,17 @@
 	{/if}
 </div>
 
+<!-- ============================================ -->
+<!-- ============================================ -->
+
 <style>
 	.post {
-		border: 1px solid #eee;
-		border-radius: 8px;
+		width: 500px;
+		max-width: 90vw;
+		box-sizing: border-box;
+		display: inline-block;
+		text-align: left;
+		border-bottom: 1px solid #95d58d;
 		padding: 16px;
 		margin-bottom: 12px;
 	}
@@ -41,11 +51,11 @@
 		color: #888;
 		margin-bottom: 8px;
 	}
-	.text {
+	/*.text {
 		font-size: 16px;
 		line-height: 1.5;
 		white-space: pre-wrap;
-	}
+	}*/
 	.post-image {
 		max-width: 100%;
 		border-radius: 8px;
