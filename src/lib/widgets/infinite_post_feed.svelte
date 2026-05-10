@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { get_activity_feed } from "$lib/near-social-js/main/fun_get_activity_feed";
 	import { get_account_id_post } from "$lib/near-social-js/helper/get_account_id_post";
+	import { resolve_image_url_fun } from "./fun/profile_image";
 	import type { IndexEntry, Post } from "near-social-js";
 	// ============================================
 	interface FeedPost {
@@ -92,6 +93,9 @@
 			<p class="meta">{item.accountId}::{Number(item.blockHeight)}</p>
 			{#if item.post}
 				<p class="text">{item.post.text}</p>
+				{#if item.post.image}
+					<img class="post-image" src={resolve_image_url_fun(item.post.image)} alt="" />
+				{/if}
 			{:else}
 				<p class="loading">Loading...</p>
 			{/if}
@@ -131,6 +135,11 @@
 		font-size: 16px;
 		line-height: 1.5;
 		white-space: pre-wrap;
+	}
+	.post-image {
+		max-width: 100%;
+		border-radius: 8px;
+		margin-top: 12px;
 	}
 	.loading {
 		color: #888;
