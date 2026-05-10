@@ -12,7 +12,11 @@ export async function near_social_js_get_post_fun(
 	options?: GetPostOptions
 ): Promise<(Post & { comments?: any[] }) | null> {
 	// =================
-	const result = await near_social_client(near_kit_client()).getPost(accountId, blockHeight, options);
+	const result = await near_social_client(near_kit_client()).getPost(
+		accountId,
+		blockHeight,
+		options
+	);
 	// =================
 	console.log("=================");
 	console.log("getPost()");

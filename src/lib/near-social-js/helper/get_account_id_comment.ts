@@ -13,7 +13,7 @@ export interface Comment {
 // ============================================
 export async function get_account_id_comment(
 	accountId: string,
-	blockHeight: bigint,
+	blockHeight: bigint
 ): Promise<Comment | null> {
 	const keys = [`${accountId}/post/comment`];
 	const result = await near_social_js_get_fun({ keys, blockHeight });

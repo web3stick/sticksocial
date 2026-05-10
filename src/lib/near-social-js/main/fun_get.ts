@@ -16,7 +16,7 @@ export async function near_social_js_get_fun(
 ): Promise<Record<string, any> | null> {
 	const result = (await near_social_client(near_kit_client()).get({
 		...options,
-		blockHeight: options.blockHeight ? Number(options.blockHeight) : undefined,
+		blockHeight: options.blockHeight ? Number(options.blockHeight) : undefined
 	} as any)) as Record<string, any> | null;
 	// =================
 	console.log("=================");

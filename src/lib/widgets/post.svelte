@@ -20,10 +20,10 @@
 <!-- ============================================ -->
 
 <div class="post">
-    <!-- ============== -->
+	<!-- ============== -->
 	<p class="meta">
-	<a href="/profile/{accountId}">{accountId}</a>
-	{Number(blockHeight)}
+		<a href="/profile/{accountId}">{accountId}</a>
+		{Number(blockHeight)}
 	</p>
 	<!-- ============== -->
 	{#if post}

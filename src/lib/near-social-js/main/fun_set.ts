@@ -8,9 +8,7 @@ interface NEAR_SOCIAL_JS_SET_OPTIONS {
 	refundUnusedDeposit?: boolean;
 }
 // ============================================
-export async function near_social_js_set_fun(
-	options: NEAR_SOCIAL_JS_SET_OPTIONS
-): Promise<any> {
+export async function near_social_js_set_fun(options: NEAR_SOCIAL_JS_SET_OPTIONS): Promise<any> {
 	// =================
 	const result = await near_social_client(near_kit_client()).set(options);
 	// =================

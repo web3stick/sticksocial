@@ -3,7 +3,7 @@ import type { Post } from "near-social-js";
 // ============================================
 export async function get_account_id_post(
 	accountId: string,
-	blockHeight: bigint,
+	blockHeight: bigint
 ): Promise<Post | null> {
 	const keys = [`${accountId}/post/main`];
 	const result = await near_social_js_get_fun({ keys, blockHeight });

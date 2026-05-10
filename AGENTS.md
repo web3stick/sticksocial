@@ -11,7 +11,6 @@ workflow
 - create and work on one thing at a time
 - flow the formate of existing files, small deatils matter
 
-
 ==============================================
 <br/>
 copyright 2026 by sleet.near

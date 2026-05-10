@@ -3,11 +3,13 @@ import { near_social_client } from "../new";
 // ============================================
 interface NEAR_SOCIAL_JS_INDEX_OPTIONS {
 	action: string;
-	key: string | {
-		type?: string;
-		path?: string;
-		blockHeight?: number;
-	};
+	key:
+		| string
+		| {
+				type?: string;
+				path?: string;
+				blockHeight?: number;
+		  };
 	accountId?: string | string[];
 	order?: "asc" | "desc";
 	limit?: number;

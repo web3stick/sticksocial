@@ -9,7 +9,12 @@ export async function near_social_js_notify_fun(
 	type?: string
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).notify(signerId, targetAccountId, item, type);
+	const result = await near_social_client(near_kit_client()).notify(
+		signerId,
+		targetAccountId,
+		item,
+		type
+	);
 	// =================
 	console.log("=================");
 	console.log("notify()");

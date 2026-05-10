@@ -10,7 +10,11 @@ export async function near_social_js_storage_deposit_fun(
 	}
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).storageDeposit({ signerId, deposit, ...options });
+	const result = await near_social_client(near_kit_client()).storageDeposit({
+		signerId,
+		deposit,
+		...options
+	});
 	// =================
 	console.log("=================");
 	console.log("storageDeposit()");

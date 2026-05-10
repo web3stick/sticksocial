@@ -13,7 +13,7 @@ export async function near_social_js_grant_write_permission_fun(
 	const result = await near_social_client(near_kit_client()).grantWritePermission({
 		signerId,
 		keys,
-		...options,
+		...options
 	});
 	// =================
 	console.log("=================");

@@ -8,7 +8,8 @@
 		blockHeight: bigint;
 	}
 	// ============================================
-	let { limit = 10, order = "desc" as "asc" | "desc" }: { limit?: number; order?: "asc" | "desc" } = $props();
+	let { limit = 10, order = "desc" as "asc" | "desc" }: { limit?: number; order?: "asc" | "desc" } =
+		$props();
 	// ============================================
 	let posts = $state<FeedPost[]>([]);
 	let loading = $state(false);
@@ -25,21 +26,26 @@
 			const entries = await get_activity_feed({
 				limit,
 				from,
-				order,
+				order
 			});
 			if (entries.length === 0 || entries.length < limit) {
 				hasMore = false;
 			}
 			const uniqueEntries = entries.filter(
 				(entry, index, self) =>
-					index === self.findIndex((e) => e.accountId === entry.accountId && e.blockHeight === entry.blockHeight)
+					index ===
+					self.findIndex(
+						(e) => e.accountId === entry.accountId && e.blockHeight === entry.blockHeight
+					)
 			);
 			const newPosts: FeedPost[] = uniqueEntries.map((entry: IndexEntry) => ({
 				accountId: entry.accountId,
-				blockHeight: BigInt(entry.blockHeight),
+				blockHeight: BigInt(entry.blockHeight)
 			}));
 			const existingKeys = new Set(posts.map((p) => p.accountId + "-" + p.blockHeight));
-			const filteredNewPosts = newPosts.filter((p) => !existingKeys.has(p.accountId + "-" + p.blockHeight));
+			const filteredNewPosts = newPosts.filter(
+				(p) => !existingKeys.has(p.accountId + "-" + p.blockHeight)
+			);
 			posts = [...posts, ...filteredNewPosts];
 			from = entries.length > 0 ? entries[entries.length - 1].blockHeight : from;
 		} catch (error) {
