@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import type { Profile } from "near-social-js";
 	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
-	import { resolve_linktree_url_fun, resolve_linktree_icon_fun } from "$lib/fun/profile_linktree";
+	import { resolve_linktree_url_fun, resolve_linktree_icon_fun } from "./fun/profile_linktree";
 	// ============================================
 	let { accountId }: { accountId: string } = $props();
 	let profile = $state<Profile | null>(null);
