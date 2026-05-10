@@ -2,12 +2,11 @@
 	import { get_account_id_post } from "$lib/near-social-js/helper/get_account_id_post";
 	import { resolve_image_url_fun } from "./fun/profile_image";
 	import type { Post } from "near-social-js";
-
+	// ============================================
 	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
-
 	let post = $state<Post | null>(null);
 	let loading = $state(true);
-
+	// ============================================
 	$effect(() => {
 		loading = true;
 		get_account_id_post(accountId, blockHeight).then((p) => {
@@ -21,7 +20,12 @@
 <!-- ============================================ -->
 
 <div class="post">
-	<p class="meta">{accountId}::{Number(blockHeight)}</p>
+    <!-- ============== -->
+	<p class="meta">
+	<a href="/profile/{accountId}">{accountId}</a>
+	{Number(blockHeight)}
+	</p>
+	<!-- ============== -->
 	{#if post}
 		<p class="text">{post.text}</p>
 		{#if post.image}
@@ -58,6 +62,7 @@
 	}*/
 	.post-image {
 		max-width: 100%;
+		width: 100%;
 		border-radius: 8px;
 		margin-top: 12px;
 	}
