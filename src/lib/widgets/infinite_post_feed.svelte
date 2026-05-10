@@ -14,7 +14,7 @@
 	let posts = $state<FeedPost[]>([]);
 	let loading = $state(false);
 	let hasMore = $state(true);
-	let from = $state(0);
+	let from = $state<number | undefined>(undefined);
 	let observer: IntersectionObserver | null = null;
 	let loadMoreRef = $state<HTMLDivElement | null>(null);
 	let initialLoadDone = $state(false);
@@ -31,8 +31,12 @@
 			if (entries.length === 0 || entries.length < limit) {
 				hasMore = false;
 			}
+			const uniqueEntries = entries.filter(
+				(entry, index, self) =>
+					index === self.findIndex((e) => e.accountId === entry.accountId && e.blockHeight === entry.blockHeight)
+			);
 			const newPosts = await Promise.all(
-				entries.map(async (entry: IndexEntry) => {
+				uniqueEntries.map(async (entry: IndexEntry) => {
 					const post = await get_account_id_post(entry.accountId, entry.blockHeight);
 					return {
 						accountId: entry.accountId,
@@ -41,8 +45,10 @@
 					};
 				})
 			);
-			posts = [...posts, ...newPosts];
-			from += entries.length;
+			const existingKeys = new Set(posts.map((p) => p.accountId + "-" + p.blockHeight));
+			const filteredNewPosts = newPosts.filter((p) => !existingKeys.has(p.accountId + "-" + p.blockHeight));
+			posts = [...posts, ...filteredNewPosts];
+			from = entries.length > 0 ? entries[entries.length - 1].blockHeight : from;
 		} catch (error) {
 			console.error("Failed to load posts:", error);
 		} finally {
