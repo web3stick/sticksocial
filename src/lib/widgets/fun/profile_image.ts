@@ -1,4 +1,4 @@
-import { near_social_ipfs } from "../ts/const";
+import { near_social_ipfs } from "../../ts/const";
 // for  accountId/profile/image or accountId/profile/backgroundImage
 // ============================================
 export function profile_image_fun(accountId: string): string {
