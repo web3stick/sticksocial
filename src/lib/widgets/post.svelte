@@ -8,6 +8,8 @@
 	let post = $state<Post | null>(null);
 	let loading = $state(true);
 	let timeAgo = $state<{ text: string; title: string } | "Loading" | "unknown">("Loading");
+	const MAX_ID_LENGTH = 20;
+	const displayId = $derived(accountId.length > MAX_ID_LENGTH ? accountId.slice(0, MAX_ID_LENGTH) + "..." : accountId);
 	// ============================================
 	$effect(() => {
 		loading = true;
@@ -30,7 +32,7 @@
 <div class="post">
 	<!-- ============== -->
 	<p class="meta">
-		<a href="/profile/{accountId}">{accountId}</a>
+		<a href="/profile/{accountId}">{displayId}</a>
 		{#if typeof timeAgo === "object" && timeAgo.text}
 			<span title={timeAgo.title}>{timeAgo.text}</span>
 		{:else}
