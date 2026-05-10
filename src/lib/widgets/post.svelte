@@ -3,7 +3,7 @@
 	import { resolve_image_url_fun } from "./fun/profile_image";
 	import type { Post } from "near-social-js";
 
-	let { accountId, blockHeight }: { accountId: string; blockHeight: number } = $props();
+	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
 
 	let post = $state<Post | null>(null);
 	let loading = $state(true);

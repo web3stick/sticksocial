@@ -5,7 +5,7 @@
 	// ============================================
 	interface FeedPost {
 		accountId: string;
-		blockHeight: number;
+		blockHeight: bigint;
 	}
 	// ============================================
 	let { limit = 10, order = "desc" as "asc" | "desc" }: { limit?: number; order?: "asc" | "desc" } = $props();
@@ -34,9 +34,9 @@
 				(entry, index, self) =>
 					index === self.findIndex((e) => e.accountId === entry.accountId && e.blockHeight === entry.blockHeight)
 			);
-			const newPosts = uniqueEntries.map((entry: IndexEntry) => ({
+			const newPosts: FeedPost[] = uniqueEntries.map((entry: IndexEntry) => ({
 				accountId: entry.accountId,
-				blockHeight: entry.blockHeight,
+				blockHeight: BigInt(entry.blockHeight),
 			}));
 			const existingKeys = new Set(posts.map((p) => p.accountId + "-" + p.blockHeight));
 			const filteredNewPosts = newPosts.filter((p) => !existingKeys.has(p.accountId + "-" + p.blockHeight));

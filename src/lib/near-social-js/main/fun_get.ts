@@ -14,10 +14,10 @@ interface NEAR_SOCIAL_JS_GET_OPTIONS {
 export async function near_social_js_get_fun(
 	options: NEAR_SOCIAL_JS_GET_OPTIONS
 ): Promise<Record<string, any> | null> {
-	const result = (await near_social_client(near_kit_client()).get(options)) as Record<
-		string,
-		any
-	> | null;
+	const result = (await near_social_client(near_kit_client()).get({
+		...options,
+		blockHeight: options.blockHeight ? Number(options.blockHeight) : undefined,
+	} as any)) as Record<string, any> | null;
 	// =================
 	console.log("=================");
 	console.log("get()");
