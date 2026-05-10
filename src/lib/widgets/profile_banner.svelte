@@ -40,6 +40,7 @@
 		{/if}
 		<!-- =========================== -->
 		<h1>{profile?.name}</h1>
+		<p>@{accountId}</p>
 		<!-- =========================== -->
 		<p>
 			{expanded || !needsTruncation
