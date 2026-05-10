@@ -78,6 +78,8 @@
 <!-- ============================================ -->
 <!-- ============================================ -->
 
+<!-- widget_infinite_post_feed -->
+<!-- WIDGET_INFINITE_POST_FEED -->
 <div class="feed">
 	{#each posts as item (item.accountId + "-" + item.blockHeight)}
 		<div class="post">
