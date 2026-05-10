@@ -11,7 +11,7 @@
 <!-- HOME_NAV -->
 <nav>
 	<!-- <img src={favicon} alt="LOADING"/> -->
-	<a href={ROUTES.feed.path}><Square fill="#FFF8A3" color="#FFF8A3"/></a>
+	<a href={ROUTES.feed.path}><Square fill="#FFF8A3" color="#FFF8A3" /></a>
 	<a href={ROUTES.feed_options.path}><SlidersHorizontal /></a>
 </nav>
 
