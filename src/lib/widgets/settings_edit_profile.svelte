@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import { auth, updateAuthStatus } from "$lib/ts/auth.svelte";
 	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
-	import { resolve_image_url_fun } from "$lib/fun/profile_image";
+	import { resolve_image_url_fun } from "./fun/profile_image";
 	import type { Profile } from "near-social-js";
 	// ==================================
 	let profile = $state<Profile | null>(null);
