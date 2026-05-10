@@ -78,6 +78,7 @@
 	}
 	.profile-pic {
 	width: 12px;
+	height: 12px;
 	}
 	/*.text {
 		font-size: 16px;
