@@ -9,7 +9,9 @@
 	let loading = $state(true);
 	let timeAgo = $state<{ text: string; title: string } | "Loading" | "unknown">("Loading");
 	const MAX_ID_LENGTH = 20;
-	const displayId = $derived(accountId.length > MAX_ID_LENGTH ? accountId.slice(0, MAX_ID_LENGTH) + "..." : accountId);
+	const displayId = $derived(
+		accountId.length > MAX_ID_LENGTH ? accountId.slice(0, MAX_ID_LENGTH) + "..." : accountId
+	);
 	// ============================================
 	$effect(() => {
 		loading = true;
@@ -32,6 +34,11 @@
 <div class="post">
 	<!-- ============== -->
 	<p class="meta">
+		<img
+			src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${accountId}`}
+			alt="PROFILE_PIC"
+			class="profile-pic"
+		/>
 		<a href="/profile/{accountId}">{displayId}</a>
 		{#if typeof timeAgo === "object" && timeAgo.text}
 			<span title={timeAgo.title}>{timeAgo.text}</span>
@@ -68,6 +75,9 @@
 		font-size: 12px;
 		color: #888;
 		margin-bottom: 8px;
+	}
+	.profile-pic {
+	width: 12px;
 	}
 	/*.text {
 		font-size: 16px;
