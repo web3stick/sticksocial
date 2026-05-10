@@ -2,6 +2,7 @@
 	import { near_social_js_get_account_feed_fun } from "$lib/near-social-js/main/fun_get_account_feed";
 	import Post from "./post.svelte";
 	import type { IndexEntry } from "near-social-js";
+	import { Square } from "lucide-svelte";
 	// ============================================
 	interface FeedPost {
 		accountId: string;
@@ -97,7 +98,7 @@
 			<p>Loading more...</p>
 		{/if}
 		{#if !hasMore && posts.length > 0}
-			<p>No more posts</p>
+			<Square fill="#FFF8A3" color="#FFF8A3" />
 		{/if}
 	</div>
 </div>
