@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { get_activity_feed } from "$lib/near-social-js/main/fun_get_activity_feed";
-	import { get_account_id_post } from "$lib/near-social-js/helper/get_account_id_post";
-	import { resolve_image_url_fun } from "./fun/profile_image";
-	import type { IndexEntry, Post } from "near-social-js";
+	import Post from "./post.svelte";
+	import type { IndexEntry } from "near-social-js";
 	// ============================================
 	interface FeedPost {
 		accountId: string;
 		blockHeight: number;
-		post: Post | null;
 	}
 	// ============================================
 	let { limit = 10, order = "desc" as "asc" | "desc" }: { limit?: number; order?: "asc" | "desc" } = $props();
@@ -36,16 +34,10 @@
 				(entry, index, self) =>
 					index === self.findIndex((e) => e.accountId === entry.accountId && e.blockHeight === entry.blockHeight)
 			);
-			const newPosts = await Promise.all(
-				uniqueEntries.map(async (entry: IndexEntry) => {
-					const post = await get_account_id_post(entry.accountId, entry.blockHeight);
-					return {
-						accountId: entry.accountId,
-						blockHeight: entry.blockHeight,
-						post,
-					};
-				})
-			);
+			const newPosts = uniqueEntries.map((entry: IndexEntry) => ({
+				accountId: entry.accountId,
+				blockHeight: entry.blockHeight,
+			}));
 			const existingKeys = new Set(posts.map((p) => p.accountId + "-" + p.blockHeight));
 			const filteredNewPosts = newPosts.filter((p) => !existingKeys.has(p.accountId + "-" + p.blockHeight));
 			posts = [...posts, ...filteredNewPosts];
@@ -89,17 +81,7 @@
 <!-- WIDGET_INFINITE_POST_FEED -->
 <div class="feed">
 	{#each posts as item (item.accountId + "-" + item.blockHeight)}
-		<div class="post">
-			<p class="meta">{item.accountId}::{Number(item.blockHeight)}</p>
-			{#if item.post}
-				<p class="text">{item.post.text}</p>
-				{#if item.post.image}
-					<img class="post-image" src={resolve_image_url_fun(item.post.image)} alt="" />
-				{/if}
-			{:else}
-				<p class="loading">Loading...</p>
-			{/if}
-		</div>
+		<Post accountId={item.accountId} blockHeight={item.blockHeight} />
 	{/each}
 	<div bind:this={loadMoreRef} class="load-more">
 		{#if loading}
@@ -119,31 +101,6 @@
 		width: 600px;
 		max-width: 90vw;
 		margin: 0 auto;
-	}
-	.post {
-		border: 1px solid #eee;
-		border-radius: 8px;
-		padding: 16px;
-		margin-bottom: 12px;
-	}
-	.meta {
-		font-size: 12px;
-		color: #888;
-		margin-bottom: 8px;
-	}
-	.text {
-		font-size: 16px;
-		line-height: 1.5;
-		white-space: pre-wrap;
-	}
-	.post-image {
-		max-width: 100%;
-		border-radius: 8px;
-		margin-top: 12px;
-	}
-	.loading {
-		color: #888;
-		font-style: italic;
 	}
 	.load-more {
 		padding: 20px;
