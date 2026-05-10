@@ -9,17 +9,14 @@ interface NEAR_SOCIAL_JS_SET_OPTIONS {
 }
 // ============================================
 export async function near_social_js_set_fun(
-	signerId: string,
-	data: Record<string, Record<string, unknown>>,
-	options?: NEAR_SOCIAL_JS_SET_OPTIONS
+	options: NEAR_SOCIAL_JS_SET_OPTIONS
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).set({ signerId, data, ...options });
+	const result = await near_social_client(near_kit_client()).set(options);
 	// =================
 	console.log("=================");
-	console.log("signerId:", signerId);
-	console.log("data:", data);
-	console.log("options:", options);
+	console.log("set()");
+	console.log(options);
 	console.log("=================");
 	console.log(result);
 	console.log("=================");

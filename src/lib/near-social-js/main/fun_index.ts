@@ -15,16 +15,14 @@ interface NEAR_SOCIAL_JS_INDEX_OPTIONS {
 }
 // ============================================
 export async function near_social_js_index_fun(
-	action: string,
-	key: string,
-	options?: NEAR_SOCIAL_JS_INDEX_OPTIONS
+	options: NEAR_SOCIAL_JS_INDEX_OPTIONS
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).index({ action, key, ...options });
+	const result = await near_social_client(near_kit_client()).index(options);
 	// =================
 	console.log("=================");
 	console.log("index()");
-	console.log({ action, key, options });
+	console.log(options);
 	console.log("=================");
 	console.log(result);
 	console.log("=================");
