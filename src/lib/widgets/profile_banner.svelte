@@ -10,6 +10,8 @@
 	let expanded = $state(false);
 	const MAX_LENGTH = 100;
 	const needsTruncation = $derived((profile?.description?.length ?? 0) > MAX_LENGTH);
+	const DEFAULT_BANNER = "https://lipsum.app/random/1600x900";
+	const bannerSrc = $derived(resolve_image_url_fun(profile?.backgroundImage) || DEFAULT_BANNER);
 	// ============================================
 	onMount(async () => {
 		if (accountId) {
@@ -30,7 +32,7 @@
 	<!-- WIDGET_PROFILE_BANNER -->
 	<div>
 		<!-- =========================== -->
-		<img src={resolve_image_url_fun(profile?.backgroundImage)} alt="BANNER" class="banner" />
+		<img src={bannerSrc} alt="BANNER" class="banner" />
 		{#if accountId}
 			<img
 				src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${accountId}`}
