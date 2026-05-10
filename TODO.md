@@ -7,6 +7,7 @@ this shpuld be a clean implenation with clean functions for fecthing and auto pa
 
 - [ ] add or use post type
 - [ ] what i mean by clean implentaion i mean use the "get_activity_feed()" in a clean way that we can pass diffent options to it form the FeedOptions
+- [ ] create a post comonent/widfget that fectehs its own post
 
 
 ==============================================
