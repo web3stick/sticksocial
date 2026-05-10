@@ -106,13 +106,11 @@
 	}
 
 	h1 {
-		font-size: 1.4rem;
+		/*font-size: 1.4rem;*/
 		margin-bottom: 4px;
 	}
 
 	p {
-		font-size: 0.95rem;
-		opacity: 0.8;
 		margin-top: 0;
 	}
 
