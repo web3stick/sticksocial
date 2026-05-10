@@ -71,6 +71,7 @@
 		border-bottom: 1px solid #95d58d;
 		padding: 16px;
 		margin-bottom: 12px;
+		line-break: anywhere;
 	}
 	.meta {
 		font-size: 12px;
