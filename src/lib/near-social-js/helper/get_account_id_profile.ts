@@ -6,7 +6,7 @@ export async function get_account_id_profile(
 	accountId: string
 ): Promise<z.infer<typeof account_id_profile_schema> | null> {
 	const keys = [`${accountId}/profile/**`];
-	const result = await near_social_js_get_fun(keys);
+	const result = await near_social_js_get_fun({ keys });
 
 	if (!result) return null;
 
