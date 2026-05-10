@@ -3,6 +3,7 @@
 	import PROFILE_BANNER from "$lib/widgets/profile_banner.svelte";
 	import PROFILE_LINKTREE from "$lib/widgets/profile_linktree.svelte";
 	import PROFILE_NAV from "$lib/components/profile_nav.svelte";
+	import PROFILE_POST_FEED from "$lib/widgets/profile_post_feed.svelte";
 </script>
 
 <!-- ============================================ -->
@@ -12,4 +13,5 @@
 	<PROFILE_NAV />
 	<PROFILE_BANNER accountId={page.params.accountId} />
 	<PROFILE_LINKTREE accountId={page.params.accountId} />
+	<PROFILE_POST_FEED accountId={page.params.accountId} />
 </section>
