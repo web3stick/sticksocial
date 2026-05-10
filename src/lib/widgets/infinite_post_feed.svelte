@@ -9,7 +9,7 @@
 		post: Post | null;
 	}
 	// ============================================
-	let { limit = 10 }: { limit?: number } = $props();
+	let { limit = 10, order = "desc" as "asc" | "desc" }: { limit?: number; order?: "asc" | "desc" } = $props();
 	// ============================================
 	let posts = $state<FeedPost[]>([]);
 	let loading = $state(false);
@@ -26,7 +26,7 @@
 			const entries = await get_activity_feed({
 				limit,
 				from,
-				order: "desc",
+				order,
 			});
 			if (entries.length === 0 || entries.length < limit) {
 				hasMore = false;
