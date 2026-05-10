@@ -1,7 +1,7 @@
 import { near_kit_client } from "@near-kit-tool-box/web";
 import { near_social_client } from "../new";
 // ============================================
-export interface NEAR_SOCIAL_JS_GET_OPTIONS {
+interface NEAR_SOCIAL_JS_GET_OPTIONS {
 	keys: string[];
 	blockHeight?: bigint;
 	returnDeleted?: boolean;
