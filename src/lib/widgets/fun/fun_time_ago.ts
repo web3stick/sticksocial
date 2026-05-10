@@ -45,8 +45,8 @@ export function format_time_ago(date: Date, dateNow: Date): { text: string; titl
 }
 // ============================================
 export async function get_time_ago_fun(
-	blockHeight: number
-): Promise<{ text: string; title: string } | "Loading" | "unknown"> {
+	blockHeight: number,
+): Promise<{ text: string; title: string } | "unknown"> {
 	const res = await get_time_fun(blockHeight);
 	if (!res || !res.timestamp) return "unknown";
 	const timeMs = res.timestamp;
