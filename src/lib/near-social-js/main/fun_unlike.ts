@@ -16,10 +16,11 @@ export async function near_social_js_unlike_fun(
 			}
 		}
 	};
-	const result = await near_social_client(near_kit_client()).set({
+	const builder = await near_social_client(near_kit_client()).set({
 		signerId,
 		data
 	});
+	const result = await builder.send();
 	// =================
 	console.log("=================");
 	console.log("unlike()");

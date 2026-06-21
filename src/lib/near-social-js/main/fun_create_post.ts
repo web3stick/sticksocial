@@ -4,7 +4,8 @@ import type { Post } from "near-social-js";
 // ============================================
 export async function near_social_js_create_post_fun(signerId: string, post: Post): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).createPost(signerId, post);
+	const builder = await near_social_client(near_kit_client()).createPost(signerId, post);
+	const result = await builder.send();
 	// =================
 	console.log("=================");
 	console.log("createPost()");

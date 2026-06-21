@@ -24,10 +24,11 @@ export async function near_social_js_repost_fun(signerId: string, item: CommentI
 			value: { type: "repost", accountId: signerId, item }
 		});
 	}
-	const result = await near_social_client(near_kit_client()).set({
+	const builder = await near_social_client(near_kit_client()).set({
 		signerId,
 		data
 	});
+	const result = await builder.send();
 	// =================
 	console.log("=================");
 	console.log("repost()");

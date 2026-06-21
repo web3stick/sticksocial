@@ -35,10 +35,11 @@ export async function near_social_js_create_comment_fun(
 	} else if (notifies.length > 1) {
 		data[signerId].index.notify = JSON.stringify(notifies);
 	}
-	const result = await near_social_client(near_kit_client()).set({
+	const builder = await near_social_client(near_kit_client()).set({
 		signerId,
 		data
 	});
+	const result = await builder.send();
 	// =================
 	console.log("=================");
 	console.log("createComment()");
