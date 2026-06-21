@@ -1,11 +1,8 @@
 <script lang="ts">
+	import type { Post } from "near-social-js";
 	import { get_account_id_post } from "$lib/near-social-js/helper/get_account_id_post";
 	import { resolve_image_url_fun } from "./fun/profile_image";
 	import { get_time_ago_fun } from "./fun/fun_time_ago";
-	import { render_post_text } from "./fun/post_text";
-	import LIKE_BUTTON from "./like_button.svelte";
-	import COMMENT_BUTTON from "./comment_button.svelte";
-	import type { Post } from "near-social-js";
 	// ============================================
 	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
 	let post = $state<Post | null>(null);
@@ -34,14 +31,10 @@
 <!-- ============================================ -->
 <!-- ============================================ -->
 
-<div class="post">
-	<!-- ============== -->
+<!-- widget_comment_view -->
+<!-- WIDGET_COMMENT_VIEW -->
+<div class="comment">
 	<p class="meta">
-		<img
-			src={`https://i.near.social/magic/large/https://near.social/magic/img/account/${accountId}`}
-			alt="PROFILE_PIC"
-			class="profile-pic"
-		/>
 		<a href="/profile/{accountId}">{displayId}</a>
 		{#if typeof timeAgo === "object" && timeAgo.text}
 			<span title={timeAgo.title}>{timeAgo.text}</span>
@@ -49,18 +42,12 @@
 			{timeAgo}
 		{/if}
 	</p>
-	<!-- ============== -->
 	{#if post}
-		<p class="text">{@html render_post_text(post.text)}</p>
+		<p class="text">{post.text}</p>
 		{#if post.image}
 			<img class="post-image" src={resolve_image_url_fun(post.image)} alt="" />
 		{/if}
-		<div class="actions">
-			<LIKE_BUTTON accountId={accountId} blockHeight={blockHeight} />
-			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} />
-			<a class="thread-link" href="/post/{accountId}/{blockHeight}">OPEN THREAD</a>
-		</div>
-	{:else}
+	{:else if loading}
 		<p class="loading">Loading...</p>
 	{/if}
 </div>
@@ -69,54 +56,33 @@
 <!-- ============================================ -->
 
 <style>
-	.post {
-		width: 500px;
-		max-width: 90vw;
-		box-sizing: border-box;
-		display: inline-block;
+	.comment {
+		border-left: 2px solid #95d58d;
+		padding: 8px 12px;
+		margin: 8px 0;
 		text-align: left;
-		border-bottom: 1px solid #95d58d;
-		padding: 16px;
-		margin-bottom: 12px;
 		line-break: anywhere;
 	}
 	.meta {
-		font-size: 12px;
+		font-size: 11px;
 		color: #888;
-		margin-bottom: 8px;
-	}
-	.profile-pic {
-	width: 12px;
-	height: 12px;
-	}
-	/*.text {
-		font-size: 16px;
-		line-height: 1.5;
-		white-space: pre-wrap;
-	}*/
-	.post-image {
-		max-width: 100%;
-		width: 100%;
-		border-radius: 8px;
-		margin-top: 12px;
-	}
-	.actions {
-		margin-top: 8px;
+		margin-bottom: 4px;
 		display: flex;
 		gap: 8px;
-		align-items: center;
 	}
-	.thread-link {
-		font-size: 11px;
-		color: var(--color-blue, #4d9fff);
-		text-decoration: none;
-		margin-left: auto;
+	.text {
+		font-size: 14px;
+		line-height: 1.4;
+		white-space: pre-wrap;
 	}
-	.thread-link:hover {
-		text-decoration: underline;
+	.post-image {
+		max-width: 100%;
+		border-radius: 6px;
+		margin-top: 6px;
 	}
 	.loading {
 		color: #888;
 		font-style: italic;
+		font-size: 12px;
 	}
 </style>
