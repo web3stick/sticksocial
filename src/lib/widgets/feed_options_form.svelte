@@ -78,7 +78,7 @@
 	.feed-options-form {
 		width: 500px;
 		max-width: 90vw;
-		margin: 0 auto;
+		margin: 20px auto 0;
 		text-align: left;
 		display: flex;
 		flex-direction: column;
@@ -109,13 +109,6 @@
 		display: flex;
 		gap: 12px;
 		align-items: center;
-	}
-	.actions button {
-		padding: 8px 12px;
-		border-radius: 6px;
-		border: 1px solid #95d58d;
-		background: #fff8a3;
-		cursor: pointer;
 	}
 	.saved {
 		color: #2e7d32;
