@@ -3,6 +3,7 @@ const ROUTES = {
 	home: { path: "/", label: "HOME" },
 	feed: { path: "/feed", label: "FEED" },
 	feed_options: { path: "/feed/options", label: "FEED OPTIONS" },
+	compose: { path: "/compose", label: "COMPOSE" },
 	search: { path: "/search", label: "SEARCH" },
 	discover: { path: "/discover", label: "DISCOVER" },
 	settings: { path: "/settings", label: "SETTINGS" },

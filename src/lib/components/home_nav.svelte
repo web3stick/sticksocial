@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ROUTES from "../ts/routes";
-	import { SlidersHorizontal, Square } from "lucide-svelte";
+	import { Plus, SlidersHorizontal, Square } from "lucide-svelte";
 	// import favicon from "$lib/assets/favicon.svg";
 </script>
 
@@ -12,6 +12,7 @@
 <nav>
 	<!-- <img src={favicon} alt="LOADING"/> -->
 	<a href={ROUTES.feed.path}><Square fill="#FFF8A3" color="#FFF8A3" /></a>
+	<a href={ROUTES.compose.path}><Plus /></a>
 	<a href={ROUTES.feed_options.path}><SlidersHorizontal /></a>
 </nav>
 
