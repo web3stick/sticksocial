@@ -5,6 +5,7 @@
 	import { render_post_text } from "./fun/post_text";
 	import LIKE_BUTTON from "./like_button.svelte";
 	import COMMENT_BUTTON from "./comment_button.svelte";
+	import REPOST_BUTTON from "./repost_button.svelte";
 	import type { Post } from "near-social-js";
 	// ============================================
 	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
@@ -58,6 +59,7 @@
 		<div class="actions">
 			<LIKE_BUTTON accountId={accountId} blockHeight={blockHeight} />
 			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} />
+			<REPOST_BUTTON accountId={accountId} blockHeight={blockHeight} />
 			<a class="thread-link" href="/post/{accountId}/{blockHeight}">OPEN THREAD</a>
 		</div>
 	{:else}
