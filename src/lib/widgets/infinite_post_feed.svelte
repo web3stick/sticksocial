@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { get_activity_feed } from "$lib/near-social-js/main/fun_get_activity_feed";
+	import { load_feed_options } from "$lib/ts/feed_options_storage";
+	import { DEFAULT_FEED_OPTIONS, type FEED_OPTIONS_TYPE } from "$lib/types/feed_options";
 	import Post from "./post.svelte";
 	import type { IndexEntry } from "near-social-js";
 	import { Square } from "lucide-svelte";
@@ -9,9 +11,8 @@
 		blockHeight: bigint;
 	}
 	// ============================================
-	let { limit = 10, order = "desc" as "asc" | "desc" }: { limit?: number; order?: "asc" | "desc" } =
-		$props();
-	// ============================================
+	const saved = load_feed_options();
+	let options = $state<FEED_OPTIONS_TYPE>({ ...saved });
 	let posts = $state<FeedPost[]>([]);
 	let loading = $state(false);
 	let hasMore = $state(true);
@@ -25,11 +26,11 @@
 		loading = true;
 		try {
 			const entries = await get_activity_feed({
-				limit,
+				limit: options.limit,
 				from,
-				order
+				order: options.order
 			});
-			if (entries.length === 0 || entries.length < limit) {
+			if (entries.length === 0 || entries.length < options.limit) {
 				hasMore = false;
 			}
 			const uniqueEntries = entries.filter(
@@ -79,6 +80,8 @@
 	$effect(() => {
 		if (loadMoreRef) setupObserver();
 	});
+	// ============================================
+	export const feed_options_defaults = DEFAULT_FEED_OPTIONS;
 </script>
 
 <!-- ============================================ -->

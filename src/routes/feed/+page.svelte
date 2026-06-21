@@ -9,7 +9,7 @@
 <section>
 	<h1>FEED</h1>
 	<HOME_NAV />
-	<WIDGET_INFINITE_POST_FEED limit={50} order="desc" />
+	<WIDGET_INFINITE_POST_FEED />
 </section>
 
 <!-- ============================================ -->
