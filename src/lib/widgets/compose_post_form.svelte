@@ -122,13 +122,6 @@
 		align-items: center;
 		gap: 12px;
 	}
-	.actions button {
-		padding: 8px 16px;
-		border-radius: 6px;
-		border: 1px solid #95d58d;
-		background: #fff8a3;
-		cursor: pointer;
-	}
 	.actions button:disabled {
 		cursor: not-allowed;
 		opacity: 0.6;
