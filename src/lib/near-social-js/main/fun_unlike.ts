@@ -2,9 +2,24 @@ import { near_kit_client } from "@near-kit-tool-box/web";
 import { near_social_client } from "../new";
 import type { CommentItem } from "near-social-js";
 // ============================================
-export async function near_social_js_unlike_fun(signerId: string, item: CommentItem): Promise<any> {
+// unlike only writes to the signer's own index/like — no notify.
+// ============================================
+export async function near_social_js_unlike_fun(
+	signerId: string,
+	item: CommentItem
+): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).unlike(signerId, item);
+	const data = {
+		[signerId]: {
+			index: {
+				like: JSON.stringify({ key: item, value: { type: "unlike" } })
+			}
+		}
+	};
+	const result = await near_social_client(near_kit_client()).set({
+		signerId,
+		data
+	});
 	// =================
 	console.log("=================");
 	console.log("unlike()");
