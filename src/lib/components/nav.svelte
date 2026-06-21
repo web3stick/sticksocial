@@ -20,7 +20,7 @@
 	<a
 		href={ROUTES.profile_router.path}
 		class:active={page.url.pathname === ROUTES.profile_router.path ||
-			(page.url.pathname.startsWith("/profile/") && page.url.pathname !== "/profile-auth")}
+			(page.url.pathname.startsWith("/profile/") && page.url.pathname !== ROUTES.profile_auth.path)}
 		><User /></a
 	>
 </nav>
