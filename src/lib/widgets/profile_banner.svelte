@@ -42,7 +42,7 @@
 		{/if}
 		<!-- =========================== -->
 		<h1>{profile?.name}</h1>
-		<p>@{accountId}</p>
+		<p class="account-id">@{accountId}</p>
 		<!-- =========================== -->
 		<p>
 			{expanded || !needsTruncation
@@ -124,5 +124,9 @@
 		padding: 0;
 		margin-left: 4px;
 		font-size: 10px;
+	}
+	.account-id {
+		line-break: anywhere;
+		word-break: break-all;
 	}
 </style>
