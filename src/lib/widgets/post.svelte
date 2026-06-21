@@ -4,6 +4,7 @@
 	import { get_time_ago_fun } from "./fun/fun_time_ago";
 	import { render_post_text } from "./fun/post_text";
 	import LIKE_BUTTON from "./like_button.svelte";
+	import COMMENT_BUTTON from "./comment_button.svelte";
 	import type { Post } from "near-social-js";
 	// ============================================
 	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
@@ -56,6 +57,7 @@
 		{/if}
 		<div class="actions">
 			<LIKE_BUTTON accountId={accountId} blockHeight={blockHeight} />
+			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} />
 		</div>
 	{:else}
 		<p class="loading">Loading...</p>
