@@ -16,8 +16,10 @@
 		// when set, click replies in-place (the parent's compose form
 		// posts against this comment as the immediate parent and the
 		// supplied rootItem as the thread root). when omitted, click
-		// navigates to /post/<commentAuthor>/<commentBh> which is the
-		// original NEAR Social fallback.
+		// navigates to /post/<rootAuthor>/<rootBh>#comment-<commenter>-<commentBh>
+		// deep-linking into the original thread with this comment highlighted.
+		// falls back to /post/<commenter>/<commentBh> only if rootItem can't
+		// be resolved (shouldn't happen on the profile feed).
 		rootItem?: CommentItem | null;
 		onReply?: (payload: {
 			handle: string;
@@ -71,6 +73,15 @@
 		<MessageCircle />
 		<span class="count">{loading ? "..." : count}</span>
 	</button>
+{:else if rootItem}
+	<a
+		class="comment-button"
+		href="/post/{rootItem.path.split("/")[0]}/{rootItem.blockHeight}#comment-{accountId}-{blockHeight}"
+		title="OPEN THREAD"
+	>
+		<MessageCircle />
+		<span class="count">{loading ? "..." : count}</span>
+	</a>
 {:else}
 	<a class="comment-button" href="/post/{accountId}/{blockHeight}" title="OPEN THREAD">
 		<MessageCircle />

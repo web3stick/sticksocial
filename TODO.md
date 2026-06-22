@@ -10,6 +10,12 @@
   - [x] "show N more replies" truncation so deep threads don't blow up the page — each `comment_view` shows the first 3 replies; a "show N more" button expands the rest. when `highlightedComment` is set (permalink nav) truncation is disabled so the target's ancestors expand fully.
   - [x] decide whether `get_comments(item)` on a sub-comment should be replaced with a `notify` + `index.comment,key=item` merge so we can also surface replies from before the dual-index patch — current `get_comments(item)` queries `index.comment` by parent `item`, which returns all sub-comments regardless of whether they were created before or after the dual-index patch. the dual-index patch adds `key=main` for author-based queries but doesn't change parent-based indexing. the caller (`comment_view.svelte`) should remain unchanged.
 
+### profile comments
+
+- [x] **fix comment navigation on the profile comments route** — on `/profile/[accountId]/comments` (`comment_feed.svelte` → `INFINITE_FEED` rendering `COMMENT_VIEW`), each comment's REPLY button currently links to `/post/<commenter>/<commentBh>` because no `onReply` handler is wired up; the post page then tries to load `<commenter>/post/main` at that blockHeight, fails, and shows someone else's post (or a never-resolving "Loading…"). we want:
+  - [x] each `COMMENT_VIEW` on the profile to show a small "on post: <author>" indicator at the top so the user can see which post the comment was left on. derive the root from the comment's on-chain `rootItem` when present (`fun_create_comment.ts` writes it alongside `item`); fall back to walking `item` up the parent chain via `get_account_id_comment` for older comments that predate the dual-index patch.
+  - [x] the REPLY button on the profile comments route to deep-link into the original thread — link should target `/post/<rootAuthor>/<rootBh>#comment-<commenter>-<commentBh>` instead of `/post/<commenter>/<commentBh>`, so the post page loads the actual root post and the matching `comment_view` is highlighted. extend `Comment` in `get_account_id_comment.ts` to expose `rootItem` and pass the resolved root into `COMMENT_BUTTON`.
+
 ### discover
 
 - [ ] **discover page — actual content** — the page is a stub right now (reset in 53aa971). when we come back to it, design needs to be its own thing, not a duplicate of the global feed. candidates that were considered earlier and not used:

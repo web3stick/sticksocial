@@ -1,8 +1,12 @@
 import { near_social_js_get_fun } from "../main/fun_get";
 import type { CommentItem } from "near-social-js";
 // ============================================
+// mirrors fun_create_comment.ts: CommentWithRoot = Comment & { rootItem? }.
+// we expose rootItem here so consumers (profile comments feed, breadcrumb
+// walker, etc.) can find the thread root without re-querying storage.
 export interface Comment {
 	item: CommentItem;
+	rootItem?: CommentItem;
 	type: string;
 	text: string;
 	image?: {

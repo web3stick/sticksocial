@@ -103,6 +103,47 @@
 		breadcrumb = chain;
 		breadcrumbLoading = false;
 	}
+	// — effective root —
+	// when the parent (post page) supplies rootItem we trust it.
+	// when it doesn't (profile comments feed, no thread context), we
+	// resolve the thread root ourselves so the comment can deep-link
+	// back to the original post and show a "on post: <author>" hint.
+	// resolution order:
+	//   1. on-chain comment.rootItem (set by fun_create_comment.ts since
+	//      the dual-index patch; top-level comments store item === rootItem
+	//      so this also covers them)
+	//   2. walk up via comment.item until we hit a parent whose path ends
+	//      in /post/main (handles older comments without rootItem on-chain)
+	let effectiveRootItem = $state<CommentItem | null>(null);
+	async function resolve_root_item(): Promise<CommentItem | null> {
+		if (rootItem) return rootItem;
+		if (!comment) return null;
+		if (comment.rootItem) return comment.rootItem;
+		let currentId = accountId;
+		let currentBh = blockHeight;
+		for (let i = 0; i < MAX_CHAIN_DEPTH; i++) {
+			const data = await get_account_id_comment(currentId, currentBh);
+			if (!data?.item) return null;
+			const parentPath = data.item.path;
+			if (parentPath.endsWith("/post/main")) return data.item;
+			const parentAuthor = parentPath.split("/")[0];
+			currentId = parentAuthor;
+			currentBh = BigInt(data.item.blockHeight);
+		}
+		return null;
+	}
+	const rootAuthor = $derived(
+		effectiveRootItem ? effectiveRootItem.path.split("/")[0] : null
+	);
+	const rootBlockHeight = $derived(
+		effectiveRootItem ? effectiveRootItem.blockHeight : null
+	);
+	const rootDisplayId = $derived(
+		rootAuthor && rootAuthor.length > MAX_ID_LENGTH
+			? rootAuthor.slice(0, MAX_ID_LENGTH) + "..."
+			: rootAuthor
+	);
+	const showOnPostHint = $derived(!rootItem && !!effectiveRootItem);
 	// ============================================
 	$effect(() => {
 		loading = true;
@@ -142,6 +183,22 @@
 		}
 		build_breadcrumb_chain();
 	});
+	// resolve the thread root when the parent didn't supply one (profile
+	// comments feed). depends on comment so it re-resolves after the
+	// comment loads, and on rootItem so it short-circuits on the thread page.
+	$effect(() => {
+		if (rootItem) {
+			effectiveRootItem = rootItem;
+			return;
+		}
+		if (!comment) {
+			effectiveRootItem = null;
+			return;
+		}
+		resolve_root_item().then((r) => {
+			effectiveRootItem = r;
+		});
+	});
 	// ============================================
 	function handle_reply() {
 		if (!onReply) return;
@@ -172,6 +229,11 @@
 			{/each}
 			<span class="current">{displayId}</span>
 		</p>
+	{:else if showOnPostHint && rootAuthor && rootBlockHeight !== null}
+		<p class="on-post">
+			on
+			<a href="/post/{rootAuthor}/{rootBlockHeight}">{rootDisplayId}'s post</a>
+		</p>
 	{/if}
 	<p class="meta">
 		<a href="/profile/{accountId}">{displayId}</a>
@@ -191,7 +253,7 @@
 			<COMMENT_BUTTON
 				{accountId}
 				{blockHeight}
-				{rootItem}
+				rootItem={effectiveRootItem}
 				onReply={onReply ? handle_reply : undefined}
 			/>
 			<REPOST_BUTTON {accountId} {blockHeight} />
@@ -320,6 +382,18 @@
 	.breadcrumb .current {
 		font-weight: 600;
 		color: #555;
+	}
+	.on-post {
+		font-size: 11px;
+		color: #888;
+		margin: 0 0 6px;
+	}
+	.on-post a {
+		color: #4d9fff;
+		text-decoration: none;
+	}
+	.on-post a:hover {
+		text-decoration: underline;
 	}
 	.show-more {
 		background: none;
