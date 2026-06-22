@@ -23,24 +23,38 @@
 		accountId.length > MAX_ID_LENGTH ? accountId.slice(0, MAX_ID_LENGTH) + "..." : accountId
 	);
 	// ============================================
-	// repost value shape (from near-social-js repost()):
+	// repost value shape (from api.near.social/index with action:repost):
 	//   { type: 'repost', item: CommentItem }
 	// where CommentItem.path is "<originalAuthor>/post/main".
+	// be defensive about the cast — older or partial entries may not
+	// match exactly, so fall back to "unavailable" rather than throwing.
 	const target = $derived.by(() => {
-		const v = value as { type?: string; item?: { path?: string; blockHeight?: number } } | undefined;
-		if (!v || v.type !== "repost" || !v.item?.path) return null;
-		const targetAccountId = v.item.path.split("/")[0];
-		const targetBlockHeight = BigInt(v.item.blockHeight ?? 0);
+		const v = value as
+			| { type?: string; item?: { type?: string; path?: string; blockHeight?: number } }
+			| undefined;
+		if (!v || v.type !== "repost") return null;
+		const item = v.item;
+		if (!item?.path) return null;
+		const targetAccountId = item.path.split("/")[0];
+		if (!targetAccountId) return null;
+		const targetBlockHeight = BigInt(item.blockHeight ?? 0);
+		if (targetBlockHeight === 0n) return null;
 		return { targetAccountId, targetBlockHeight };
 	});
-	const original = $state<{ post: Post | null }>({ post: null });
+	// ============================================
+	type LoadState = "idle" | "loading" | "found" | "missing";
+	let original = $state<{ state: LoadState; post: Post | null }>({
+		state: "idle",
+		post: null
+	});
 	// ============================================
 	$effect(() => {
-		original.post = null;
+		original = { state: "idle", post: null };
 		if (!target) return;
-		get_account_id_post(target.targetAccountId, target.targetBlockHeight).then(
-			(p) => (original.post = p)
-		);
+		original = { state: "loading", post: null };
+		get_account_id_post(target.targetAccountId, target.targetBlockHeight).then((p) => {
+			original = p ? { state: "found", post: p } : { state: "missing", post: null };
+		});
 	});
 	// ============================================
 </script>
@@ -54,22 +68,38 @@
 	<div class="repost">
 		<p class="byline">
 			<Repeat2 />
-			REPOSTED BY <a href="/profile/{accountId}">@{displayId}</a>
+			<a href="/profile/{accountId}">@{displayId}</a>
+			<span class="dim">reposted</span>
+			<a href="/post/{target.targetAccountId}/{target.targetBlockHeight}"
+				>@{target.targetAccountId}</a
+			>
 		</p>
-		{#if original.post}
-			<a class="original" href="/post/{target.targetAccountId}/{target.targetBlockHeight}">
+		{#if original.state === "loading"}
+			<p class="muted">Loading original post...</p>
+		{:else if original.state === "missing"}
+			<p class="muted">
+				Original post by <a href="/profile/{target.targetAccountId}"
+					>@{target.targetAccountId}</a
+				>
+				is unavailable.
+			</p>
+		{:else if original.state === "found" && original.post}
+			<div class="original">
 				<p class="meta">@{target.targetAccountId}</p>
 				<div class="text">{@html render_post_text(original.post.text)}</div>
 				{#if original.post.image}
 					<img class="post-image" src={resolve_image_url_fun(original.post.image)} alt="" />
 				{/if}
-			</a>
-		{:else}
-			<p class="loading">Loading original post...</p>
+				<a
+					class="open"
+					href="/post/{target.targetAccountId}/{target.targetBlockHeight}"
+					>OPEN THREAD</a
+				>
+			</div>
 		{/if}
 	</div>
-{:else}
-	<p class="loading">Repost unavailable.</p>
+{:else if value !== undefined && value !== null}
+	<p class="muted">Repost unavailable (unexpected value shape).</p>
 {/if}
 
 <!-- ============================================ -->
@@ -90,6 +120,7 @@
 		color: #888;
 		margin: 0 0 6px;
 		text-transform: uppercase;
+		flex-wrap: wrap;
 	}
 	.byline a {
 		color: var(--color-blue, #4d9fff);
@@ -98,16 +129,14 @@
 	.byline a:hover {
 		text-decoration: underline;
 	}
+	.byline .dim {
+		opacity: 0.8;
+	}
 	.original {
 		display: block;
-		text-decoration: none;
-		color: inherit;
 		padding: 8px;
 		border: 1px solid rgba(0, 0, 0, 0.1);
 		border-radius: 6px;
-	}
-	.original:hover {
-		background: rgba(77, 159, 255, 0.05);
 	}
 	.meta {
 		font-size: 11px;
@@ -123,9 +152,27 @@
 		border-radius: 6px;
 		margin-top: 6px;
 	}
-	.loading {
+	.open {
+		display: inline-block;
+		margin-top: 6px;
+		font-size: 10px;
+		color: var(--color-blue, #4d9fff);
+		text-decoration: none;
+		text-transform: uppercase;
+	}
+	.open:hover {
+		text-decoration: underline;
+	}
+	.muted {
 		color: #888;
 		font-style: italic;
 		font-size: 12px;
+	}
+	.muted a {
+		color: var(--color-blue, #4d9fff);
+		text-decoration: none;
+	}
+	.muted a:hover {
+		text-decoration: underline;
 	}
 </style>
