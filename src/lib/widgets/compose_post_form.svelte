@@ -177,11 +177,15 @@
 	.upload-btn {
 		display: inline-block;
 		padding: 6px 12px;
-		border: 1px solid #95d58d;
-		background: #fff8a3;
-		border-radius: 6px;
+		border: none;
+		background-color: #8ca2f5;
+		color: #ffffff;
+		border-radius: 10px;
 		cursor: pointer;
 		font-size: 12px;
+	}
+	.upload-btn:hover {
+		background-color: #c9a8f4;
 	}
 	.upload-btn:has(input:disabled) {
 		cursor: not-allowed;
