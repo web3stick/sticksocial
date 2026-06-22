@@ -55,7 +55,8 @@
 			);
 			const newPosts: FeedPost[] = uniqueEntries.map((entry: IndexEntry) => ({
 				accountId: entry.accountId,
-				blockHeight: BigInt(entry.blockHeight)
+				blockHeight: BigInt(entry.blockHeight),
+				value: entry.value
 			}));
 			const existingKeys = new Set(posts.map((p) => p.accountId + "-" + p.blockHeight));
 			const filteredNewPosts = newPosts.filter(
