@@ -3,6 +3,7 @@
 	import type { Profile } from "near-social-js";
 	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
 	import { resolve_image_url_fun } from "./fun/profile_image";
+	import { render_post_text } from "./fun/post_text";
 	// ============================================
 	let profile = $state<Profile | null>(null);
 	let loading = $state(true);
@@ -48,16 +49,18 @@
 		<h1>{profile?.name}</h1>
 		<p class="account-id" title={accountId}>@{displayId}</p>
 		<!-- =========================== -->
-		<p>
-			{expanded || !needsTruncation
-				? profile?.description
-				: profile?.description?.slice(0, MAX_LENGTH) + "..."}
+		<div class="text bio">
+			{#if expanded || !needsTruncation}
+				{@html render_post_text(profile?.description ?? "")}
+			{:else}
+				{@html render_post_text(profile?.description?.slice(0, MAX_LENGTH) ?? "")}...
+			{/if}
 			{#if needsTruncation}
 				<button class="show-more" onclick={() => (expanded = !expanded)}
 					>{expanded ? "SHOW LESS" : "SHOW MORE"}</button
 				>
 			{/if}
-		</p>
+		</div>
 		<!-- =========================== -->
 		<!-- we will use tags in future when i add links to them to routes -->
 		<!-- {#if profile?.tags}
@@ -116,7 +119,8 @@
 		margin-bottom: 4px;
 	}
 
-	p {
+	p,
+	.bio {
 		margin-top: 0;
 	}
 
