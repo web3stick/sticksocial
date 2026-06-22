@@ -1,4 +1,5 @@
-<script lang="ts">
+<script lang="ts" generics="C extends Component<any>">
+	import type { Component } from "svelte";
 	import Post from "./post.svelte";
 	import type { IndexEntry, FeedOptions } from "near-social-js";
 	import { Square } from "lucide-svelte";
@@ -15,11 +16,13 @@
 	let {
 		fetch,
 		limit = 10,
-		order = "desc" as "asc" | "desc"
+		order = "desc" as "asc" | "desc",
+		component: Renderer = Post as unknown as C
 	}: {
 		fetch: FeedFetcher;
 		limit?: number;
 		order?: "asc" | "desc";
+		component?: C;
 	} = $props();
 	// ============================================
 	let posts = $state<FeedPost[]>([]);
@@ -95,7 +98,7 @@
 <!-- WIDGET_INFINITE_FEED -->
 <div class="feed">
 	{#each posts as item (item.accountId + "-" + item.blockHeight)}
-		<Post accountId={item.accountId} blockHeight={item.blockHeight} />
+		<Renderer accountId={item.accountId} blockHeight={item.blockHeight} />
 	{/each}
 	<div bind:this={loadMoreRef} class="load-more">
 		{#if loading}
