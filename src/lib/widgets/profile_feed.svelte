@@ -91,27 +91,29 @@
 	}
 	.tabs {
 		display: flex;
-		gap: 4px;
-		padding: 8px 0;
+		justify-content: space-around;
+		padding: 0;
 		border-bottom: 1px solid #95d58d;
 		margin-bottom: 8px;
 	}
 	.tab {
+		flex: 1;
 		background: none;
 		border: none;
-		padding: 6px 12px;
-		border-radius: 999px;
+		padding: 10px 8px;
 		font-size: 12px;
 		color: inherit;
 		cursor: pointer;
-		opacity: 0.6;
+		opacity: 0.55;
+		border-bottom: 2px solid transparent;
+		margin-bottom: -1px;
 	}
 	.tab:hover {
-		opacity: 0.9;
+		opacity: 0.85;
 	}
 	.tab.active {
 		opacity: 1;
-		background: #fff8a3;
 		font-weight: bold;
+		border-bottom-color: currentColor;
 	}
 </style>
