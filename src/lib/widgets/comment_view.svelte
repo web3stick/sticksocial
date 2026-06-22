@@ -11,7 +11,6 @@
 	import LIKE_BUTTON from "./like_button.svelte";
 	import COMMENT_BUTTON from "./comment_button.svelte";
 	import REPOST_BUTTON from "./repost_button.svelte";
-	// self-import for recursion (svelte:self is deprecated in svelte 5)
 	import COMMENT_VIEW from "./comment_view.svelte";
 	// ============================================
 	let {
@@ -20,6 +19,7 @@
 		depth = 0,
 		maxDepth = 5,
 		refreshKey = 0,
+		highlightedComment = null,
 		rootItem = null,
 		onReply
 	}: {
@@ -28,15 +28,8 @@
 		depth?: number;
 		maxDepth?: number;
 		refreshKey?: number;
-		// the top-level post of the thread this comment belongs to. passed
-		// down so every COMMENT_BUTTON can report it to the parent's
-		// compose form; defaults to "this comment is its own root" so
-		// comment_view also works when rendered standalone (e.g. in a
-		// notification drilldown or a future thread view).
+		highlightedComment?: string | null;
 		rootItem?: CommentItem | null;
-		// bubbles up when the user clicks the REPLY icon on this
-		// comment; the parent uses it to retarget the compose form at
-		// this comment (immediate parent) + the supplied rootItem.
 		onReply?: (payload: {
 			handle: string;
 			item: CommentItem;
@@ -48,24 +41,68 @@
 	let timeAgo = $state<{ text: string; title: string } | "Loading" | "unknown">("Loading");
 	let subComments = $state<IndexEntry[]>([]);
 	let subLoading = $state(false);
+	let showAllReplies = $state(false);
+	let commentRef = $state<HTMLDivElement | null>(null);
 	// ============================================
+	const myKey = $derived(`${accountId}-${blockHeight}`);
+	const isHighlighted = $derived(highlightedComment === myKey);
 	const MAX_ID_LENGTH = 20;
 	const displayId = $derived(
 		accountId.length > MAX_ID_LENGTH ? accountId.slice(0, MAX_ID_LENGTH) + "..." : accountId
 	);
-	// sub-comments live at this comment's own /post/comment
 	const subItem = $derived({
 		type: "social",
 		path: `${accountId}/post/comment`,
 		blockHeight: Number(blockHeight)
 	});
 	const canRecurse = $derived(depth < maxDepth);
-	// this comment as a CommentItem, used when bubbling up REPLY clicks
 	const selfItem = $derived<CommentItem>({
 		type: "social",
 		path: `${accountId}/post/comment`,
 		blockHeight: Number(blockHeight)
 	});
+	// — truncation —
+	// show first N replies; "show N more" button expands the rest.
+	// when highlightedComment is set (permalink nav), skip truncation
+	// so the target comment's ancestors all expand fully.
+	const INITIAL_VISIBLE_REPLIES = 3;
+	const truncate = $derived(
+		!highlightedComment && !showAllReplies && subComments.length > INITIAL_VISIBLE_REPLIES
+	);
+	const visibleReplies = $derived(
+		truncate ? subComments.slice(0, INITIAL_VISIBLE_REPLIES) : subComments
+	);
+	const hiddenCount = $derived(
+		truncate ? subComments.length - INITIAL_VISIBLE_REPLIES : 0
+	);
+	// — breadcrumb chain —
+	// for the highlighted comment we walk up via the comment's on-chain
+	// `item` (immediate parent) to build the root→...→this path.
+	const MAX_CHAIN_DEPTH = 10;
+	let breadcrumb = $state<Array<{ accountId: string; blockHeight: string; label: string }>>([]);
+	let breadcrumbLoading = $state(false);
+	async function build_breadcrumb_chain() {
+		if (!comment?.item || !rootItem) return;
+		breadcrumbLoading = true;
+		const chain: Array<{ accountId: string; blockHeight: string; label: string }> = [];
+		let currentId = accountId;
+		let currentBh = blockHeight;
+		let iterations = 0;
+		while (iterations < MAX_CHAIN_DEPTH) {
+			const data = await get_account_id_comment(currentId, currentBh);
+			if (!data?.item) break;
+			const parentAuthor = data.item.path.split("/")[0];
+			const parentBh = String(data.item.blockHeight);
+			chain.unshift({ accountId: parentAuthor, blockHeight: parentBh, label: parentAuthor });
+			const rootAuthor = rootItem.path.split("/")[0];
+			if (parentAuthor === rootAuthor && data.item.blockHeight === rootItem.blockHeight) break;
+			currentId = parentAuthor;
+			currentBh = BigInt(parentBh);
+			iterations++;
+		}
+		breadcrumb = chain;
+		breadcrumbLoading = false;
+	}
 	// ============================================
 	$effect(() => {
 		loading = true;
@@ -74,16 +111,11 @@
 			loading = false;
 		});
 	});
-	// ============================================
 	$effect(() => {
 		get_time_ago_fun(Number(blockHeight)).then((t) => {
 			timeAgo = t;
 		});
 	});
-	// ============================================
-	// fetch sub-comments when this comment is rendered, when its
-	// accountId/blockHeight changes, or when the parent signals a
-	// refresh (e.g. a new comment was posted somewhere up the chain)
 	$effect(() => {
 		if (!canRecurse) return;
 		refreshKey;
@@ -92,12 +124,32 @@
 			.then((c) => (subComments = c))
 			.finally(() => (subLoading = false));
 	});
+	// when highlighted, auto-expand all replies so ancestors are visible
+	$effect(() => {
+		if (highlightedComment) showAllReplies = true;
+	});
+	// scroll into view when highlighted
+	$effect(() => {
+		if (isHighlighted && commentRef) {
+			commentRef.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+	});
+	// build breadcrumb chain when this is the highlighted comment
+	$effect(() => {
+		if (!isHighlighted || !comment?.item) {
+			breadcrumb = [];
+			return;
+		}
+		build_breadcrumb_chain();
+	});
 	// ============================================
 	function handle_reply() {
 		if (!onReply) return;
 		onReply({ handle: accountId, item: selfItem, rootItem });
 	}
-	// ============================================
+	function expand_replies() {
+		showAllReplies = true;
+	}
 </script>
 
 <!-- ============================================ -->
@@ -105,7 +157,22 @@
 
 <!-- widget_comment_view -->
 <!-- WIDGET_COMMENT_VIEW -->
-<div class="comment" data-depth={depth}>
+<div
+	class="comment"
+	class:highlighted={isHighlighted}
+	data-depth={depth}
+	bind:this={commentRef}
+>
+	<!-- — breadcrumb — -->
+	{#if isHighlighted && breadcrumb.length > 0}
+		<p class="breadcrumb">
+			{#each breadcrumb as crumb, i}
+				<a href="/post/{crumb.accountId}/{crumb.blockHeight}">{crumb.label}</a>
+				<span class="sep">&gt;</span>
+			{/each}
+			<span class="current">{displayId}</span>
+		</p>
+	{/if}
 	<p class="meta">
 		<a href="/profile/{accountId}">{displayId}</a>
 		{#if typeof timeAgo === "object" && timeAgo.text}
@@ -133,22 +200,30 @@
 		<p class="loading">Loading...</p>
 	{/if}
 	<!-- ============== -->
-	{#if canRecurse && subComments.length > 0}
-		<div class="replies">
-			{#each subComments as sub (sub.accountId + "-" + sub.blockHeight)}
-				<COMMENT_VIEW
-					accountId={sub.accountId}
-					blockHeight={BigInt(sub.blockHeight)}
-					depth={depth + 1}
-					{maxDepth}
-					{refreshKey}
-					{rootItem}
-					onReply={onReply ? handle_reply : undefined}
-				/>
-			{/each}
-		</div>
-	{:else if canRecurse && subLoading}
-		<p class="loading replies-loading">Loading replies...</p>
+	{#if canRecurse}
+		{#if subComments.length > 0}
+			<div class="replies">
+				{#each visibleReplies as sub (sub.accountId + "-" + sub.blockHeight)}
+					<COMMENT_VIEW
+						accountId={sub.accountId}
+						blockHeight={BigInt(sub.blockHeight)}
+						depth={depth + 1}
+						{maxDepth}
+						{refreshKey}
+						{highlightedComment}
+						{rootItem}
+						onReply={onReply ? handle_reply : undefined}
+					/>
+				{/each}
+			</div>
+			{#if hiddenCount > 0}
+				<button class="show-more" onclick={expand_replies}>
+					show {hiddenCount} more repl{hiddenCount === 1 ? "y" : "ies"}
+				</button>
+			{/if}
+		{:else if subLoading}
+			<p class="loading replies-loading">Loading replies...</p>
+		{/if}
 	{/if}
 </div>
 
@@ -161,6 +236,7 @@
 		padding: 8px 12px;
 		margin: 8px 0;
 		text-align: left;
+		transition: background-color 0.3s ease;
 	}
 	.comment[data-depth="1"] {
 		border-left-color: #8ca2f5;
@@ -176,6 +252,16 @@
 	}
 	.comment[data-depth="5"] {
 		border-left-color: #fff8a3;
+	}
+	.comment.highlighted {
+		background: rgba(255, 248, 163, 0.25);
+		border-radius: 6px;
+		scroll-margin-top: 80px;
+	}
+	@media (prefers-color-scheme: dark) {
+		.comment.highlighted {
+			background: rgba(255, 248, 163, 0.08);
+		}
 	}
 	.meta {
 		font-size: 11px;
@@ -211,5 +297,43 @@
 	.replies-loading {
 		margin-top: 6px;
 		margin-left: 6px;
+	}
+	.breadcrumb {
+		font-size: 11px;
+		color: #888;
+		margin: 0 0 6px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		flex-wrap: wrap;
+	}
+	.breadcrumb a {
+		color: #4d9fff;
+		text-decoration: none;
+	}
+	.breadcrumb a:hover {
+		text-decoration: underline;
+	}
+	.breadcrumb .sep {
+		color: #bbb;
+	}
+	.breadcrumb .current {
+		font-weight: 600;
+		color: #555;
+	}
+	.show-more {
+		background: none;
+		border: 1px solid #ddd;
+		border-radius: 6px;
+		padding: 4px 10px;
+		font-size: 11px;
+		color: #4d9fff;
+		cursor: pointer;
+		margin-top: 4px;
+		font-family: inherit;
+	}
+	.show-more:hover {
+		background: rgba(77, 159, 255, 0.08);
+		border-color: #4d9fff;
 	}
 </style>

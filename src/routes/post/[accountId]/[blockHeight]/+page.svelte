@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import { goto } from "$app/navigation";
 	import type { CommentItem } from "near-social-js";
 	import POST from "$lib/widgets/post.svelte";
 	import COMMENTS_LIST from "$lib/widgets/comments_list.svelte";
@@ -13,16 +14,11 @@
 	let refreshKey = $state(0);
 	function handle_posted() {
 		refreshKey++;
-		// a reply to the post (the default) clears the threaded target.
 		composeItem = null;
 		composeReplyToHandle = null;
 	}
 	// ============================================
 	// when a comment_view fires onReply, we retarget the compose form
-	// to that comment (immediate parent) + the post (thread root).
-	// comment_view defaults `item` to the post itself, so a fresh page
-	// starts with no threaded override — replies go straight onto the
-	// post.
 	let composeItem = $state<CommentItem | null>(null);
 	let composeReplyToHandle = $state<string | null>(null);
 	function handle_reply(payload: {
@@ -34,13 +30,36 @@
 		composeReplyToHandle = payload.handle;
 	}
 	// ============================================
-	// top-level post item — used as the thread root for replies onto
-	// the post itself (no comment in between) and forwarded as
-	// rootItem for replies onto sub-comments.
 	const rootItem = $derived<CommentItem>({
 		type: "social",
 		path: `${accountId}/post/main`,
 		blockHeight: Number(blockHeight)
+	});
+	// ============================================
+	// — comment permalink hash —
+	// /post/<rootAuthor>/<rootBh>#comment-<commenter>-<commentBh>
+	// extracts the highlighted comment from the URL hash so the thread
+	// page can scroll to it and highlight it.
+	const hashMatch = $derived.by(() => {
+		const hash = page.url.hash;
+		if (!hash || !hash.startsWith("#comment-")) return null;
+		const m = hash.match(/^#comment-(.+)-(\d+)$/);
+		if (!m) return null;
+		return { accountId: m[1], blockHeight: m[2] };
+	});
+	const highlightedComment = $derived(
+		hashMatch ? `${hashMatch.accountId}-${hashMatch.blockHeight}` : null
+	);
+	// clear the hash after first render so a subsequent reply doesn't
+	// re-trigger scroll. we pushState instead of replace so the user
+	// keeps a clean URL if they bookmark.
+	$effect(() => {
+		if (!highlightedComment) return;
+		// wait a tick for the DOM to render, then clean the hash
+		requestAnimationFrame(() => {
+			const clean = page.url.pathname + page.url.search;
+			goto(clean, { replaceState: true, noScroll: true });
+		});
 	});
 	// ============================================
 </script>
@@ -54,7 +73,15 @@
 		<div class="sticky-parent">
 			<POST {accountId} {blockHeight} {refreshKey} />
 		</div>
-		<COMMENTS_LIST {accountId} {blockHeight} {refreshKey} onReply={handle_reply} />
+		<COMMENTS_LIST
+			{accountId}
+			{blockHeight}
+			{refreshKey}
+			{highlightedComment}
+			{rootItem}
+			maxDepth={highlightedComment ? 20 : 5}
+			onReply={handle_reply}
+		/>
 		<div class="reply">
 			<h3>REPLY</h3>
 			<COMMENT_COMPOSE_FORM

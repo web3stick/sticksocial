@@ -7,11 +7,17 @@
 		accountId,
 		blockHeight,
 		refreshKey = 0,
+		highlightedComment = null,
+		maxDepth = 5,
+		rootItem: rootItemOverride = null,
 		onReply
 	}: {
 		accountId: string;
 		blockHeight: bigint;
 		refreshKey?: number;
+		highlightedComment?: string | null;
+		maxDepth?: number;
+		rootItem?: CommentItem | null;
 		onReply?: (payload: {
 			handle: string;
 			item: CommentItem;
@@ -27,10 +33,7 @@
 		path: `${accountId}/post/main`,
 		blockHeight: Number(blockHeight)
 	});
-	// every comment in this list shares the same thread root — the post
-	// we're listing comments on — so we can pre-compute it once and pass
-	// it down so comment_view knows where to attach threaded replies.
-	const rootItem = $derived<CommentItem>(item);
+	const rootItem = $derived<CommentItem>(rootItemOverride ?? item);
 	// ============================================
 	async function refresh() {
 		loading = true;
@@ -42,9 +45,6 @@
 			loading = false;
 		}
 	}
-	// ============================================
-	// refresh on mount AND whenever refreshKey bumps (parent signals a
-	// new comment was posted, etc.)
 	$effect(() => {
 		refreshKey;
 		refresh();
@@ -68,6 +68,8 @@
 				accountId={comment.accountId}
 				blockHeight={BigInt(comment.blockHeight)}
 				{refreshKey}
+				{highlightedComment}
+				{maxDepth}
 				{rootItem}
 				{onReply}
 			/>
