@@ -4,6 +4,7 @@
 	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
 	import { near_social_js_set_profile_fun } from "$lib/near-social-js/main/fun_set_profile";
 	import { resolve_image_url_fun } from "./fun/profile_image";
+	import { upload_image_fun } from "./fun/upload_image";
 	import type { Profile } from "near-social-js";
 	// ============================================
 	let profile = $state<Profile | null>(null);
@@ -18,6 +19,7 @@
 	let website = $state("");
 	// ============================================
 	let busy = $state(false);
+	let uploading = $state(false);
 	let result = $state<string | null>(null);
 	let error = $state<string | null>(null);
 	// ============================================
@@ -37,6 +39,9 @@
 		}
 		return true;
 	}
+	// ============================================
+	const imagePreviewSrc = $derived(resolve_image_url_fun(parse_image_input(imageUrl) ?? undefined));
+	const backdropPreviewSrc = $derived(resolve_image_url_fun(parse_image_input(backdropUrl) ?? undefined));
 	// ============================================
 	function build_diffed_payload(): Record<string, unknown> {
 		const payload: Record<string, unknown> = {};
@@ -88,6 +93,40 @@
 		if (!auth.accountId) return;
 		const fresh = await get_profile(auth.accountId);
 		if (fresh) profile = fresh;
+	}
+	// ============================================
+	async function on_upload_pic(e: Event) {
+		const input = e.currentTarget as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+		uploading = true;
+		error = null;
+		try {
+			imageUrl = await upload_image_fun(file);
+		} catch (err) {
+			error = err instanceof Error ? err.message : String(err);
+			console.error("ipfs upload failed", err);
+		} finally {
+			uploading = false;
+			input.value = "";
+		}
+	}
+	// ============================================
+	async function on_upload_backdrop(e: Event) {
+		const input = e.currentTarget as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+		uploading = true;
+		error = null;
+		try {
+			backdropUrl = await upload_image_fun(file);
+		} catch (err) {
+			error = err instanceof Error ? err.message : String(err);
+			console.error("ipfs upload failed", err);
+		} finally {
+			uploading = false;
+			input.value = "";
+		}
 	}
 	// ============================================
 	async function on_save(e: Event) {
@@ -156,10 +195,45 @@
 			IMAGE URL
 			<input type="text" bind:value={imageUrl} disabled={!auth.accountId || busy} />
 		</label>
+		<!-- ============== -->
+		<p class="hint">SQUARE WORKS BEST</p>
+		<div class="upload">
+			<label class="upload-btn">
+				{uploading ? "UPLOADING..." : "UPLOAD IMAGE"}
+				<input
+					type="file"
+					accept="image/*"
+					onchange={on_upload_pic}
+					disabled={!auth.accountId || busy || uploading}
+				/>
+			</label>
+		</div>
+		<!-- ============== -->
+		{#if imagePreviewSrc}
+			<img src={imagePreviewSrc} class="pic-preview" alt="PROFILE PIC PREVIEW" />
+		{/if}
+		<!-- ============== -->
 		<label>
 			BACKDROP IMAGE URL
 			<input type="text" bind:value={backdropUrl} disabled={!auth.accountId || busy} />
 		</label>
+		<!-- ============== -->
+		<p class="hint">RECOMMENDED 1600x900</p>
+		<div class="upload">
+			<label class="upload-btn">
+				{uploading ? "UPLOADING..." : "UPLOAD BACKDROP"}
+				<input
+					type="file"
+					accept="image/*"
+					onchange={on_upload_backdrop}
+					disabled={!auth.accountId || busy || uploading}
+				/>
+			</label>
+		</div>
+		<!-- ============== -->
+		{#if backdropPreviewSrc}
+			<img src={backdropPreviewSrc} class="banner-preview" alt="BACKDROP PREVIEW" />
+		{/if}
 		<label>
 			BIO
 			<textarea bind:value={bio} disabled={!auth.accountId || busy}></textarea>
@@ -228,6 +302,44 @@
 	textarea {
 		min-height: 80px;
 		resize: vertical;
+	}
+	.upload {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.upload-btn {
+		display: inline-block;
+		padding: 6px 12px;
+		border: none;
+		background-color: #8ca2f5;
+		color: #ffffff;
+		border-radius: 10px;
+		cursor: pointer;
+		font-size: 12px;
+	}
+	.upload-btn:hover {
+		background-color: #c9a8f4;
+	}
+	.upload-btn:has(input:disabled) {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+	.upload-btn input[type="file"] {
+		display: none;
+	}
+	.banner-preview {
+		width: 100%;
+		height: 160px;
+		object-fit: cover;
+		border-radius: 16px;
+	}
+	.pic-preview {
+		width: 90px;
+		height: 90px;
+		border-radius: 50%;
+		border: 4px solid white;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 	}
 	.actions {
 		display: flex;

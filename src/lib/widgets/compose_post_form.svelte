@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { auth } from "$lib/ts/auth.svelte";
 	import { near_social_js_create_post_fun } from "$lib/near-social-js/main/fun_create_post";
-	import { near_social_ipfs } from "$lib/ts/const";
+	import { upload_image_fun } from "./fun/upload_image";
 	import type { Post } from "near-social-js";
 	// ============================================
 	let text = $state("");
@@ -57,22 +57,7 @@
 		error = null;
 		uploadName = file.name;
 		try {
-			const form = new FormData();
-			form.append("file", file);
-			const res = await fetch(`${near_social_ipfs.replace("/ipfs/", "/add")}`, {
-				method: "POST",
-				body: form
-			});
-			if (!res.ok) throw new Error(`upload failed: ${res.status} ${res.statusText}`);
-			const text = await res.text();
-			let cid = text.trim();
-			try {
-				const parsed = JSON.parse(cid);
-				if (parsed && typeof parsed.cid === "string") cid = parsed.cid;
-			} catch {
-				/* response was the bare cid */
-			}
-			imageUrl = `ipfs://${cid}`;
+			imageUrl = await upload_image_fun(file);
 		} catch (err) {
 			error = err instanceof Error ? err.message : String(err);
 			console.error("ipfs upload failed", err);
