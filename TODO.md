@@ -8,7 +8,7 @@
 
   before implementing, think big picture — not "patch the one closure":
   - **reusable comment feed widget**: build `comment_feed.svelte` that takes `(accountId, limit?, order?)` and internally wires `infinite_feed` + `comment_view` + the fetch closure. any future surface that wants "comments by X" (`/profile/...`, `/discover` "people commenting on X", notification drilldowns, etc.) just imports it. same pattern as `infinite_post_feed` for posts.
-  - **clean fetch logic**: move the `index({action, key, ...})` wrappers out of `profile_feed.svelte`'s inline script and into named helpers in `src/lib/near-social-js/main/` (e.g. `fun_get_account_comments.ts`) so the SDK quirks are isolated and testable from the `/bin` route.
+  - **clean fetch logic**: move the `index({action, key, ...})` wrappers out of `profile_feed.svelte`'s inline script and into named helpers in `src/lib/near-social-js/main/` (e.g. `fun_get_account_comments.ts`) so the SDK quirks are isolated. shape probe via curl from `near-social-tool-box/bin` while iterating.
   - **figure out what query actually returns comments by user** before committing to an approach:
     - **option A**: query `/index` with no `key` filter and filter the result client-side by `value.accountId === <userId>` or `value.item.path.startsWith(<userId>)`. cheap if the API supports it; expensive if it returns the whole global comment index.
     - **option B**: scan `${userId}/post/comment` over a range of block heights (the contract exposes `keys` via `get` only at a single blockHeight, so this won't work directly).
@@ -28,14 +28,6 @@
   - **follow-graph based suggestions** — "people you follow follow X". possible with current APIs but expensive (N follows × N followers).
   
   decide on a direction before re-mounting anything on the page.
-
-### /bin debug route
-
-- [ ] **expand /bin for other SDK probes** — currently /bin covers reposts / posts / comments. extend with more probes as we hit them:
-  - `notifications` for a given account (per-type rendering + value shapes)
-  - `getPost` (single post + comments) to verify the post + comments shape
-  - `getFollowers` / `getFollowing` for a given account, including the cross-walk between Record<string,unknown> (following) vs [{accountId}] (followers) shapes — both are confusing and worth seeing in one place
-  - `notify` index entries (mentions / likes / reposts notifications) to verify item/ value/ type
 
 ==============================================
 <br/>
