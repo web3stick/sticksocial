@@ -78,9 +78,7 @@
 			<p class="muted">Loading original post...</p>
 		{:else if original.state === "missing"}
 			<p class="muted">
-				Original post by <a href="/profile/{target.targetAccountId}"
-					>@{target.targetAccountId}</a
-				>
+				Original post by <a href="/profile/{target.targetAccountId}">@{target.targetAccountId}</a>
 				is unavailable.
 			</p>
 		{:else if original.state === "found" && original.post}
@@ -90,9 +88,7 @@
 				{#if original.post.image}
 					<img class="post-image" src={resolve_image_url_fun(original.post.image)} alt="" />
 				{/if}
-				<a
-					class="open"
-					href="/post/{target.targetAccountId}/{target.targetBlockHeight}"
+				<a class="open" href="/post/{target.targetAccountId}/{target.targetBlockHeight}"
 					>OPEN THREAD</a
 				>
 			</div>

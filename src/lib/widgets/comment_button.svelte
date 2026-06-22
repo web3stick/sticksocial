@@ -76,7 +76,9 @@
 {:else if rootItem}
 	<a
 		class="comment-button"
-		href="/post/{rootItem.path.split("/")[0]}/{rootItem.blockHeight}#comment-{accountId}-{blockHeight}"
+		href="/post/{rootItem.path.split(
+			'/'
+		)[0]}/{rootItem.blockHeight}#comment-{accountId}-{blockHeight}"
 		title="OPEN THREAD"
 	>
 		<MessageCircle />

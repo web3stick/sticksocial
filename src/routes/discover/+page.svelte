@@ -17,7 +17,7 @@
 	<hr />
 	<WIDGET_DISCOVER_PEOPLE />
 	<hr />
-	<section class="contribute-card">
+	<div class="contribute-card">
 		<h2>HACK ON STICKSOCIAL</h2>
 		<p>found a bug? have an idea? leave bug reports and help contribute on github.</p>
 		<a
@@ -28,7 +28,7 @@
 		>
 			<button type="button">OPEN REPO</button>
 		</a>
-	</section>
+	</div>
 </section>
 
 <!-- ============================================ -->
@@ -37,7 +37,7 @@
 <style>
 	.contribute-card {
 		margin-top: 24px;
-		padding: 28px 24px;
+		padding: 16px 24px;
 		max-width: 500px;
 		width: 100%;
 		box-sizing: border-box;
@@ -47,7 +47,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 10px;
+		gap: 6px;
 		text-align: center;
 	}
 	@media (prefers-color-scheme: dark) {
@@ -69,11 +69,11 @@
 		line-height: 1.5;
 	}
 	.cta-link {
-		margin-top: 6px;
+		margin-top: 4px;
 		text-decoration: none;
 	}
 	.cta-link button {
-		font-size: 14px;
-		padding: 10px 22px;
+		font-size: 13px;
+		padding: 7px 18px;
 	}
 </style>

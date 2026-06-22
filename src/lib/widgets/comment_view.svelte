@@ -72,9 +72,7 @@
 	const visibleReplies = $derived(
 		truncate ? subComments.slice(0, INITIAL_VISIBLE_REPLIES) : subComments
 	);
-	const hiddenCount = $derived(
-		truncate ? subComments.length - INITIAL_VISIBLE_REPLIES : 0
-	);
+	const hiddenCount = $derived(truncate ? subComments.length - INITIAL_VISIBLE_REPLIES : 0);
 	// — breadcrumb chain —
 	// for the highlighted comment we walk up via the comment's on-chain
 	// `item` (immediate parent) to build the root→...→this path.
@@ -132,12 +130,8 @@
 		}
 		return null;
 	}
-	const rootAuthor = $derived(
-		effectiveRootItem ? effectiveRootItem.path.split("/")[0] : null
-	);
-	const rootBlockHeight = $derived(
-		effectiveRootItem ? effectiveRootItem.blockHeight : null
-	);
+	const rootAuthor = $derived(effectiveRootItem ? effectiveRootItem.path.split("/")[0] : null);
+	const rootBlockHeight = $derived(effectiveRootItem ? effectiveRootItem.blockHeight : null);
 	const rootDisplayId = $derived(
 		rootAuthor && rootAuthor.length > MAX_ID_LENGTH
 			? rootAuthor.slice(0, MAX_ID_LENGTH) + "..."
@@ -214,12 +208,7 @@
 
 <!-- widget_comment_view -->
 <!-- WIDGET_COMMENT_VIEW -->
-<div
-	class="comment"
-	class:highlighted={isHighlighted}
-	data-depth={depth}
-	bind:this={commentRef}
->
+<div class="comment" class:highlighted={isHighlighted} data-depth={depth} bind:this={commentRef}>
 	<!-- — breadcrumb — -->
 	{#if isHighlighted && breadcrumb.length > 0}
 		<p class="breadcrumb">

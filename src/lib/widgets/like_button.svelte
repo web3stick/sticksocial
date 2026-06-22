@@ -6,10 +6,7 @@
 	import { near_social_js_unlike_fun } from "$lib/near-social-js/main/fun_unlike";
 	import { near_social_js_get_likes_fun } from "$lib/near-social-js/main/fun_get_likes";
 	// ============================================
-	let {
-		accountId,
-		blockHeight
-	}: { accountId: string; blockHeight: bigint } = $props();
+	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
 	// ============================================
 	let likes = $state<IndexEntry[]>([]);
 	let loading = $state(false);
@@ -21,8 +18,7 @@
 		blockHeight: Number(blockHeight)
 	});
 	const liked = $derived(
-		auth.accountId !== null &&
-			likes.some((l) => l.accountId === auth.accountId)
+		auth.accountId !== null && likes.some((l) => l.accountId === auth.accountId)
 	);
 	const count = $derived(likes.length);
 	// ============================================

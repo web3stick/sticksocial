@@ -65,9 +65,9 @@
 			<img class="post-image" src={resolve_image_url_fun(post.image)} alt="" />
 		{/if}
 		<div class="actions">
-			<LIKE_BUTTON accountId={accountId} blockHeight={blockHeight} />
-			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} {refreshKey} />
-			<REPOST_BUTTON accountId={accountId} blockHeight={blockHeight} />
+			<LIKE_BUTTON {accountId} {blockHeight} />
+			<COMMENT_BUTTON {accountId} {blockHeight} {refreshKey} />
+			<REPOST_BUTTON {accountId} {blockHeight} />
 		</div>
 	{:else}
 		<p class="loading">Loading...</p>
@@ -95,8 +95,8 @@
 		margin-bottom: 8px;
 	}
 	.profile-pic {
-	width: 12px;
-	height: 12px;
+		width: 12px;
+		height: 12px;
 	}
 	.text {
 		font-size: 16px;

@@ -1,8 +1,6 @@
 import { const_api_near_social, const_api_near_social_endpoints } from "../../ts/const";
 // ============================================
-export async function get_time_fun(
-	blockHeight?: number,
-): Promise<{ timestamp: number } | null> {
+export async function get_time_fun(blockHeight?: number): Promise<{ timestamp: number } | null> {
 	const url =
 		blockHeight !== undefined
 			? `${const_api_near_social}${const_api_near_social_endpoints.time}?blockHeight=${blockHeight}`

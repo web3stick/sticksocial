@@ -63,8 +63,7 @@
 					viewerFollowing = new Set(Object.keys(vf ?? {}));
 				}
 				rows = ids.map((id) => {
-					const profileNode = (profileResult?.[id] as { profile?: Profile } | undefined)
-						?.profile;
+					const profileNode = (profileResult?.[id] as { profile?: Profile } | undefined)?.profile;
 					return {
 						accountId: id,
 						name: profileNode?.name ?? "",
@@ -118,7 +117,7 @@
 					<FOLLOW_BUTTON
 						accountId={row.accountId}
 						initialFollowing={row.isFollowing}
-						refreshKey={refreshKey}
+						{refreshKey}
 					/>
 				{/if}
 			</div>

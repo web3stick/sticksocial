@@ -4,10 +4,7 @@ import type { CommentItem } from "near-social-js";
 // ============================================
 // unlike only writes to the signer's own index/like — no notify.
 // ============================================
-export async function near_social_js_unlike_fun(
-	signerId: string,
-	item: CommentItem
-): Promise<any> {
+export async function near_social_js_unlike_fun(signerId: string, item: CommentItem): Promise<any> {
 	// =================
 	const data = {
 		[signerId]: {

@@ -41,7 +41,9 @@
 	}
 	// ============================================
 	const imagePreviewSrc = $derived(resolve_image_url_fun(parse_image_input(imageUrl) ?? undefined));
-	const backdropPreviewSrc = $derived(resolve_image_url_fun(parse_image_input(backdropUrl) ?? undefined));
+	const backdropPreviewSrc = $derived(
+		resolve_image_url_fun(parse_image_input(backdropUrl) ?? undefined)
+	);
 	// ============================================
 	function build_diffed_payload(): Record<string, unknown> {
 		const payload: Record<string, unknown> = {};

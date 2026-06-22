@@ -12,9 +12,7 @@
 	let result = $state<string | null>(null);
 	let error = $state<string | null>(null);
 	// ============================================
-	const can_post = $derived(
-		!!auth.accountId && !busy && !uploading && text.trim().length > 0
-	);
+	const can_post = $derived(!!auth.accountId && !busy && !uploading && text.trim().length > 0);
 	// ============================================
 	function build_post(): Post {
 		const trimmed_text = text.trim();
@@ -80,32 +78,19 @@
 	<form class="compose-form" onsubmit={on_submit}>
 		<label>
 			TEXT
-			<textarea
-				bind:value={text}
-				placeholder="what's happening?"
-				rows="4"
-				maxlength="2000"
+			<textarea bind:value={text} placeholder="what's happening?" rows="4" maxlength="2000"
 			></textarea>
 		</label>
 		<!-- ============== -->
 		<label>
 			IMAGE URL (OPTIONAL)
-			<input
-				type="text"
-				bind:value={imageUrl}
-				placeholder="https://... or ipfs://CID"
-			/>
+			<input type="text" bind:value={imageUrl} placeholder="https://... or ipfs://CID" />
 		</label>
 		<!-- ============== -->
 		<div class="upload">
 			<label class="upload-btn">
 				{uploading ? "UPLOADING..." : "UPLOAD IMAGE"}
-				<input
-					type="file"
-					accept="image/*"
-					onchange={on_file}
-					disabled={uploading || busy}
-				/>
+				<input type="file" accept="image/*" onchange={on_file} disabled={uploading || busy} />
 			</label>
 			{#if uploadName}
 				<span class="upload-name">{uploadName}</span>

@@ -27,13 +27,10 @@
 	const following = $derived(
 		followedOverride !== null
 			? followedOverride
-			: auth.accountId !== null &&
-					followers.some((f) => f.accountId === auth.accountId)
+			: auth.accountId !== null && followers.some((f) => f.accountId === auth.accountId)
 	);
 	const count = $derived(followers.length);
-	const can_toggle = $derived(
-		!!auth.accountId && !busy && auth.accountId !== accountId
-	);
+	const can_toggle = $derived(!!auth.accountId && !busy && auth.accountId !== accountId);
 	// ============================================
 	async function refresh() {
 		if (!accountId) return;

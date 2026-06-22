@@ -82,7 +82,7 @@
 					<a class="actor" href="/profile/{actor(n)}">{actor(n)}</a>
 					<span class="msg">{message_for(n).replace(actor(n), "").trim()}</span>
 					{#if href}
-						<a class="target" href={href}>view post</a>
+						<a class="target" {href}>view post</a>
 					{/if}
 				</div>
 			</div>
