@@ -22,7 +22,9 @@
 <section>
 	{#if accountId && blockHeight > 0n}
 		<HOME_NAV />
-		<POST {accountId} {blockHeight} />
+		<div class="sticky-parent">
+			<POST {accountId} {blockHeight} />
+		</div>
 		<div class="compose">
 			<COMMENT_COMPOSE_FORM {accountId} {blockHeight} onPosted={handle_posted} />
 		</div>
@@ -36,6 +38,19 @@
 <!-- ============================================ -->
 
 <style>
+	.sticky-parent {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		background: #fff;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	}
+	@media (prefers-color-scheme: dark) {
+		.sticky-parent {
+			background: #1a1a1a;
+			border-bottom-color: rgba(255, 255, 255, 0.1);
+		}
+	}
 	.compose {
 		width: 500px;
 		max-width: 90vw;
