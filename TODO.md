@@ -2,12 +2,18 @@
 
 ---
 
-### profile page polish
+### profile / settings
 
-- [ ] **repost rendering — research old NEAR social semantics + finish verification** — the immediate 'Repost unavailable' bug was infinite_feed dropping IndexEntry.value (fixed in bd45d66). with value forwarded, repost_view reads value.item.path, parses the target account/blockHeight, and fetches the original post. the next step is to verify this end-to-end against a real reposting account (mob.near has many) and, if needed, refine against the old near.social Post widget semantics — specifically:
-  - confirm path.split('/')[0] is the right way to extract the target account id (what if the path has more than 2 segments?)
-  - confirm get_account_id_post(item.blockHeight) returns the original post content; in some legacy cases the original may have been deleted and we should fall back to a 'post unavailable' state instead of throwing
-  - consider whether the byline should also link to the original /post/<author>/<block> (currently only the original body links there)
+- [ ] **profile edit — only save changed fields** — `settings_edit_profile.svelte` currently always builds and sends the full payload (`name`, `image`, `backgroundImage`, `description`, `linktree.*`) on every save, even when the user only touched one field. that overwrites every field with whatever's in the form, including stale/empty values, and bumps the on-chain profile unnecessarily. fix by diffing the current form values against the freshly-fetched profile (or tracking an initial snapshot in an `$state` after `refresh_profile()`) and only including fields in the payload that actually changed. needs care for `linktree` since partial merges of nested objects are non-trivial — either diff key-by-key or treat linktree as a single blob that only ships when any of its keys change.
+
+### discover
+
+- [ ] **discover page — actual content** — the page is a stub right now (reset in 53aa971). when we come back to it, design needs to be its own thing, not a duplicate of the global feed. candidates that were considered earlier and not used:
+  - **trending hashtags** — near-social-js only exposes `getHashtagFeed(tag)` per-tag, no list-all-tags endpoint. would need either a server-side aggregation or a community-curated tag list.
+  - **top accounts by follower count** — `getFollowers` is per-account only; not indexable. would need a follow graph cache.
+  - **follow-graph based suggestions** — "people you follow follow X". possible with current APIs but expensive (N follows × N followers).
+  
+  decide on a direction before re-mounting anything on the page.
 
 ### /bin debug route
 
