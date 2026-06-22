@@ -7,6 +7,11 @@
 	interface FeedPost {
 		accountId: string;
 		blockHeight: bigint;
+		// forward the raw IndexEntry value through to the renderer so
+		// renderers like repost_view can inspect value.item to find the
+		// original post. renderers that don't need it (post, comment_view)
+		// simply ignore the prop.
+		value?: unknown;
 	}
 	// ============================================
 	// fetch signature matches the SDK getActivityFeed / getHashtagFeed /
@@ -98,7 +103,7 @@
 <!-- WIDGET_INFINITE_FEED -->
 <div class="feed">
 	{#each posts as item (item.accountId + "-" + item.blockHeight)}
-		<Renderer accountId={item.accountId} blockHeight={item.blockHeight} />
+		<Renderer accountId={item.accountId} blockHeight={item.blockHeight} value={item.value} />
 	{/each}
 	<div bind:this={loadMoreRef} class="load-more">
 		{#if loading}
