@@ -28,16 +28,23 @@
 	// account's profile, and (if signed in) figure out which of those
 	// accounts the viewer already follows so each row's follow button
 	// can render in the right state without doing its own N round-trips.
+	// we close over `accountId` + `mode` synchronously so the effect re-fires
+	// when either changes, and use a cancellation guard so an in-flight
+	// fetch for the previous accountId can't overwrite the new one.
 	$effect(() => {
 		refreshKey;
-		if (!accountId) return;
+		const target = accountId;
+		const targetMode = mode;
+		if (!target) return;
 		loading = true;
+		let cancelled = false;
 		(async () => {
 			try {
 				const ids =
-					mode === "followers"
-						? (await near_social_js_get_followers_fun(accountId)).map((f) => f.accountId)
-						: Object.keys((await near_social_js_get_following_fun(accountId)) ?? {});
+					targetMode === "followers"
+						? (await near_social_js_get_followers_fun(target)).map((f) => f.accountId)
+						: Object.keys((await near_social_js_get_following_fun(target)) ?? {});
+				if (cancelled) return;
 				if (ids.length === 0) {
 					rows = [];
 					loading = false;
@@ -47,10 +54,12 @@
 				const profileResult = await near_social_js_get_fun({
 					keys: ids.flatMap((id) => [`${id}/profile/name`, `${id}/profile/**`])
 				});
+				if (cancelled) return;
 				// viewer followings set — only if signed in.
 				let viewerFollowing: Set<string> | null = null;
 				if (auth.accountId) {
 					const vf = await near_social_js_get_following_fun(auth.accountId);
+					if (cancelled) return;
 					viewerFollowing = new Set(Object.keys(vf ?? {}));
 				}
 				rows = ids.map((id) => {
@@ -63,12 +72,15 @@
 					};
 				});
 			} catch (e) {
-				console.error(`profile_relations (${mode}) failed`, e);
+				console.error(`profile_relations (${targetMode}) failed`, e);
 				rows = [];
 			} finally {
-				loading = false;
+				if (!cancelled) loading = false;
 			}
 		})();
+		return () => {
+			cancelled = true;
+		};
 	});
 	// ============================================
 	function handle_toggled() {

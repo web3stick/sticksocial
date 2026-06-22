@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import type { Profile } from "near-social-js";
 	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
 	import { resolve_image_url_fun } from "./fun/profile_image";
@@ -18,11 +17,24 @@
 	const DEFAULT_BANNER = "https://lipsum.app/random/1600x900";
 	const bannerSrc = $derived(resolve_image_url_fun(profile?.backgroundImage) || DEFAULT_BANNER);
 	// ============================================
-	onMount(async () => {
-		if (accountId) {
-			profile = await get_profile(accountId);
-		}
-		loading = false;
+	// $effect (not onMount) so navigating /profile/alice → /profile/bob
+	// (e.g. via an @mention click in the bio) refetches the new profile.
+	// SvelteKit reuses this component when the route's accountId param
+	// changes, so onMount would only fire once and the banner would stick
+	// on the previous account's data.
+	$effect(() => {
+		if (!accountId) return;
+		loading = true;
+		let cancelled = false;
+		get_profile(accountId).then((p) => {
+			// ignore the result if accountId changed while we were fetching
+			if (cancelled) return;
+			profile = p;
+			loading = false;
+		});
+		return () => {
+			cancelled = true;
+		};
 	});
 </script>
 

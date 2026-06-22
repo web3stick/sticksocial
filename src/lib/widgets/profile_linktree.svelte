@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import type { Profile } from "near-social-js";
 	import { get_profile } from "$lib/near-social-js/main/fun_get_profile";
 	import { resolve_linktree_url_fun, resolve_linktree_icon_fun } from "./fun/profile_linktree";
@@ -7,10 +6,18 @@
 	let { accountId }: { accountId: string } = $props();
 	let profile = $state<Profile | null>(null);
 	// ============================================
-	onMount(async () => {
-		if (accountId) {
-			profile = await get_profile(accountId);
-		}
+	// $effect (not onMount) so navigating /profile/alice → /profile/bob
+	// refetches the new linktree. matches profile_banner.svelte.
+	$effect(() => {
+		if (!accountId) return;
+		let cancelled = false;
+		get_profile(accountId).then((p) => {
+			if (cancelled) return;
+			profile = p;
+		});
+		return () => {
+			cancelled = true;
+		};
 	});
 </script>
 
