@@ -5,8 +5,13 @@
 	// ============================================
 	let {
 		accountId,
-		blockHeight
-	}: { accountId: string; blockHeight: bigint } = $props();
+		blockHeight,
+		refreshKey = 0
+	}: {
+		accountId: string;
+		blockHeight: bigint;
+		refreshKey?: number;
+	} = $props();
 	// ============================================
 	let comments = $state<IndexEntry[]>([]);
 	let loading = $state(false);
@@ -18,7 +23,10 @@
 	});
 	const count = $derived(comments.length);
 	// ============================================
+	// refetch on mount AND whenever refreshKey bumps (parent signals
+	// a new comment was posted and counts should re-sync)
 	$effect(() => {
+		refreshKey;
 		loading = true;
 		near_social_js_get_comments_fun(item)
 			.then((c) => (comments = c))

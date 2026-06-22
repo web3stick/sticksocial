@@ -23,7 +23,7 @@
 	{#if accountId && blockHeight > 0n}
 		<HOME_NAV />
 		<div class="sticky-parent">
-			<POST {accountId} {blockHeight} />
+			<POST {accountId} {blockHeight} {refreshKey} />
 		</div>
 		<div class="compose">
 			<COMMENT_COMPOSE_FORM {accountId} {blockHeight} onPosted={handle_posted} />

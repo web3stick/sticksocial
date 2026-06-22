@@ -8,7 +8,15 @@
 	import REPOST_BUTTON from "./repost_button.svelte";
 	import type { Post } from "near-social-js";
 	// ============================================
-	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
+	let {
+		accountId,
+		blockHeight,
+		refreshKey = 0
+	}: {
+		accountId: string;
+		blockHeight: bigint;
+		refreshKey?: number;
+	} = $props();
 	let post = $state<Post | null>(null);
 	let loading = $state(true);
 	let timeAgo = $state<{ text: string; title: string } | "Loading" | "unknown">("Loading");
@@ -58,7 +66,7 @@
 		{/if}
 		<div class="actions">
 			<LIKE_BUTTON accountId={accountId} blockHeight={blockHeight} />
-			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} />
+			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} {refreshKey} />
 			<REPOST_BUTTON accountId={accountId} blockHeight={blockHeight} />
 			<a class="thread-link" href="/post/{accountId}/{blockHeight}">OPEN THREAD</a>
 		</div>
