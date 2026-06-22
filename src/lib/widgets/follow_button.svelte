@@ -127,12 +127,10 @@
 		font-size: 12px;
 	}
 	.follow-button.following {
-		color: #666;
 		border-color: rgba(0, 0, 0, 0.2);
 	}
 	@media (prefers-color-scheme: dark) {
 		.follow-button.following {
-			color: #aaa;
 			border-color: rgba(255, 255, 255, 0.2);
 		}
 	}
