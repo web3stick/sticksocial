@@ -1,11 +1,13 @@
 <script lang="ts">
 	import INFINITE_FEED from "./infinite_feed.svelte";
 	import COMMENT_VIEW from "./comment_view.svelte";
+	import REPOST_VIEW from "./repost_view.svelte";
+	import PROFILE_RELATIONS from "./profile_relations.svelte";
 	import { near_social_js_get_account_feed_fun } from "$lib/near-social-js/main/fun_get_account_feed";
 	import { near_social_js_index_fun } from "$lib/near-social-js/main/fun_index";
 	import type { FeedOptions } from "near-social-js";
 	// ============================================
-	type Tab = "posts" | "comments" | "reposts";
+	type Tab = "posts" | "comments" | "reposts" | "followers" | "following";
 	let {
 		accountId,
 		limit = 10,
@@ -47,7 +49,9 @@
 	const tabs: { id: Tab; label: string }[] = [
 		{ id: "posts", label: "POSTS" },
 		{ id: "comments", label: "COMMENTS" },
-		{ id: "reposts", label: "REPOSTS" }
+		{ id: "reposts", label: "REPOSTS" },
+		{ id: "followers", label: "FOLLOWERS" },
+		{ id: "following", label: "FOLLOWING" }
 	];
 	// ============================================
 </script>
@@ -74,8 +78,12 @@
 			<INFINITE_FEED fetch={fetch_posts} {limit} {order} />
 		{:else if tab === "comments"}
 			<INFINITE_FEED fetch={fetch_comments} {limit} {order} component={COMMENT_VIEW} />
+		{:else if tab === "reposts"}
+			<INFINITE_FEED fetch={fetch_reposts} {limit} {order} component={REPOST_VIEW} />
+		{:else if tab === "followers"}
+			<PROFILE_RELATIONS {accountId} mode="followers" />
 		{:else}
-			<INFINITE_FEED fetch={fetch_reposts} {limit} {order} />
+			<PROFILE_RELATIONS {accountId} mode="following" />
 		{/if}
 	{/key}
 </div>
