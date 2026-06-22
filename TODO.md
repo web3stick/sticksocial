@@ -8,11 +8,7 @@
 
 ### profile edit (settings)
 
-- [ ] **add file-upload + live preview to `settings_edit_profile.svelte`** — currently the form only accepts URL strings for `image` (profile pic) and `backgroundImage` (banner); users have to host the image elsewhere and paste a URL. the compose-post form already has a working IPFS upload pattern (`on_file` in `compose_post_form.svelte` posts a `FormData` to `${near_social_ipfs}/add`, parses the cid back out of either a JSON `{cid}` or bare-cid response, and sets `imageUrl = "ipfs://<cid>"`). replicate that pattern twice in the profile edit form — once for the profile pic and once for the backdrop. also add a small live preview of the banner (and ideally a square preview of the profile pic) so the user can see what they're about to save without leaving the page. things to think about:
-  - both `image` and `backgroundImage` go through the same IPFS endpoint, so a single `upload_image(file): Promise<string>` helper in `widgets/fun/` (or inline) keeps the form tidy.
-  - the diff helper (`build_diffed_payload`) compares the resolved image URL against `base.image` / `base.backgroundImage` — uploads need to flow through the same `{ ipfs_cid }` / `{ url }` normalization as the existing URL input so a save still triggers only on real changes.
-  - preview should re-render when `imageUrl` / `backdropUrl` change (whether typed or uploaded); clear with `input.value = ""` after upload so the same file can be re-selected.
-  - consider size guidance (banner is `1600x900` per `profile_banner.svelte`'s `DEFAULT_BANNER`) before the upload control so users don't get surprised by stretch/blur.
+- [x] **add file-upload + live preview to `settings_edit_profile.svelte`** — the form previously only accepted URL strings for `image` / `backgroundImage`. fix: extracted the IPFS upload into a shared `upload_image_fun(file): Promise<string>` helper at `src/lib/widgets/fun/upload_image.ts` (handles both bare-cid and `{cid}` response shapes, throws on non-2xx). `compose_post_form.svelte` now calls the helper instead of inlining the fetch. `settings_edit_profile.svelte` got per-control upload buttons, `$derived` preview srcs, and `.banner-preview` / `.pic-preview` styling that matches `profile_banner.svelte`'s dimensions. uploads set `imageUrl` / `backdropUrl` to `ipfs://<cid>`, which `parse_image_input` already converts into `{ ipfs_cid }` for `build_diffed_payload` — no diff-logic change needed.
 
 ### auth bootstrapping
 
@@ -20,12 +16,7 @@
 
 ### discover
 
-- [ ] **discover page — actual content** — the page is a stub right now (reset in 53aa971). when we come back to it, design needs to be its own thing, not a duplicate of the global feed. candidates that were considered earlier and not used:
-  - **trending hashtags** — near-social-js only exposes `getHashtagFeed(tag)` per-tag, no list-all-tags endpoint. would need either a server-side aggregation or a community-curated tag list.
-  - **top accounts by follower count** — `getFollowers` is per-account only; not indexable. would need a follow graph cache.
-  - **follow-graph based suggestions** — "people you follow follow X". possible with current APIs but expensive (N follows × N followers).
-  
-  decide on a direction before re-mounting anything on the page.
+- [x] **discover page — people widget** — replaced the stub `src/routes/discover/+page.svelte` with two sections. (1) `src/lib/widgets/discover_people.svelte` ports the old `mob.near/widget/People` + `ProfileSearch` + `LastProfilesImages` triplet: a `keys(["*/profile"])` + `get(["*/profile/name", "*/profile/tags/*"])` fetch powers both the search (the original accountId/name/tags scoring with `MaxSingleScore=20` / `MaxScore=60`, sliced to 30) and the recent-profile grid (last `limit` accountIds as a circular-avatar grid, default 24). search recomputes from cached data on every keystroke via `$derived.by`. each search result gets the existing `<FOLLOW_BUTTON initialFollowing={...}/>` pre-supplied with a batch-fetched viewer-following set so the button doesn't do its own `getFollowers` roundtrip. (2) a contribution card linking to `https://github.com/web3stick/sticksocial` for bug reports + contributions, styled as a blue/purple bordered CTA matching the app's accent colors. follow-graph / hashtag / top-accounts candidates from the old TODO remain unimplemented and aren't on the roadmap right now.
 
 ==============================================
 <br/>
