@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { auth } from "$lib/ts/auth.svelte";
 	import { near_social_js_create_post_fun } from "$lib/near-social-js/main/fun_create_post";
+	import { near_social_ipfs } from "$lib/ts/const";
 	import type { Post } from "near-social-js";
 	// ============================================
 	let text = $state("");
 	let imageUrl = $state("");
 	let busy = $state(false);
+	let uploading = $state(false);
+	let uploadName = $state<string | null>(null);
 	let result = $state<string | null>(null);
 	let error = $state<string | null>(null);
 	// ============================================
 	const can_post = $derived(
-		!!auth.accountId && !busy && text.trim().length > 0
+		!!auth.accountId && !busy && !uploading && text.trim().length > 0
 	);
 	// ============================================
 	function build_post(): Post {
@@ -37,11 +40,45 @@
 			result = "POSTED";
 			text = "";
 			imageUrl = "";
+			uploadName = null;
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
 			console.error("createPost failed", e);
 		} finally {
 			busy = false;
+		}
+	}
+	// ============================================
+	async function on_file(e: Event) {
+		const input = e.currentTarget as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+		uploading = true;
+		error = null;
+		uploadName = file.name;
+		try {
+			const form = new FormData();
+			form.append("file", file);
+			const res = await fetch(`${near_social_ipfs.replace("/ipfs/", "/add")}`, {
+				method: "POST",
+				body: form
+			});
+			if (!res.ok) throw new Error(`upload failed: ${res.status} ${res.statusText}`);
+			const text = await res.text();
+			let cid = text.trim();
+			try {
+				const parsed = JSON.parse(cid);
+				if (parsed && typeof parsed.cid === "string") cid = parsed.cid;
+			} catch {
+				/* response was the bare cid */
+			}
+			imageUrl = `ipfs://${cid}`;
+		} catch (err) {
+			error = err instanceof Error ? err.message : String(err);
+			console.error("ipfs upload failed", err);
+		} finally {
+			uploading = false;
+			input.value = "";
 		}
 	}
 	// ============================================
@@ -74,6 +111,21 @@
 				placeholder="https://... or ipfs://CID"
 			/>
 		</label>
+		<!-- ============== -->
+		<div class="upload">
+			<label class="upload-btn">
+				{uploading ? "UPLOADING..." : "UPLOAD IMAGE"}
+				<input
+					type="file"
+					accept="image/*"
+					onchange={on_file}
+					disabled={uploading || busy}
+				/>
+			</label>
+			{#if uploadName}
+				<span class="upload-name">{uploadName}</span>
+			{/if}
+		</div>
 		<!-- ============== -->
 		<div class="actions">
 			<button type="submit" disabled={!can_post}>POST</button>
@@ -117,10 +169,43 @@
 		border-radius: 6px;
 		box-sizing: border-box;
 	}
+	.upload {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.upload-btn {
+		display: inline-block;
+		padding: 6px 12px;
+		border: 1px solid #95d58d;
+		background: #fff8a3;
+		border-radius: 6px;
+		cursor: pointer;
+		font-size: 12px;
+	}
+	.upload-btn:has(input:disabled) {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+	.upload-btn input[type="file"] {
+		display: none;
+	}
+	.upload-name {
+		font-size: 11px;
+		color: #888;
+		font-style: italic;
+	}
 	.actions {
 		display: flex;
 		align-items: center;
 		gap: 12px;
+	}
+	.actions button {
+		padding: 8px 16px;
+		border-radius: 6px;
+		border: 1px solid #95d58d;
+		background: #fff8a3;
+		cursor: pointer;
 	}
 	.actions button:disabled {
 		cursor: not-allowed;
