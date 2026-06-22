@@ -94,7 +94,7 @@
 	type="button"
 	class="follow-button"
 	class:following
-	disabled={!can_toggle}
+	disabled={!can_toggle || loading}
 	onclick={on_click}
 	title={!auth.accountId
 		? "SIGN IN TO FOLLOW"
@@ -104,14 +104,16 @@
 				? "UNFOLLOW"
 				: "FOLLOW"}
 >
-	{#if following}
+	{#if loading && followedOverride === null}
+		<span class="label">...</span>
+	{:else if following}
 		<UserMinus />
 		<span class="label">UNFOLLOW</span>
 	{:else}
 		<UserPlus />
 		<span class="label">FOLLOW</span>
 	{/if}
-	<span class="count">{loading ? "..." : count}</span>
+	<span class="count">{loading && followedOverride === null ? "" : count}</span>
 </button>
 
 <!-- ============================================ -->
