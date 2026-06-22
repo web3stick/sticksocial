@@ -1,16 +1,12 @@
 <script lang="ts">
 	import INFINITE_FEED from "./infinite_feed.svelte";
-	import { near_social_js_get_account_feed_fun } from "$lib/near-social-js/main/fun_get_account_feed";
+	import { near_social_js_get_hashtag_feed_fun } from "$lib/near-social-js/main/fun_get_hashtag_feed";
 	import type { FeedOptions } from "near-social-js";
 	// ============================================
-	let {
-		accountId,
-		limit = 10,
-		order = "desc" as "asc" | "desc"
-	}: { accountId: string; limit?: number; order?: "asc" | "desc" } = $props();
+	let { tag }: { tag: string } = $props();
 	// ============================================
-	function fetch_account_feed(opts: FeedOptions) {
-		return near_social_js_get_account_feed_fun(accountId, opts);
+	function fetch_hashtag_feed(opts: FeedOptions) {
+		return near_social_js_get_hashtag_feed_fun(tag, opts);
 	}
 	// ============================================
 </script>
@@ -18,9 +14,9 @@
 <!-- ============================================ -->
 <!-- ============================================ -->
 
-<!-- widget_profile_post_feed -->
-<!-- WIDGET_PROFILE_POST_FEED -->
-<INFINITE_FEED fetch={fetch_account_feed} {limit} {order} />
+<!-- widget_hashtag_feed -->
+<!-- WIDGET_HASHTAG_FEED -->
+<INFINITE_FEED fetch={fetch_hashtag_feed} />
 
 <!-- ============================================ -->
 <!-- ============================================ -->
