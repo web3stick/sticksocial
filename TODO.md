@@ -20,6 +20,27 @@
 
 - [ ] **unfollow button text color — keep it white** — `follow_button.svelte`'s `.follow-button.following` rule sets `color: #666` (and `#aaa` in dark mode). against the blue global button background that comes through from `src/lib/css/button.css`, the gray text is hard to read. drop both color overrides (light + dark) so the button falls back to the global `color: #ffffff` and the label stays legible. the state difference between follow / unfollow is already carried by the label text (FOLLOW vs UNFOLLOW), the icon (UserPlus vs UserMinus), and the border-color; we don't need a third dim-text signal on top.
 
+### profile page — tab bar + per-tab routes
+
+- [ ] **tab bar width consistency + per-tab routes + overflow scroll** — `profile_feed.svelte` is `width: 600px; max-width: 90vw;` while the rest of the profile column (profile_banner, profile_linktree, comments_list, the REPLY compose block, etc.) is consistently `width: 500px; max-width: 90vw;`. inside the tab bar, the `.tab` buttons also use `flex: 1` + `justify-content: space-around`, so the five tabs split 600px roughly evenly; longer labels like FOLLOWERS / FOLLOWING / REPOSTS make those buttons visibly wider than the others (inconsistent within the row itself) and on narrow screens the bar can also exceed the profile column. fix in three layers:
+
+  1. **width consistency** — drop every `width: 600px; max-width: 90vw;` in the profile column to `width: 500px; max-width: 90vw;`. that touches at minimum `infinite_feed.svelte`, `profile_feed.svelte`, and `profile_relations.svelte`. audit any other widget still on 600 and bring it in line. consider promoting `500px / 90vw` to a shared CSS variable (`--column-width`) in `src/lib/css/main.css` so it's defined once.
+
+  2. **per-tab routes** — currently `profile_feed.svelte` uses `let tab = $state<Tab>("posts")` and renders one of five child widgets based on that. replace with actual routes so each tab is its own URL:
+     - `/profile/[accountId]` — posts (default)
+     - `/profile/[accountId]/comments` — comments
+     - `/profile/[accountId]/reposts` — reposts
+     - `/profile/[accountId]/followers` — followers
+     - `/profile/[accountId]/following` — following
+
+     file layout: keep `[accountId]/+page.svelte` as posts (or move to `[accountId]/posts/+page.svelte` and put a redirect in `[accountId]/+page.svelte`), and add `[accountId]/comments/+page.svelte`, etc. the tab bar becomes a small `<nav>` component (`profile_tab_nav.svelte`) that takes the current pathname and renders 5 `<a>`s with `aria-current="page"` on the active one. props per route component reduce to `accountId` — no more inline `fetch_*` closures or `{#key tab}` remount hack.
+
+     benefits: deep-linkable tabs, browser back/forward works, refresh keeps you on the tab, server-rendered initial state if we ever go SSR, and the `profile_feed` component can go away entirely.
+
+  3. **overflow scroll** — even at 500px the five tab labels (POSTS / COMMENTS / REPOSTS / FOLLOWERS / FOLLOWING) total ~50 chars at 12px; on a 320px mobile viewport each label gets ~30px which truncates. add `overflow-x: auto` + `flex-wrap: nowrap` + `scroll-snap-type: x mandatory` (with `scroll-snap-align: start` on each `.tab`) to the `.tabs` row. add `-webkit-overflow-scrolling: touch` for iOS momentum. add a small fade / arrow indicator at the right edge so it's discoverable that the row scrolls.
+
+  do all three together since they're tightly coupled — splitting them would mean two rounds of churn on the same files.
+
 ### discover
 
 - [ ] **discover page — actual content** — the page is a stub right now (reset in 53aa971). when we come back to it, design needs to be its own thing, not a duplicate of the global feed. candidates that were considered earlier and not used:
