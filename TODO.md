@@ -18,6 +18,8 @@
 
 - [ ] **profile edit — only save changed fields** — `settings_edit_profile.svelte` currently always builds and sends the full payload (`name`, `image`, `backgroundImage`, `description`, `linktree.*`) on every save, even when the user only touched one field. that overwrites every field with whatever's in the form, including stale/empty values, and bumps the on-chain profile unnecessarily. fix by diffing the current form values against the freshly-fetched profile (or tracking an initial snapshot in an `$state` after `refresh_profile()`) and only including fields in the payload that actually changed. needs care for `linktree` since partial merges of nested objects are non-trivial — either diff key-by-key or treat linktree as a single blob that only ships when any of its keys change.
 
+- [ ] **unfollow button text color — keep it white** — `follow_button.svelte`'s `.follow-button.following` rule sets `color: #666` (and `#aaa` in dark mode). against the blue global button background that comes through from `src/lib/css/button.css`, the gray text is hard to read. drop both color overrides (light + dark) so the button falls back to the global `color: #ffffff` and the label stays legible. the state difference between follow / unfollow is already carried by the label text (FOLLOW vs UNFOLLOW), the icon (UserPlus vs UserMinus), and the border-color; we don't need a third dim-text signal on top.
+
 ### discover
 
 - [ ] **discover page — actual content** — the page is a stub right now (reset in 53aa971). when we come back to it, design needs to be its own thing, not a duplicate of the global feed. candidates that were considered earlier and not used:
