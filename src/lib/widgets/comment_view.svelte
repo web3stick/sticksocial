@@ -4,6 +4,9 @@
 	import { resolve_image_url_fun } from "./fun/profile_image";
 	import { get_time_ago_fun } from "./fun/fun_time_ago";
 	import { render_post_text } from "./fun/post_text";
+	import LIKE_BUTTON from "./like_button.svelte";
+	import COMMENT_BUTTON from "./comment_button.svelte";
+	import REPOST_BUTTON from "./repost_button.svelte";
 	// ============================================
 	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
 	let post = $state<Post | null>(null);
@@ -48,6 +51,11 @@
 		{#if post.image}
 			<img class="post-image" src={resolve_image_url_fun(post.image)} alt="" />
 		{/if}
+		<div class="actions">
+			<LIKE_BUTTON {accountId} {blockHeight} />
+			<COMMENT_BUTTON {accountId} {blockHeight} />
+			<REPOST_BUTTON {accountId} {blockHeight} />
+		</div>
 	{:else if loading}
 		<p class="loading">Loading...</p>
 	{/if}
@@ -62,7 +70,6 @@
 		padding: 8px 12px;
 		margin: 8px 0;
 		text-align: left;
-		line-break: anywhere;
 	}
 	.meta {
 		font-size: 11px;
@@ -78,6 +85,12 @@
 	.post-image {
 		max-width: 100%;
 		border-radius: 6px;
+		margin-top: 6px;
+	}
+	.actions {
+		display: flex;
+		gap: 8px;
+		align-items: center;
 		margin-top: 6px;
 	}
 	.loading {
