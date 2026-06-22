@@ -1,6 +1,9 @@
 <script lang="ts">
-	import type { IndexEntry, Post } from "near-social-js";
-	import { get_account_id_post } from "$lib/near-social-js/helper/get_account_id_post";
+	import type { IndexEntry } from "near-social-js";
+	import {
+		get_account_id_comment,
+		type Comment
+	} from "$lib/near-social-js/helper/get_account_id_comment";
 	import { near_social_js_get_comments_fun } from "$lib/near-social-js/main/fun_get_comments";
 	import { resolve_image_url_fun } from "./fun/profile_image";
 	import { get_time_ago_fun } from "./fun/fun_time_ago";
@@ -29,7 +32,7 @@
 		// compose textarea at the bottom of the thread.
 		onReply?: (handle: string) => void;
 	} = $props();
-	let post = $state<Post | null>(null);
+	let comment = $state<Comment | null>(null);
 	let loading = $state(true);
 	let timeAgo = $state<{ text: string; title: string } | "Loading" | "unknown">("Loading");
 	let subComments = $state<IndexEntry[]>([]);
@@ -49,8 +52,8 @@
 	// ============================================
 	$effect(() => {
 		loading = true;
-		get_account_id_post(accountId, blockHeight).then((p) => {
-			post = p;
+		get_account_id_comment(accountId, blockHeight).then((c) => {
+			comment = c;
 			loading = false;
 		});
 	});
@@ -89,10 +92,10 @@
 			{timeAgo}
 		{/if}
 	</p>
-	{#if post}
-		<div class="text">{@html render_post_text(post.text)}</div>
-		{#if post.image}
-			<img class="post-image" src={resolve_image_url_fun(post.image)} alt="" />
+	{#if comment}
+		<div class="text">{@html render_post_text(comment.text)}</div>
+		{#if comment.image}
+			<img class="post-image" src={resolve_image_url_fun(comment.image)} alt="" />
 		{/if}
 		<div class="actions">
 			<LIKE_BUTTON {accountId} {blockHeight} />
