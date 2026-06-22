@@ -25,10 +25,11 @@
 		<div class="sticky-parent">
 			<POST {accountId} {blockHeight} {refreshKey} />
 		</div>
-		<div class="compose">
+		<COMMENTS_LIST {accountId} {blockHeight} {refreshKey} />
+		<div class="reply">
+			<h3>REPLY</h3>
 			<COMMENT_COMPOSE_FORM {accountId} {blockHeight} onPosted={handle_posted} />
 		</div>
-		<COMMENTS_LIST {accountId} {blockHeight} {refreshKey} />
 	{:else}
 		<p>Invalid post URL</p>
 	{/if}
@@ -51,9 +52,14 @@
 			border-bottom-color: rgba(255, 255, 255, 0.1);
 		}
 	}
-	.compose {
+	.reply {
 		width: 500px;
 		max-width: 90vw;
-		margin: 12px auto 0;
+		margin: 16px auto;
+		text-align: left;
+	}
+	.reply h3 {
+		font-size: 14px;
+		margin: 0 0 6px;
 	}
 </style>

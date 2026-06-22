@@ -68,7 +68,6 @@
 			<LIKE_BUTTON accountId={accountId} blockHeight={blockHeight} />
 			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} {refreshKey} />
 			<REPOST_BUTTON accountId={accountId} blockHeight={blockHeight} />
-			<a class="thread-link" href="/post/{accountId}/{blockHeight}">OPEN THREAD</a>
 		</div>
 	{:else}
 		<p class="loading">Loading...</p>
@@ -114,15 +113,6 @@
 		display: flex;
 		gap: 8px;
 		align-items: center;
-	}
-	.thread-link {
-		font-size: 11px;
-		color: var(--color-blue, #4d9fff);
-		text-decoration: none;
-		margin-left: auto;
-	}
-	.thread-link:hover {
-		text-decoration: underline;
 	}
 	.loading {
 		color: #888;
