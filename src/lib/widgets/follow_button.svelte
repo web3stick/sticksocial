@@ -7,19 +7,28 @@
 	// ============================================
 	let {
 		accountId,
-		refreshKey = 0
+		refreshKey = 0,
+		initialFollowing = null
 	}: {
 		accountId: string;
 		refreshKey?: number;
+		// when the caller already knows whether the viewer follows this
+		// account (e.g. profile_relations fetched the viewer's following
+		// set once), pass it in to skip the per-row getFollowers fetch.
+		// null means "look it up"; true/false is used as-is.
+		initialFollowing?: boolean | null;
 	} = $props();
 	// ============================================
 	let followers = $state<{ accountId: string }[]>([]);
+	let followedOverride = $state<boolean | null>(null);
 	let loading = $state(false);
 	let busy = $state(false);
 	// ============================================
 	const following = $derived(
-		auth.accountId !== null &&
-			followers.some((f) => f.accountId === auth.accountId)
+		followedOverride !== null
+			? followedOverride
+			: auth.accountId !== null &&
+					followers.some((f) => f.accountId === auth.accountId)
 	);
 	const count = $derived(followers.length);
 	const can_toggle = $derived(
@@ -41,6 +50,12 @@
 	$effect(() => {
 		refreshKey;
 		accountId;
+		// if the caller passed a known state, use it and skip the fetch.
+		if (initialFollowing !== null && initialFollowing !== undefined) {
+			followedOverride = initialFollowing;
+			loading = false;
+			return;
+		}
 		refresh();
 	});
 	// ============================================
@@ -53,7 +68,14 @@
 			} else {
 				await near_social_js_follow_fun(auth.accountId!, accountId);
 			}
-			await refresh();
+			// flip the override locally so the UI updates instantly when
+			// the caller pre-supplied initialFollowing. refresh() also
+			// works but does an extra roundtrip.
+			if (followedOverride !== null) {
+				followedOverride = !following;
+			} else {
+				await refresh();
+			}
 		} catch (e) {
 			console.error("follow toggle failed", e);
 		} finally {
