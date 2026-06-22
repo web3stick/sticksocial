@@ -1,0 +1,111 @@
+/*==================================*/
+/* markdown element styling */
+/* targets anything rendered by marked() inside a .text container,
+   so only post / comment bodies get the rules and other plain text
+   on the page is unaffected. */
+/*==================================*/
+.text p {
+	margin: 8px 0;
+	line-height: 1.5;
+}
+.text p:first-child {
+	margin-top: 0;
+}
+.text p:last-child {
+	margin-bottom: 0;
+}
+.text h1,
+.text h2,
+.text h3,
+.text h4,
+.text h5,
+.text h6 {
+	margin: 12px 0 6px;
+	line-height: 1.25;
+	font-weight: bold;
+}
+.text h1 {
+	font-size: 1.4em;
+}
+.text h2 {
+	font-size: 1.25em;
+}
+.text h3 {
+	font-size: 1.1em;
+}
+.text h4,
+.text h5,
+.text h6 {
+	font-size: 1em;
+}
+.text blockquote {
+	display: block;
+	margin: 8px 0;
+	padding-left: 12px;
+	border-left: 3px solid #95d58d;
+	color: inherit;
+}
+.text blockquote p {
+	margin: 4px 0;
+}
+.text ul,
+.text ol {
+	margin: 8px 0;
+	padding-left: 24px;
+}
+.text li {
+	margin: 4px 0;
+}
+.text pre {
+	background: rgba(0, 0, 0, 0.06);
+	border-radius: 6px;
+	padding: 8px 10px;
+	overflow-x: auto;
+	font-size: 0.85em;
+	margin: 8px 0;
+}
+.text code {
+	background: rgba(0, 0, 0, 0.06);
+	border-radius: 3px;
+	padding: 1px 5px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.85em;
+}
+.text pre code {
+	background: none;
+	padding: 0;
+	border-radius: 0;
+}
+.text a {
+	color: #4d9fff;
+	text-decoration: none;
+}
+.text a:hover {
+	text-decoration: underline;
+}
+.text hr {
+	border: none;
+	border-top: 1px solid rgba(0, 0, 0, 0.15);
+	margin: 12px 0;
+}
+.text strong {
+	font-weight: bold;
+}
+.text em {
+	font-style: italic;
+}
+.text img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+	.text pre,
+	.text code {
+		background: rgba(255, 255, 255, 0.08);
+	}
+	.text hr {
+		border-top-color: rgba(255, 255, 255, 0.15);
+	}
+}
+/*==================================*/

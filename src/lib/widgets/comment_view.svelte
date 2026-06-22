@@ -3,6 +3,7 @@
 	import { get_account_id_post } from "$lib/near-social-js/helper/get_account_id_post";
 	import { resolve_image_url_fun } from "./fun/profile_image";
 	import { get_time_ago_fun } from "./fun/fun_time_ago";
+	import { render_post_text } from "./fun/post_text";
 	// ============================================
 	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
 	let post = $state<Post | null>(null);
@@ -43,7 +44,7 @@
 		{/if}
 	</p>
 	{#if post}
-		<p class="text">{post.text}</p>
+		<div class="text">{@html render_post_text(post.text)}</div>
 		{#if post.image}
 			<img class="post-image" src={resolve_image_url_fun(post.image)} alt="" />
 		{/if}
@@ -73,7 +74,6 @@
 	.text {
 		font-size: 14px;
 		line-height: 1.4;
-		white-space: pre-wrap;
 	}
 	.post-image {
 		max-width: 100%;

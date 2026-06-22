@@ -52,7 +52,7 @@
 	</p>
 	<!-- ============== -->
 	{#if post}
-		<p class="text">{@html render_post_text(post.text)}</p>
+		<div class="text">{@html render_post_text(post.text)}</div>
 		{#if post.image}
 			<img class="post-image" src={resolve_image_url_fun(post.image)} alt="" />
 		{/if}
@@ -91,11 +91,10 @@
 	width: 12px;
 	height: 12px;
 	}
-	/*.text {
+	.text {
 		font-size: 16px;
 		line-height: 1.5;
-		white-space: pre-wrap;
-	}*/
+	}
 	.post-image {
 		max-width: 100%;
 		width: 100%;
