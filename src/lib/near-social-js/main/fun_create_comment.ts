@@ -11,6 +11,19 @@ import type { Comment } from "near-social-js";
 // built-in createComment did before we rewrote it — comments notify
 // each @mentioned account and tag the comment under each #hashtag
 // so it shows up in hashtag feeds.
+//
+// DUAL-INDEX: the SDK's createComment writes only a single index entry
+// keyed by the parent post item, so /index?action=comment&key=main
+// always returns []. we mirror the repost pattern (fun_repost.ts) and
+// also write an entry under key="main" so /index with key="main" +
+// accountId=X returns every comment by X going forward. the api-server
+// (api-server-js/src/social.js indexValue) already handles arrays via
+// Array.isArray(parsed) — no server-side change needed.
+//
+// NOTE: only comments made AFTER this patch are queryable by author.
+// existing on-chain comments written with the old single-key format
+// are not backfilled — they remain queryable only via their parent
+// post (the existing comments_list.svelte path still works).
 // ============================================
 const MENTION_REGEX = /@([a-z\d]+[-_]*[a-z\d]*(?:\.[a-z\d]+[-_]*[a-z\d]*)*)/gi;
 const HASHTAG_REGEX = /#([a-zA-Z][a-zA-Z0-9_]*)/g;
@@ -47,7 +60,10 @@ export async function near_social_js_create_comment_fun(
 				comment: JSON.stringify(commentContent)
 			},
 			index: {
-				comment: JSON.stringify({ key: item, value: { type: "md" } })
+				comment: JSON.stringify([
+					{ key: item, value: { type: "md" } },
+					{ key: "main", value: { type: "md" } }
+				])
 			}
 		}
 	};
