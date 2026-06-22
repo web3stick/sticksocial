@@ -1,6 +1,13 @@
 import { near_kit_client } from "@near-kit-tool-box/web";
 import { near_social_client } from "../new";
-import type { Comment } from "near-social-js";
+import type { Comment, CommentItem } from "near-social-js";
+// ============================================
+// extension of near-social-js's Comment carrying an optional rootItem
+// (the top-of-thread post) so the on-chain content shape matches the
+// old NEAR Social widget (mob.near/widget/MainPage.N.Comment.Compose).
+// see fun_create_comment.ts header for context.
+export type CommentWithRoot = Comment & { rootItem?: CommentItem };
+// ============================================
 // ============================================
 // same write-permission fix as like(): all notify entries go under the
 // signer's own index with `key` pointing at the target account, so
@@ -20,10 +27,19 @@ import type { Comment } from "near-social-js";
 // (api-server-js/src/social.js indexValue) already handles arrays via
 // Array.isArray(parsed) — no server-side change needed.
 //
-// NOTE: only comments made AFTER this patch are queryable by author.
-// existing on-chain comments written with the old single-key format
-// are not backfilled — they remain queryable only via their parent
-// post (the existing comments_list.svelte path still works).
+// ROOT-ITEM: the old NEAR Social widget (mob.near/widget/MainPage.N.
+// Comment.Compose) stored rootItem alongside item in the comment
+// content so consumers can rebuild the full thread without an extra
+// lookup. the SDK drops rootItem; we restore it. callers should pass
+// rootItem whenever item is itself a comment (i.e. a reply); for top-
+// level comments item === rootItem. when rootItem is omitted we fall
+// back to item, matching the SDK behavior.
+//
+// NOTE: only comments made AFTER this patch are queryable by author
+// via the dual-index bucket. existing on-chain comments written with
+// the old single-key format are not backfilled — they remain queryable
+// only via their parent post (the existing comments_list.svelte path
+// still works).
 // ============================================
 const MENTION_REGEX = /@([a-z\d]+[-_]*[a-z\d]*(?:\.[a-z\d]+[-_]*[a-z\d]*)*)/gi;
 const HASHTAG_REGEX = /#([a-zA-Z][a-zA-Z0-9_]*)/g;
@@ -45,14 +61,15 @@ function extract_hashtags(text: string): string[] {
 // ============================================
 export async function near_social_js_create_comment_fun(
 	signerId: string,
-	comment: Comment
+	comment: CommentWithRoot
 ): Promise<any> {
 	// =================
-	const { item, text, image } = comment;
+	const { item, rootItem, text, image } = comment;
 	const postAuthor = item.path.split("/")[0];
 	const mentions = extract_mentions(text);
 	const hashtags = extract_hashtags(text);
 	const commentContent: Record<string, any> = { item, text, type: "md" };
+	if (rootItem) commentContent.rootItem = rootItem;
 	if (image) commentContent.image = image;
 	const data: Record<string, any> = {
 		[signerId]: {

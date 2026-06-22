@@ -1,20 +1,29 @@
 <script lang="ts">
 	import { MessageCircle } from "lucide-svelte";
-	import type { IndexEntry } from "near-social-js";
+	import type { CommentItem, IndexEntry } from "near-social-js";
 	import { near_social_js_get_comments_fun } from "$lib/near-social-js/main/fun_get_comments";
 	// ============================================
 	let {
 		accountId,
 		blockHeight,
 		refreshKey = 0,
+		rootItem = null,
 		onReply
 	}: {
 		accountId: string;
 		blockHeight: bigint;
 		refreshKey?: number;
-		// when set, click replies in-place (prefill the parent's compose
-		// form) instead of navigating to the comment's own /post URL.
-		onReply?: (handle: string) => void;
+		// when set, click replies in-place (the parent's compose form
+		// posts against this comment as the immediate parent and the
+		// supplied rootItem as the thread root). when omitted, click
+		// navigates to /post/<commentAuthor>/<commentBh> which is the
+		// original NEAR Social fallback.
+		rootItem?: CommentItem | null;
+		onReply?: (payload: {
+			handle: string;
+			item: CommentItem;
+			rootItem: CommentItem | null;
+		}) => void;
 	} = $props();
 	// ============================================
 	let comments = $state<IndexEntry[]>([]);
@@ -38,7 +47,16 @@
 	});
 	// ============================================
 	function on_click() {
-		if (onReply) onReply(accountId);
+		if (!onReply) return;
+		onReply({
+			handle: accountId,
+			item: {
+				type: "social",
+				path: `${accountId}/post/comment`,
+				blockHeight: Number(blockHeight)
+			},
+			rootItem
+		});
 	}
 	// ============================================
 </script>

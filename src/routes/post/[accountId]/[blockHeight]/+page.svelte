@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import type { CommentItem } from "near-social-js";
 	import POST from "$lib/widgets/post.svelte";
 	import COMMENTS_LIST from "$lib/widgets/comments_list.svelte";
 	import COMMENT_COMPOSE_FORM from "$lib/widgets/comment_compose_form.svelte";
@@ -12,16 +13,35 @@
 	let refreshKey = $state(0);
 	function handle_posted() {
 		refreshKey++;
+		// a reply to the post (the default) clears the threaded target.
+		composeItem = null;
+		composeReplyToHandle = null;
 	}
 	// ============================================
-	// when a comment_view fires onReply(handle), we prefill the compose
-	// textarea at the bottom of the page with `@<handle> ` and focus it.
-	// defaultDraft is read by the form via a $effect so the latest click
-	// always wins over a stale draft.
-	let defaultDraft = $state("");
-	function handle_reply(handle: string) {
-		defaultDraft = `@${handle} `;
+	// when a comment_view fires onReply, we retarget the compose form
+	// to that comment (immediate parent) + the post (thread root).
+	// comment_view defaults `item` to the post itself, so a fresh page
+	// starts with no threaded override — replies go straight onto the
+	// post.
+	let composeItem = $state<CommentItem | null>(null);
+	let composeReplyToHandle = $state<string | null>(null);
+	function handle_reply(payload: {
+		handle: string;
+		item: CommentItem;
+		rootItem: CommentItem | null;
+	}) {
+		composeItem = payload.item;
+		composeReplyToHandle = payload.handle;
 	}
+	// ============================================
+	// top-level post item — used as the thread root for replies onto
+	// the post itself (no comment in between) and forwarded as
+	// rootItem for replies onto sub-comments.
+	const rootItem = $derived<CommentItem>({
+		type: "social",
+		path: `${accountId}/post/main`,
+		blockHeight: Number(blockHeight)
+	});
 	// ============================================
 </script>
 
@@ -40,7 +60,9 @@
 			<COMMENT_COMPOSE_FORM
 				{accountId}
 				{blockHeight}
-				{defaultDraft}
+				item={composeItem}
+				{rootItem}
+				replyToHandle={composeReplyToHandle}
 				onPosted={handle_posted}
 			/>
 		</div>

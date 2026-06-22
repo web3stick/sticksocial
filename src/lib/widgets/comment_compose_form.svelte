@@ -6,15 +6,29 @@
 	let {
 		accountId,
 		blockHeight,
+		// the immediate parent being commented on. defaults to the top-
+		// level post (<accountId>/post/main@<blockHeight>). callers
+		// replying to a sub-comment should pass the sub-comment's item.
+		item: itemOverride = null,
+		// the top-level post. defaults to the same as item for top-level
+		// comments. for threaded replies pass the original post item so
+		// the on-chain rootItem is set and consumers can rebuild the
+		// thread later.
+		rootItem: rootItemOverride = null,
+		// bumped by the /post page when the user clicks REPLY on a
+		// comment_view; we apply it to the textarea and focus it so the
+		// user can keep typing without reaching for the mouse.
 		defaultDraft = "",
+		// optional display handle shown in the "replying to" hint.
+		replyToHandle = null,
 		onPosted = () => {}
 	}: {
 		accountId: string;
 		blockHeight: bigint;
-		// bumped by the /post page when the user clicks REPLY on a
-		// comment_view; we apply it to the textarea and focus it so the
-		// user can keep typing without reaching for the mouse.
+		item?: CommentItem | null;
+		rootItem?: CommentItem | null;
 		defaultDraft?: string;
+		replyToHandle?: string | null;
 		onPosted?: () => void;
 	} = $props();
 	// ============================================
@@ -24,11 +38,17 @@
 	let error = $state<string | null>(null);
 	let textareaRef = $state<HTMLTextAreaElement | null>(null);
 	// ============================================
-	const item = $derived<CommentItem>({
-		type: "social",
-		path: `${accountId}/post/main`,
-		blockHeight: Number(blockHeight)
-	});
+	// default item = the post itself; rootItem defaults to the same.
+	const item = $derived<CommentItem>(
+		itemOverride ?? {
+			type: "social",
+			path: `${accountId}/post/main`,
+			blockHeight: Number(blockHeight)
+		}
+	);
+	const rootItem = $derived<CommentItem>(rootItemOverride ?? item);
+	// are we threading into a sub-comment (item.path ends in /post/comment)?
+	const threading = $derived(item.path.endsWith("/post/comment"));
 	const can_post = $derived(!!auth.accountId && !busy && draft.trim().length > 0);
 	// ============================================
 	// whenever the parent hands us a new defaultDraft (i.e. someone
@@ -52,6 +72,7 @@
 			const trimmed = draft.trim();
 			await near_social_js_create_comment_fun(auth.accountId, {
 				item,
+				rootItem,
 				text: trimmed
 			});
 			draft = "";
@@ -66,6 +87,10 @@
 		}
 	}
 	// ============================================
+	function cancel_reply() {
+		defaultDraft = "";
+	}
+	// ============================================
 </script>
 
 <!-- ============================================ -->
@@ -76,11 +101,24 @@
 {#if !auth.accountId}
 	<p class="hint">SIGN IN TO COMMENT</p>
 {:else}
+	{#if threading || replyToHandle}
+		<p class="reply-target">
+			replying to
+			{#if replyToHandle}<a href="/profile/{replyToHandle}">@{replyToHandle}</a>{/if}
+			{#if threading}
+				{#if replyToHandle}
+					on
+				{/if}
+				<span class="thread-note">threaded under a comment</span>
+			{/if}
+			<button type="button" class="cancel" onclick={cancel_reply}>cancel</button>
+		</p>
+	{/if}
 	<form class="compose-form" onsubmit={on_submit}>
 		<textarea
 			bind:this={textareaRef}
 			bind:value={draft}
-			placeholder="reply..."
+			placeholder={threading ? "reply to comment..." : "reply..."}
 			rows="3"
 			maxlength="2000"
 		></textarea>
@@ -126,6 +164,40 @@
 	.actions button:disabled {
 		cursor: not-allowed;
 		opacity: 0.6;
+	}
+	.reply-target {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		flex-wrap: wrap;
+		font-size: 12px;
+		color: #666;
+		background: rgba(140, 162, 245, 0.08);
+		border: 1px solid rgba(140, 162, 245, 0.3);
+		border-radius: 6px;
+		padding: 6px 10px;
+		margin: 0 0 6px;
+	}
+	.reply-target a {
+		font-weight: bold;
+	}
+	.thread-note {
+		font-style: italic;
+		color: #888;
+	}
+	.reply-target .cancel {
+		margin-left: auto;
+		background: none;
+		border: none;
+		color: #888;
+		font-size: 11px;
+		cursor: pointer;
+		padding: 2px 6px;
+		border-radius: 4px;
+	}
+	.reply-target .cancel:hover {
+		background: rgba(0, 0, 0, 0.05);
+		color: #444;
 	}
 	.ok {
 		color: #2e7d32;

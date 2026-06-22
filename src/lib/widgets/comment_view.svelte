@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IndexEntry } from "near-social-js";
+	import type { CommentItem, IndexEntry } from "near-social-js";
 	import {
 		get_account_id_comment,
 		type Comment
@@ -20,6 +20,7 @@
 		depth = 0,
 		maxDepth = 5,
 		refreshKey = 0,
+		rootItem = null,
 		onReply
 	}: {
 		accountId: string;
@@ -27,10 +28,20 @@
 		depth?: number;
 		maxDepth?: number;
 		refreshKey?: number;
+		// the top-level post of the thread this comment belongs to. passed
+		// down so every COMMENT_BUTTON can report it to the parent's
+		// compose form; defaults to "this comment is its own root" so
+		// comment_view also works when rendered standalone (e.g. in a
+		// notification drilldown or a future thread view).
+		rootItem?: CommentItem | null;
 		// bubbles up when the user clicks the REPLY icon on this
-		// comment; the parent /post page uses it to prefill + focus the
-		// compose textarea at the bottom of the thread.
-		onReply?: (handle: string) => void;
+		// comment; the parent uses it to retarget the compose form at
+		// this comment (immediate parent) + the supplied rootItem.
+		onReply?: (payload: {
+			handle: string;
+			item: CommentItem;
+			rootItem: CommentItem | null;
+		}) => void;
 	} = $props();
 	let comment = $state<Comment | null>(null);
 	let loading = $state(true);
@@ -49,6 +60,12 @@
 		blockHeight: Number(blockHeight)
 	});
 	const canRecurse = $derived(depth < maxDepth);
+	// this comment as a CommentItem, used when bubbling up REPLY clicks
+	const selfItem = $derived<CommentItem>({
+		type: "social",
+		path: `${accountId}/post/comment`,
+		blockHeight: Number(blockHeight)
+	});
 	// ============================================
 	$effect(() => {
 		loading = true;
@@ -76,6 +93,11 @@
 			.finally(() => (subLoading = false));
 	});
 	// ============================================
+	function handle_reply() {
+		if (!onReply) return;
+		onReply({ handle: accountId, item: selfItem, rootItem });
+	}
+	// ============================================
 </script>
 
 <!-- ============================================ -->
@@ -99,7 +121,12 @@
 		{/if}
 		<div class="actions">
 			<LIKE_BUTTON {accountId} {blockHeight} />
-			<COMMENT_BUTTON {accountId} {blockHeight} {onReply} />
+			<COMMENT_BUTTON
+				{accountId}
+				{blockHeight}
+				{rootItem}
+				onReply={onReply ? handle_reply : undefined}
+			/>
 			<REPOST_BUTTON {accountId} {blockHeight} />
 		</div>
 	{:else if loading}
@@ -115,7 +142,8 @@
 					depth={depth + 1}
 					{maxDepth}
 					{refreshKey}
-					{onReply}
+					{rootItem}
+					onReply={onReply ? handle_reply : undefined}
 				/>
 			{/each}
 		</div>

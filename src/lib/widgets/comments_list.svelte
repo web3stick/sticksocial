@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IndexEntry } from "near-social-js";
+	import type { CommentItem, IndexEntry } from "near-social-js";
 	import { near_social_js_get_comments_fun } from "$lib/near-social-js/main/fun_get_comments";
 	import COMMENT_VIEW from "./comment_view.svelte";
 	// ============================================
@@ -12,17 +12,25 @@
 		accountId: string;
 		blockHeight: bigint;
 		refreshKey?: number;
-		onReply?: (handle: string) => void;
+		onReply?: (payload: {
+			handle: string;
+			item: CommentItem;
+			rootItem: CommentItem | null;
+		}) => void;
 	} = $props();
 	// ============================================
 	let comments = $state<IndexEntry[]>([]);
 	let loading = $state(true);
 	// ============================================
-	const item = $derived({
+	const item = $derived<CommentItem>({
 		type: "social",
 		path: `${accountId}/post/main`,
 		blockHeight: Number(blockHeight)
 	});
+	// every comment in this list shares the same thread root — the post
+	// we're listing comments on — so we can pre-compute it once and pass
+	// it down so comment_view knows where to attach threaded replies.
+	const rootItem = $derived<CommentItem>(item);
 	// ============================================
 	async function refresh() {
 		loading = true;
@@ -60,6 +68,7 @@
 				accountId={comment.accountId}
 				blockHeight={BigInt(comment.blockHeight)}
 				{refreshKey}
+				{rootItem}
 				{onReply}
 			/>
 		{/each}
