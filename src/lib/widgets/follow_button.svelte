@@ -100,13 +100,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
-		padding: 6px 12px;
-		border-radius: 999px;
-		border: 1px solid #95d58d;
-		background: #fff8a3;
-		cursor: pointer;
 		font-size: 12px;
-		font-weight: bold;
 	}
 	.follow-button.following {
 		background: transparent;
