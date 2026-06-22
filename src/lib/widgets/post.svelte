@@ -58,11 +58,9 @@
 		{/if}
 		<div class="actions">
 			<LIKE_BUTTON accountId={accountId} blockHeight={blockHeight} />
+			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} />
 			<REPOST_BUTTON accountId={accountId} blockHeight={blockHeight} />
 			<a class="thread-link" href="/post/{accountId}/{blockHeight}">OPEN THREAD</a>
-		</div>
-		<div class="comment-row">
-			<COMMENT_BUTTON accountId={accountId} blockHeight={blockHeight} />
 		</div>
 	{:else}
 		<p class="loading">Loading...</p>
@@ -117,9 +115,6 @@
 	}
 	.thread-link:hover {
 		text-decoration: underline;
-	}
-	.comment-row {
-		margin-top: 4px;
 	}
 	.loading {
 		color: #888;

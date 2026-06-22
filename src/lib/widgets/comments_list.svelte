@@ -3,7 +3,15 @@
 	import { near_social_js_get_comments_fun } from "$lib/near-social-js/main/fun_get_comments";
 	import COMMENT_VIEW from "./comment_view.svelte";
 	// ============================================
-	let { accountId, blockHeight }: { accountId: string; blockHeight: bigint } = $props();
+	let {
+		accountId,
+		blockHeight,
+		refreshKey = 0
+	}: {
+		accountId: string;
+		blockHeight: bigint;
+		refreshKey?: number;
+	} = $props();
 	// ============================================
 	let comments = $state<IndexEntry[]>([]);
 	let loading = $state(true);
@@ -25,7 +33,10 @@
 		}
 	}
 	// ============================================
+	// refresh on mount AND whenever refreshKey bumps (parent signals a
+	// new comment was posted, etc.)
 	$effect(() => {
+		refreshKey;
 		refresh();
 	});
 </script>
