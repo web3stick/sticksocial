@@ -1,21 +1,15 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import INFINITE_FEED from "$lib/widgets/infinite_feed.svelte";
-	import { near_social_js_get_account_feed_fun } from "$lib/near-social-js/main/fun_get_account_feed";
-	import type { FeedOptions } from "near-social-js";
+	import REPOST_FEED from "$lib/widgets/repost_feed.svelte";
 	// ============================================
 	const accountId = $derived(page.params.accountId ?? "");
-	// ============================================
-	function fetch_posts(opts: FeedOptions) {
-		return near_social_js_get_account_feed_fun(accountId, opts);
-	}
 	// ============================================
 </script>
 
 <!-- ============================================ -->
 <!-- ============================================ -->
 
-<INFINITE_FEED fetch={fetch_posts} limit={10} order="desc" />
+<REPOST_FEED {accountId} />
 
 <!-- ============================================ -->
 <!-- ============================================ -->

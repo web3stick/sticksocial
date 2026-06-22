@@ -121,7 +121,7 @@
 
 <style>
 	.feed {
-		width: 600px;
+		width: 500px;
 		max-width: 90vw;
 		margin: 0 auto;
 	}
