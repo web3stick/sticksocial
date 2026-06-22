@@ -7,7 +7,8 @@ export async function near_social_js_set_profile_fun(
 	profile: Partial<Profile>
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).setProfile(signerId, profile);
+	const builder = await near_social_client(near_kit_client()).setProfile(signerId, profile);
+	const result = await builder.send();
 	// =================
 	console.log("=================");
 	console.log("setProfile()");
