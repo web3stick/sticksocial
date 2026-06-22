@@ -9,7 +9,11 @@
 	let { accountId } = $props<{ accountId: string }>();
 	let expanded = $state(false);
 	const MAX_LENGTH = 100;
+	const MAX_ID_LENGTH = 20;
 	const needsTruncation = $derived((profile?.description?.length ?? 0) > MAX_LENGTH);
+	const displayId = $derived(
+		accountId.length > MAX_ID_LENGTH ? accountId.slice(0, MAX_ID_LENGTH) + "..." : accountId
+	);
 	const DEFAULT_BANNER = "https://lipsum.app/random/1600x900";
 	const bannerSrc = $derived(resolve_image_url_fun(profile?.backgroundImage) || DEFAULT_BANNER);
 	// ============================================
@@ -42,7 +46,7 @@
 		{/if}
 		<!-- =========================== -->
 		<h1>{profile?.name}</h1>
-		<p class="account-id">@{accountId}</p>
+		<p class="account-id" title={accountId}>@{displayId}</p>
 		<!-- =========================== -->
 		<p>
 			{expanded || !needsTruncation
@@ -126,7 +130,10 @@
 		font-size: 10px;
 	}
 	.account-id {
-		line-break: anywhere;
-		word-break: break-all;
+		font-size: 13px;
+		color: #888;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 </style>
