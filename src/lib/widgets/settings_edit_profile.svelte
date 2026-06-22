@@ -28,22 +28,59 @@
 		return { url: trimmed };
 	}
 	// ============================================
-	function build_profile_payload(): Record<string, unknown> {
+	function linktree_equal(a: Record<string, string>, b: Record<string, string>): boolean {
+		const ak = Object.keys(a);
+		const bk = Object.keys(b);
+		if (ak.length !== bk.length) return false;
+		for (const k of ak) {
+			if (a[k] !== b[k]) return false;
+		}
+		return true;
+	}
+	// ============================================
+	function build_diffed_payload(): Record<string, unknown> {
 		const payload: Record<string, unknown> = {};
+		const base = profile ?? {};
+		// ============================================
 		const trimmed_name = name.trim();
-		if (trimmed_name) payload.name = trimmed_name;
+		if (trimmed_name !== (base.name ?? "")) {
+			payload.name = trimmed_name;
+		}
+		// ============================================
 		const trimmed_bio = bio.trim();
-		if (trimmed_bio) payload.description = trimmed_bio;
-		const img = parse_image_input(imageUrl);
-		if (img) payload.image = img;
-		const bg = parse_image_input(backdropUrl);
-		if (bg) payload.backgroundImage = bg;
-		const linktree: Record<string, string> = {};
-		if (twitter.trim()) linktree.twitter = twitter.trim();
-		if (github.trim()) linktree.github = github.trim();
-		if (telegram.trim()) linktree.telegram = telegram.trim();
-		if (website.trim()) linktree.website = website.trim();
-		if (Object.keys(linktree).length > 0) payload.linktree = linktree;
+		if (trimmed_bio !== (base.description ?? "")) {
+			payload.description = trimmed_bio;
+		}
+		// ============================================
+		const img_form = imageUrl.trim();
+		const img_base = resolve_image_url_fun(base.image);
+		if (img_form !== img_base) {
+			payload.image = img_form ? parse_image_input(img_form) : "";
+		}
+		// ============================================
+		const bg_form = backdropUrl.trim();
+		const bg_base = resolve_image_url_fun(base.backgroundImage);
+		if (bg_form !== bg_base) {
+			payload.backgroundImage = bg_form ? parse_image_input(bg_form) : "";
+		}
+		// ============================================
+		// linktree is treated as a single blob so any on-chain key the
+		// form doesn't render (e.g. "linkedin") is preserved. an empty
+		// form-side value clears that key.
+		const form_linktree: Record<string, string> = {};
+		if (twitter.trim()) form_linktree.twitter = twitter.trim();
+		if (github.trim()) form_linktree.github = github.trim();
+		if (telegram.trim()) form_linktree.telegram = telegram.trim();
+		if (website.trim()) form_linktree.website = website.trim();
+		const base_linktree = base.linktree ?? {};
+		const merged: Record<string, string> = { ...base_linktree };
+		for (const [k, v] of Object.entries(form_linktree)) {
+			merged[k] = v;
+		}
+		if (!linktree_equal(merged, base_linktree)) {
+			payload.linktree = merged;
+		}
+		// ============================================
 		return payload;
 	}
 	// ============================================
@@ -60,7 +97,12 @@
 		result = null;
 		error = null;
 		try {
-			await near_social_js_set_profile_fun(auth.accountId, build_profile_payload());
+			const payload = build_diffed_payload();
+			if (Object.keys(payload).length === 0) {
+				result = "NO CHANGES";
+				return;
+			}
+			await near_social_js_set_profile_fun(auth.accountId, payload);
 			await refresh_profile();
 			result = "SAVED";
 		} catch (e) {
