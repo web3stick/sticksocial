@@ -57,6 +57,7 @@
 			<COMMENT_VIEW
 				accountId={comment.accountId}
 				blockHeight={BigInt(comment.blockHeight)}
+				{refreshKey}
 			/>
 		{/each}
 	{/if}
