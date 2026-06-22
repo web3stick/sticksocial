@@ -123,14 +123,6 @@
 		align-items: center;
 		gap: 8px;
 	}
-	.actions button {
-		padding: 6px 14px;
-		border-radius: 6px;
-		border: 1px solid #4d9fff;
-		background: #e6f0ff;
-		cursor: pointer;
-		font-size: 12px;
-	}
 	.actions button:disabled {
 		cursor: not-allowed;
 		opacity: 0.6;
