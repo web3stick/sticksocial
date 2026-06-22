@@ -6,7 +6,8 @@ export async function near_social_js_unfollow_fun(
 	accountId: string
 ): Promise<any> {
 	// =================
-	const result = await near_social_client(near_kit_client()).unfollow(signerId, accountId);
+	const builder = await near_social_client(near_kit_client()).unfollow(signerId, accountId);
+	const result = await builder.send();
 	// =================
 	console.log("=================");
 	console.log("unfollow()");
