@@ -127,7 +127,6 @@
 		font-size: 12px;
 	}
 	.follow-button.following {
-		background: transparent;
 		color: #666;
 		border-color: rgba(0, 0, 0, 0.2);
 	}

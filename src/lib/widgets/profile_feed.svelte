@@ -108,6 +108,7 @@
 		flex: 1;
 		background: none;
 		border: none;
+		border-radius: 0;
 		padding: 10px 8px;
 		font-size: 12px;
 		color: inherit;
