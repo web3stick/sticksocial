@@ -16,13 +16,18 @@
 		blockHeight,
 		depth = 0,
 		maxDepth = 5,
-		refreshKey = 0
+		refreshKey = 0,
+		onReply
 	}: {
 		accountId: string;
 		blockHeight: bigint;
 		depth?: number;
 		maxDepth?: number;
 		refreshKey?: number;
+		// bubbles up when the user clicks the REPLY icon on this
+		// comment; the parent /post page uses it to prefill + focus the
+		// compose textarea at the bottom of the thread.
+		onReply?: (handle: string) => void;
 	} = $props();
 	let post = $state<Post | null>(null);
 	let loading = $state(true);
@@ -91,7 +96,7 @@
 		{/if}
 		<div class="actions">
 			<LIKE_BUTTON {accountId} {blockHeight} />
-			<COMMENT_BUTTON {accountId} {blockHeight} />
+			<COMMENT_BUTTON {accountId} {blockHeight} {onReply} />
 			<REPOST_BUTTON {accountId} {blockHeight} />
 		</div>
 	{:else if loading}
@@ -107,6 +112,7 @@
 					depth={depth + 1}
 					{maxDepth}
 					{refreshKey}
+					{onReply}
 				/>
 			{/each}
 		</div>

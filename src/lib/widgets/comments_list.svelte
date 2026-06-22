@@ -6,11 +6,13 @@
 	let {
 		accountId,
 		blockHeight,
-		refreshKey = 0
+		refreshKey = 0,
+		onReply
 	}: {
 		accountId: string;
 		blockHeight: bigint;
 		refreshKey?: number;
+		onReply?: (handle: string) => void;
 	} = $props();
 	// ============================================
 	let comments = $state<IndexEntry[]>([]);
@@ -58,6 +60,7 @@
 				accountId={comment.accountId}
 				blockHeight={BigInt(comment.blockHeight)}
 				{refreshKey}
+				{onReply}
 			/>
 		{/each}
 	{/if}

@@ -14,6 +14,15 @@
 		refreshKey++;
 	}
 	// ============================================
+	// when a comment_view fires onReply(handle), we prefill the compose
+	// textarea at the bottom of the page with `@<handle> ` and focus it.
+	// defaultDraft is read by the form via a $effect so the latest click
+	// always wins over a stale draft.
+	let defaultDraft = $state("");
+	function handle_reply(handle: string) {
+		defaultDraft = `@${handle} `;
+	}
+	// ============================================
 </script>
 
 <!-- ============================================ -->
@@ -25,10 +34,15 @@
 		<div class="sticky-parent">
 			<POST {accountId} {blockHeight} {refreshKey} />
 		</div>
-		<COMMENTS_LIST {accountId} {blockHeight} {refreshKey} />
+		<COMMENTS_LIST {accountId} {blockHeight} {refreshKey} onReply={handle_reply} />
 		<div class="reply">
 			<h3>REPLY</h3>
-			<COMMENT_COMPOSE_FORM {accountId} {blockHeight} onPosted={handle_posted} />
+			<COMMENT_COMPOSE_FORM
+				{accountId}
+				{blockHeight}
+				{defaultDraft}
+				onPosted={handle_posted}
+			/>
 		</div>
 	{:else}
 		<p>Invalid post URL</p>

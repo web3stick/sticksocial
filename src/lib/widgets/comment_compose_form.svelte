@@ -6,10 +6,15 @@
 	let {
 		accountId,
 		blockHeight,
+		defaultDraft = "",
 		onPosted = () => {}
 	}: {
 		accountId: string;
 		blockHeight: bigint;
+		// bumped by the /post page when the user clicks REPLY on a
+		// comment_view; we apply it to the textarea and focus it so the
+		// user can keep typing without reaching for the mouse.
+		defaultDraft?: string;
 		onPosted?: () => void;
 	} = $props();
 	// ============================================
@@ -17,6 +22,7 @@
 	let busy = $state(false);
 	let result = $state<string | null>(null);
 	let error = $state<string | null>(null);
+	let textareaRef = $state<HTMLTextAreaElement | null>(null);
 	// ============================================
 	const item = $derived<CommentItem>({
 		type: "social",
@@ -24,6 +30,16 @@
 		blockHeight: Number(blockHeight)
 	});
 	const can_post = $derived(!!auth.accountId && !busy && draft.trim().length > 0);
+	// ============================================
+	// whenever the parent hands us a new defaultDraft (i.e. someone
+	// clicked REPLY on a comment), overwrite the current draft and
+	// focus the textarea so the user can keep typing.
+	$effect(() => {
+		if (defaultDraft) {
+			draft = defaultDraft;
+			textareaRef?.focus();
+		}
+	});
 	// ============================================
 	async function on_submit(e: Event) {
 		e.preventDefault();
@@ -39,6 +55,7 @@
 				text: trimmed
 			});
 			draft = "";
+			defaultDraft = "";
 			result = "POSTED";
 			onPosted();
 		} catch (e) {
@@ -61,6 +78,7 @@
 {:else}
 	<form class="compose-form" onsubmit={on_submit}>
 		<textarea
+			bind:this={textareaRef}
 			bind:value={draft}
 			placeholder="reply..."
 			rows="3"
