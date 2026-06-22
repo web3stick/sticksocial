@@ -25,5 +25,6 @@
 <style>
 	button {
 		width: 500px;
+		max-width: 90vw;
 	}
 </style>

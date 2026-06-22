@@ -38,8 +38,8 @@
 	.contribute-card {
 		margin-top: 24px;
 		padding: 16px 24px;
-		max-width: 500px;
-		width: 100%;
+		width: 500px;
+		max-width: 90vw;
 		box-sizing: border-box;
 		border-radius: 14px;
 		background: rgba(140, 162, 245, 0.08);
