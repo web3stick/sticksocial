@@ -1,6 +1,11 @@
 import { near_social_js_index_fun } from "./fun_index";
 import type { IndexEntry } from "near-social-js";
 // ============================================
+// the index() response value for "post" and "comment" actions with
+// key="main" is only { type: "md" } — no text or item field.  we tag
+// every entry with _action so the renderer can identify the type and
+// fetch the full content from storage when needed.
+// ============================================
 interface NEAR_SOCIAL_JS_UNIFIED_FEED_OPTIONS {
 	limit?: number;
 	from?: number;
@@ -17,7 +22,16 @@ export async function get_unified_feed(
 		near_social_js_index_fun({ action: "comment", key: "main", ...options })
 	]);
 	// =================
-	const all: IndexEntry[] = [...(posts ?? []), ...(reposts ?? []), ...(comments ?? [])];
+	const tag = (entries: IndexEntry[] | null, action: string) =>
+		(entries ?? []).map((e) => ({
+			...e,
+			value: { _action: action, ...((e.value as object) ?? {}) }
+		}));
+	const all: IndexEntry[] = [
+		...tag(posts, "post"),
+		...tag(reposts, "repost"),
+		...tag(comments, "comment")
+	];
 	// =================
 	const seen = new Set<string>();
 	const unique = all.filter((entry) => {

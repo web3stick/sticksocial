@@ -1,31 +1,34 @@
 <script lang="ts">
+	import { get_account_id_post } from "$lib/near-social-js/helper/get_account_id_post";
 	import { resolve_image_url_fun } from "./fun/profile_image";
 	import { get_time_ago_fun } from "./fun/fun_time_ago";
 	import { render_post_text } from "./fun/post_text";
+	import type { Post } from "near-social-js";
 	// ============================================
 	let {
 		accountId,
-		blockHeight,
-		value
+		blockHeight
 	}: {
 		accountId: string;
 		blockHeight: bigint;
-		value?: unknown;
 	} = $props();
 	// ============================================
+	let post = $state<Post | null>(null);
+	let loading = $state(true);
+	let timeAgo = $state<{ text: string; title: string } | "Loading" | "unknown">("Loading");
 	const MAX_ID_LENGTH = 20;
 	const displayId = $derived(
 		accountId.length > MAX_ID_LENGTH ? accountId.slice(0, MAX_ID_LENGTH) + "..." : accountId
 	);
 	// ============================================
-	const postValue = $derived(
-		value as
-			| { text?: string; type?: string; image?: { ipfs_cid?: string; url?: string } }
-			| undefined
-			| null
-	);
+	$effect(() => {
+		loading = true;
+		get_account_id_post(accountId, blockHeight).then((p) => {
+			post = p;
+			loading = false;
+		});
+	});
 	// ============================================
-	let timeAgo = $state<{ text: string; title: string } | "Loading" | "unknown">("Loading");
 	$effect(() => {
 		get_time_ago_fun(Number(blockHeight)).then((t) => {
 			timeAgo = t;
@@ -52,13 +55,13 @@
 			{timeAgo}
 		{/if}
 	</p>
-	{#if postValue}
-		<div class="text">{@html render_post_text(postValue.text ?? "")}</div>
-		{#if postValue.image}
-			<img class="post-image" src={resolve_image_url_fun(postValue.image)} alt="" />
+	{#if loading}
+		<p class="loading">Loading...</p>
+	{:else if post}
+		<div class="text">{@html render_post_text(post.text)}</div>
+		{#if post.image}
+			<img class="post-image" src={resolve_image_url_fun(post.image)} alt="" />
 		{/if}
-	{:else if value !== undefined && value !== null}
-		<p class="muted">Post unavailable (unexpected value shape).</p>
 	{:else}
 		<p class="muted">Post unavailable.</p>
 	{/if}
@@ -102,5 +105,9 @@
 		color: #888;
 		font-style: italic;
 		font-size: 12px;
+	}
+	.loading {
+		color: #888;
+		font-style: italic;
 	}
 </style>

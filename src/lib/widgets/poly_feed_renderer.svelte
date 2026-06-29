@@ -13,7 +13,7 @@
 		value?: unknown;
 	} = $props();
 	// ============================================
-	const val = $derived(value as { item?: { path?: string } } | undefined | null);
+	const val = $derived(value as { _action?: string; item?: { path?: string } } | undefined | null);
 </script>
 
 <!-- ============================================ -->
@@ -21,12 +21,12 @@
 
 <!-- widget_poly_feed_renderer -->
 <!-- WIDGET_POLY_FEED_RENDERER -->
-{#if val?.item?.path?.includes("/repost/")}
+{#if val?._action === "repost"}
 	<REPOST_VIEW {accountId} {blockHeight} {value} />
-{:else if val?.item?.path?.includes("/comment/")}
+{:else if val?._action === "comment"}
 	<COMMENT_VIEW {accountId} {blockHeight} />
 {:else}
-	<POST_VIEW {accountId} {blockHeight} {value} />
+	<POST_VIEW {accountId} {blockHeight} />
 {/if}
 
 <!-- ============================================ -->
