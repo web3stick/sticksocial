@@ -194,16 +194,16 @@ interface CommentItem {
 
 ## Implementation Checklist
 
-- [ ] Create `src/lib/near-social-js/main/fun_get_unified_feed.ts` wrapper
-- [ ] Add inline options interface `NEAR_SOCIAL_JS_UNIFIED_FEED_OPTIONS`
-- [ ] Add section dividers and console.log per convention
+- [x] Create `src/lib/near-social-js/main/fun_get_unified_feed.ts` wrapper
+- [x] Add inline options interface `NEAR_SOCIAL_JS_UNIFIED_FEED_OPTIONS`
+- [x] Add section dividers and console.log per convention
 - [ ] Test in `near-social-tool-box/bin-env/main/get_unified_feed.ts`
 - [ ] Add example to `near-social-tool-box/bin-env/README.md`
-- [ ] Mirror wrapper to `sticksocial/src/lib/near-social-js/main/fun_get_unified_feed.ts`
-- [ ] Create/update widget (either new `unified_feed.svelte` or extend `infinite_feed.svelte`)
-- [ ] Update `/feed/+page.svelte` to use new widget/wrapper
-- [ ] Add polymorphic renderers for Post / Repost / Comment
-- [ ] Run `bun run check && bun run tsc --noEmit && bun run format`
+- [x] Mirror wrapper to `sticksocial/src/lib/near-social-js/main/fun_get_unified_feed.ts`
+- [x] Create/update widget (unified_feed.svelte + poly_feed_renderer.svelte)
+- [x] Update `/feed/+page.svelte` to use new widget/wrapper
+- [x] Add polymorphic renderers for Post / Repost / Comment
+- [x] Run `bun run check && bun run tsc --noEmit && bun run format`
 - [ ] Test on mainnet via tool-box bin
 
 ---
