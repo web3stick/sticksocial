@@ -50,7 +50,7 @@ bun run build && bun run preview
 
 ## Workflow
 
-Work on wrappers happens in a directory with both `near-social-js-toolbox` and `sticksocial` checked out. Prototype and test in the toolbox first, then land the browser-side version here (wrappers here may differ slightly from toolbox test ones — browser env has no `near` arg).
+When working in a directory with both `near-social-js-toolbox` and `sticksocial` checked out, prototype and test in the toolbox first, then land the browser-side version here (wrappers here may differ slightly from toolbox test ones — browser env has no `near` arg). Otherwise, tasks are focused on this repo only.
 
 1. **Research first.** Look at the equivalent widget on the old NEAR Social UI (bos-loader) for reference. Use `bun run bin-env/main/<method>.ts` from the `near-social-js-toolbox` repo to explore live data shapes on mainnet before writing any code.
 2. Find the upstream method in `near-social-js` (`Social` class) and write/browse the wrapper in `src/lib/near-social-js/main/fun_<method>.ts` with inline options interface, section dividers, pretty `console.log`.
