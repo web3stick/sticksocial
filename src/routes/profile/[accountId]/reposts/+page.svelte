@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import REPOST_FEED from "$lib/widgets/repost_feed.svelte";
+	import REPOST_FEED from "$lib/widgets/profile_repost_feed.svelte";
 	// ============================================
 	const accountId = $derived(page.params.accountId ?? "");
 	// ============================================

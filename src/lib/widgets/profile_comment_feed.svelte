@@ -14,8 +14,8 @@
 <!-- ============================================ -->
 <!-- ============================================ -->
 
-<!-- widget_comment_feed -->
-<!-- WIDGET_COMMENT_FEED -->
+<!-- widget_profile_comment_feed -->
+<!-- WIDGET_PROFILE_COMMENT_FEED -->
 <INFINITE_FEED
 	fetch={(opts) => near_social_js_get_profile_comments_fun(accountId, opts)}
 	limit={saved.limit}

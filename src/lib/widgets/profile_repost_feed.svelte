@@ -14,8 +14,8 @@
 <!-- ============================================ -->
 <!-- ============================================ -->
 
-<!-- widget_repost_feed -->
-<!-- WIDGET_REPOST_FEED -->
+<!-- widget_profile_repost_feed -->
+<!-- WIDGET_PROFILE_REPOST_FEED -->
 <INFINITE_FEED
 	fetch={(opts) => near_social_js_get_profile_reposts_fun(accountId, opts)}
 	limit={saved.limit}
