@@ -1,5 +1,4 @@
-import { near_kit_client } from "@near-kit-tool-box/web";
-import { near_social_client } from "../new";
+import { near_social_js_set_fun } from "../main/fun_set";
 import type { Comment, CommentItem } from "near-social-js";
 // ============================================
 // extension of near-social-js's Comment carrying an optional rootItem
@@ -116,11 +115,10 @@ export async function near_social_js_create_comment_fun(
 	} else if (notifies.length > 1) {
 		data[signerId].index.notify = JSON.stringify(notifies);
 	}
-	const builder = await near_social_client(near_kit_client()).set({
+	const result = await near_social_js_set_fun({
 		signerId,
 		data
 	});
-	const result = await builder.send();
 	// =================
 	console.log("=================");
 	console.log("createComment()");

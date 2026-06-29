@@ -4,7 +4,7 @@ import type { FeedOptions, IndexEntry } from "near-social-js";
 // ============================================
 // returns the comments made by `accountId`, newest first.
 //
-// this works because fun_create_comment.ts writes a DUAL-INDEX entry —
+// this works because helper/fun_create_comment.ts writes a DUAL-INDEX entry —
 // both under key=<parentItem> (existing SDK behavior) AND under
 // key="main" (new behavior, mirroring the repost pattern). the api-server
 // (api-server-js/src/social.js indexValue) already handles the array

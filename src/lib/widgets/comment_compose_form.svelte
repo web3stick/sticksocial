@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { CommentItem } from "near-social-js";
 	import { auth } from "$lib/ts/auth.svelte";
-	import { near_social_js_create_comment_fun } from "$lib/near-social-js/main/fun_create_comment";
+	import { near_social_js_create_comment_fun } from "$lib/near-social-js/helper/fun_create_comment";
 	// ============================================
 	let {
 		accountId,
