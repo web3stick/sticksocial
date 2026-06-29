@@ -62,6 +62,12 @@ Every change must be researched and clean — no guessing, no half-baked impleme
 
 ---
 
+## Task tracking
+
+Todo items live in GitHub issues or `todo.md` at the project root. When working on one issue, review all open issues to understand the bigger picture so changes stay consistent with the overall direction.
+
+---
+
 ## Commit & push
 
 After completing a task (and passing `bun run check && bun run tsc --noEmit && bun run format`):
