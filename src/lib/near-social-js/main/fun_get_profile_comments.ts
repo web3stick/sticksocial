@@ -14,7 +14,7 @@ import type { FeedOptions, IndexEntry } from "near-social-js";
 // LIMITATION: only comments written after the dual-index patch are
 // queryable by author. comments written with the old single-key format
 // remain visible only via their parent post (comments_list.svelte).
-export async function near_social_js_get_account_comments_fun(
+export async function near_social_js_get_profile_comments_fun(
 	accountId: string,
 	options?: FeedOptions
 ): Promise<IndexEntry[]> {

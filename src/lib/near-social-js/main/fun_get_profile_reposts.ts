@@ -2,7 +2,7 @@ import { near_kit_client } from "@near-kit-tool-box/web";
 import { near_social_client } from "../new";
 import type { FeedOptions, IndexEntry } from "near-social-js";
 // ============================================
-export async function near_social_js_get_account_reposts_fun(
+export async function near_social_js_get_profile_reposts_fun(
 	accountId: string,
 	options?: FeedOptions
 ): Promise<IndexEntry[]> {
