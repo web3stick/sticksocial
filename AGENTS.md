@@ -1,6 +1,6 @@
 # AGENTS.md
 
-SvelteKit 2 + Svelte 5 (runes) UI for NEAR Social. Data flows through `near-social-js` wrappers, rendered by widgets, mounted from pages. Wrappers are prototyped and CLI-tested in [`sleet-js/near-social-tool-box`](https://github.com/sleet-js/near-social-tool-box) before being mirrored here.
+SvelteKit 2 + Svelte 5 (runes) UI for NEAR Social. Data flows through `near-social-js` wrappers, rendered by widgets, mounted from pages. Wrappers are prototyped and tested against live mainnet data via [`near-social-js-toolbox`](https://github.com/sleet-js/near-social-tool-box) bins before landing here.
 
 ---
 
@@ -30,7 +30,7 @@ bun run build && bun run preview
 - `src/lib/components/` — app-level components (`nav.svelte`, `home_nav.svelte`, `profile_nav.svelte`, `button_auth.svelte`).
 - `src/lib/ts/auth.svelte.ts` — `$state`-based auth (`auth.isSignedIn`, `auth.accountId`) using `near_connect_client().wallet()`.
 - `src/lib/ts/routes.ts` — `ROUTES` const consumed by nav.
-- `src/routes/` — SvelteKit pages: `feed/` (with `options/`), `profile/[accountId]/`, `profile/auth/`, `profile/router/`, `settings/`, `discover/`, `notifications/`, `blank/`.
+- `src/routes/` — SvelteKit pages: `feed/` (with `options/`), `profile/[accountId]/`, `profile/auth/`, `profile/router/`, `settings/`, `discover/`, `notifications/`, `blank/`. Not every route goes in the nav.
 
 ---
 
@@ -50,16 +50,15 @@ bun run build && bun run preview
 
 ## Workflow
 
-Order matters — every feature goes tool-box → sticksocial.
+Work on wrappers happens in a directory with both `near-social-js-toolbox` and `sticksocial` checked out. Prototype and test in the toolbox first, then land the browser-side version here (wrappers here may differ slightly from toolbox test ones — browser env has no `near` arg).
 
-1. Find the upstream method in `near-social-js` (`Social` class).
-2. Prototype the wrapper in `near-social-tool-box/src/near-social-js/main/fun_<method>.ts` with inline options interface, section dividers, pretty `console.log`.
-3. Write a bin in `near-social-tool-box/bin-env/main/<method>.ts` with sane defaults returning real data. Add the example to `bin-env/README.md`.
-4. Run `bun run bin-env/main/<method>.ts -- <args>` — confirm live `social.near` output. Fix the wrapper if shape is off.
-5. Mirror the wrapper into `sticksocial/src/lib/near-social-js/main/fun_<method>.ts` (drop the `near` arg for browser-side).
-6. Build the widget in `src/lib/widgets/<name>.svelte`. Use `Post`, `Profile`, `Notification`, `IndexEntry` types; load data via `$effect`; expose props for `limit`/`order`/`from` where useful. Copy IntersectionObserver + `hasMore` from `infinite_post_feed.svelte` for infinite scroll.
-7. Mount from `src/routes/<page>/+page.svelte`. Add a route entry to `src/lib/ts/routes.ts` if it's a new top-level nav destination.
-8. Run `bun run check && bun run tsc --noEmit` before considering the feature done.
+1. **Research first.** Look at the equivalent widget on the old NEAR Social UI (bos-loader) for reference. Use `bun run bin-env/main/<method>.ts` from the `near-social-js-toolbox` repo to explore live data shapes on mainnet before writing any code.
+2. Find the upstream method in `near-social-js` (`Social` class) and write/browse the wrapper in `src/lib/near-social-js/main/fun_<method>.ts` with inline options interface, section dividers, pretty `console.log`.
+3. Build the widget in `src/lib/widgets/<name>.svelte`. Use `Post`, `Profile`, `Notification`, `IndexEntry` types; load data via `$effect`; expose props for `limit`/`order`/`from` where useful. Copy IntersectionObserver + `hasMore` from `infinite_post_feed.svelte` for infinite scroll.
+4. Mount from `src/routes/<page>/+page.svelte`. Add a route entry to `src/lib/ts/routes.ts` if it's a new top-level nav destination.
+5. Run `bun run check && bun run tsc --noEmit` before considering the feature done.
+
+Every change must be researched and clean — no guessing, no half-baked implementations.
 
 ---
 
@@ -82,11 +81,8 @@ git push
 ---
 
 ## Sanity checklist before committing
-
-- [ ] Wrapper mirrored in **both** repos with matching options interface.
-- [ ] Tool-box bin runs and prints a real mainnet result; example in `bin-env/README.md`.
 - [ ] Widget uses `$state`/`$effect`/`$props` only; imports wrappers from `$lib/near-social-js/main/`.
-- [ ] New top-level route added to `src/lib/ts/routes.ts` and picked up by nav.
+- [ ] New top-level route added to `src/lib/ts/routes.ts` and picked up by nav if applicable.
 - [ ] `bun run check && bun run tsc --noEmit` passes.
 - [ ] `bun run format` has been run.
 - [ ] No unrelated drive-by edits.
